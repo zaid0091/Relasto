@@ -103,14 +103,12 @@ const HomePage = () => {
                   >
                     Profile
                   </button>
-                  {(user?.is_agent || user?.is_superuser) && (
-                    <button
-                      onClick={() => navigate('/dashboard')}
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      Dashboard
-                    </button>
-                  )}
+                  <button
+                    onClick={() => navigate('/dashboard')}
+                    className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Dashboard
+                  </button>
                   <button
                     onClick={logout}
                     className="text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium"

@@ -140,14 +140,12 @@ const PropertyDetailPage = () => {
                   <span className="text-gray-700">
                     Welcome, {user?.first_name || user?.username}
                   </span>
-                  {(user?.is_agent || user?.is_superuser) && (
-                    <Link
-                      to="/dashboard"
-                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-                    >
-                      Dashboard
-                    </Link>
-                  )}
+                  <Link
+                    to="/dashboard"
+                    className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Dashboard
+                  </Link>
                   <button
                     onClick={logout}
                     className="text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium"

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { profilesAPI, propertiesAPI, reviewsAPI } from '../services/api';
+import { profilesAPI, reviewsAPI } from '../services/api';
 
 const AgentProfilePage = () => {
   const { id } = useParams();
@@ -13,6 +13,13 @@ const AgentProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('properties');
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewData, setReviewData] = useState({ rating: 5, comment: '' });
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewSuccess, setReviewSuccess] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editReviewData, setEditReviewData] = useState({ rating: 5, comment: '' });
+  const [updatingReview, setUpdatingReview] = useState(false);
 
   useEffect(() => {
     const fetchAgentData = async () => {
@@ -37,6 +44,58 @@ const AgentProfilePage = () => {
 
     fetchAgentData();
   }, [id]);
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    setSubmittingReview(true);
+    try {
+      await reviewsAPI.createReview({
+        agent_profile: id,
+        rating: reviewData.rating,
+        comment: reviewData.comment,
+      });
+      setReviewSuccess(true);
+      setShowReviewForm(false);
+      const reviewsResponse = await profilesAPI.getAgentReviews(id);
+      setReviews(reviewsResponse.data.data?.reviews || []);
+      setTimeout(() => setReviewSuccess(false), 3000);
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to submit review');
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
+
+  const handleEditClick = () => {
+    setEditReviewData({ rating: userReview.rating, comment: userReview.comment || '' });
+    setShowEditForm(true);
+  };
+
+  const handleUpdateReview = async (e) => {
+    e.preventDefault();
+    setUpdatingReview(true);
+    try {
+      await reviewsAPI.updateReview(userReview.id, {
+        rating: editReviewData.rating,
+        comment: editReviewData.comment,
+      });
+      setReviewSuccess(true);
+      setShowEditForm(false);
+      const reviewsResponse = await profilesAPI.getAgentReviews(id);
+      setReviews(reviewsResponse.data.data?.reviews || []);
+      setTimeout(() => setReviewSuccess(false), 3000);
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to update review');
+    } finally {
+      setUpdatingReview(false);
+    }
+  };
+
+  const userReview = user ? reviews.find(r => r.reviewer?.id === user.id) : null;
 
   if (loading) {
     return (
@@ -177,6 +236,22 @@ const AgentProfilePage = () => {
                   <span className="font-medium">Phone:</span> {agent.phone}
                 </p>
               )}
+              {isAuthenticated && !userReview && (
+                <button
+                  onClick={() => setShowReviewForm(true)}
+                  className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
+                >
+                  Write a Review
+                </button>
+              )}
+              {isAuthenticated && userReview && (
+                <button
+                  onClick={handleEditClick}
+                  className="mt-4 bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
+                >
+                  Edit My Review
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -290,6 +365,126 @@ const AgentProfilePage = () => {
           </div>
         </div>
       </main>
+
+      {showReviewForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Write a Review</h2>
+            <form onSubmit={handleSubmitReview}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                <div className="flex space-x-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setReviewData({ ...reviewData, rating: star })}
+                      className="focus:outline-none"
+                    >
+                      <svg
+                        className={`h-8 w-8 ${star <= reviewData.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Comment (optional)</label>
+                <textarea
+                  value={reviewData.comment}
+                  onChange={(e) => setReviewData({ ...reviewData, comment: e.target.value })}
+                  rows={4}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Share your experience with this agent..."
+                />
+              </div>
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setShowReviewForm(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submittingReview}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {submittingReview ? 'Submitting...' : 'Submit Review'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showEditForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Edit Review</h2>
+            <form onSubmit={handleUpdateReview}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                <div className="flex space-x-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setEditReviewData({ ...editReviewData, rating: star })}
+                      className="focus:outline-none"
+                    >
+                      <svg
+                        className={`h-8 w-8 ${star <= editReviewData.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Comment (optional)</label>
+                <textarea
+                  value={editReviewData.comment}
+                  onChange={(e) => setEditReviewData({ ...editReviewData, comment: e.target.value })}
+                  rows={4}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Share your experience with this agent..."
+                />
+              </div>
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setShowEditForm(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={updatingReview}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {updatingReview ? 'Updating...' : 'Update Review'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {reviewSuccess && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+          Review submitted successfully!
+        </div>
+      )}
 
       <footer className="bg-gray-800 text-white py-8 mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

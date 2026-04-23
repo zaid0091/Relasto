@@ -83,17 +83,6 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
         if request and hasattr(request, 'user'):
             if data['agent_profile'].user_id == request.user.id:
                 raise serializers.ValidationError("You cannot review yourself")
-            
-            # Check if review already exists
-            existing_review = Review.objects.filter(
-                reviewer=request.user,
-                agent_profile=data['agent_profile']
-            ).first()
-            
-            if existing_review:
-                raise serializers.ValidationError(
-                    "You have already reviewed this agent. You can update your existing review."
-                )
         return data
 
 

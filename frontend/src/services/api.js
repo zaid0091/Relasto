@@ -108,9 +108,10 @@ export const reviewsAPI = {
   createReview: (data) => api.post('/reviews/', data),
   updateReview: (id, data) => api.patch(`/reviews/${id}/`, data),
   deleteReview: (id) => api.delete(`/reviews/${id}/`),
-  getMyReviews: (params) => api.get('/my_reviews/', { params }),
-  getAgentSummary: (params) => api.get('/agent_summary/', { params }),
-  canReview: (params) => api.get('/can_review/', { params }),
+  getMyReviews: (params) => api.get('/reviews/my_reviews/', { params }),
+  getAgentSummary: (params) => api.get('/reviews/agent_summary/', { params }),
+  canReview: (params) => api.get('/reviews/can_review/', { params }),
+  getReceivedReviews: (agentId, params) => api.get(`/profiles/${agentId}/reviews/`, { params }),
 };
 
 export const visitsAPI = {

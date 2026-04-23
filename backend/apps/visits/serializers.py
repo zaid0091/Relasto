@@ -156,8 +156,8 @@ class UserVisitRequestListSerializer(serializers.ModelSerializer):
     class Meta:
         model = VisitRequest
         fields = [
-            'id', 'property', 'agent', 'preferred_date', 'status',
-            'is_reviewed', 'created_at'
+            'id', 'property', 'agent', 'preferred_date', 'contact_phone',
+            'contact_email', 'message', 'status', 'is_reviewed', 'created_at'
         ]
     
     def get_property(self, obj):
