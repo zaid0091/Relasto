@@ -1,7 +1,7 @@
 import React from 'react';
 import PropertyCard from './PropertyCard';
 
-const PropertyGrid = ({ properties, loading, error, pagination }) => {
+const PropertyGrid = ({ properties, loading, error, pagination, onPageChange }) => {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -98,12 +98,7 @@ const PropertyGrid = ({ properties, loading, error, pagination }) => {
           <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
             {/* Previous Button */}
             <button
-              onClick={() => {
-                // Handle pagination - this would be passed as a prop in a real implementation
-                if (pagination.has_previous) {
-                  window.location.href = `?page=${pagination.page - 1}`;
-                }
-              }}
+              onClick={() => onPageChange && onPageChange(pagination.page - 1)}
               disabled={!pagination.has_previous}
               className={`relative inline-flex items-center px-2 py-2 rounded-l-md border ${
                 pagination.has_previous
@@ -139,9 +134,7 @@ const PropertyGrid = ({ properties, loading, error, pagination }) => {
                 return (
                   <button
                     key={pageNum}
-                    onClick={() => {
-                      window.location.href = `?page=${pageNum}`;
-                    }}
+                    onClick={() => onPageChange && onPageChange(pageNum)}
                     className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
                       isCurrentPage
                         ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
@@ -173,11 +166,7 @@ const PropertyGrid = ({ properties, loading, error, pagination }) => {
 
             {/* Next Button */}
             <button
-              onClick={() => {
-                if (pagination.has_next) {
-                  window.location.href = `?page=${pagination.page + 1}`;
-                }
-              }}
+              onClick={() => onPageChange && onPageChange(pagination.page + 1)}
               disabled={!pagination.has_next}
               className={`relative inline-flex items-center px-2 py-2 rounded-r-md border ${
                 pagination.has_next
