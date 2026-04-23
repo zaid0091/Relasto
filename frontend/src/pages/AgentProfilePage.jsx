@@ -200,7 +200,7 @@ const AgentProfilePage = () => {
 
         <div className="bg-white rounded-lg shadow-md p-8 mb-8">
           <div className="flex items-start space-x-6">
-            <div className="h-24 w-24 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+            <div className="h-24 w-24 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
               <span className="text-3xl font-bold text-blue-600">
                 {agent.user?.first_name?.[0] || agent.user?.username?.[0] || 'A'}
               </span>
@@ -236,7 +236,7 @@ const AgentProfilePage = () => {
                   <span className="font-medium">Phone:</span> {agent.phone}
                 </p>
               )}
-              {isAuthenticated && !userReview && (
+              {isAuthenticated && user && agent && user.id !== agent.user.id && !userReview && (
                 <button
                   onClick={() => setShowReviewForm(true)}
                   className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
@@ -244,7 +244,7 @@ const AgentProfilePage = () => {
                   Write a Review
                 </button>
               )}
-              {isAuthenticated && userReview && (
+              {isAuthenticated && user && agent && user.id !== agent.user.id && userReview && (
                 <button
                   onClick={handleEditClick}
                   className="mt-4 bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-700"

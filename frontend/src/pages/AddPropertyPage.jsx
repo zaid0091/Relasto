@@ -33,6 +33,8 @@ const AddPropertyPage = () => {
 
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
+  const [featuresList, setFeaturesList] = useState([]);
   const fileInputRef = useRef(null);
 
   const [errors, setErrors] = useState({});
@@ -81,6 +83,37 @@ const AddPropertyPage = () => {
     });
   };
 
+  const addFeature = () => {
+    setFeaturesList(prev => [...prev, { key: '', value: '' }]);
+  };
+
+  const removeFeature = (index) => {
+    setFeaturesList(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleFeatureChange = (index, field, value) => {
+    setFeaturesList(prev => prev.map((f, i) => i === index ? { ...f, [field]: value } : f));
+  };
+
+  const removeExistingImage = async (imageId) => {
+    if (!window.confirm('Are you sure you want to delete this image?')) return;
+    try {
+      await propertiesAPI.deleteImage(slug, imageId);
+      setExistingImages(prev => prev.filter(img => img.id !== imageId));
+    } catch (err) {
+      alert('Failed to delete image');
+    }
+  };
+
+  const setPrimaryImage = async (imageId) => {
+    try {
+      await propertiesAPI.setPrimaryImage(slug, imageId);
+      setExistingImages(prev => prev.map(img => ({ ...img, is_primary: img.id === imageId })));
+    } catch (err) {
+      alert('Failed to set primary image');
+    }
+  };
+
   useEffect(() => {
     if (isEditMode && slug) {
       const fetchProperty = async () => {
@@ -103,8 +136,10 @@ const AddPropertyPage = () => {
             square_feet: property.attributes?.square_feet || '',
             lot_size: property.attributes?.lot_size || '',
             year_built: property.attributes?.year_built || '',
-            features: property.features?.map(f => f.feature_key).join(', ') || '',
+            features: '',
           });
+          setFeaturesList(property.features?.map(f => ({ key: f.feature_key, value: f.feature_value })) || []);
+          setExistingImages(property.images || []);
         } catch (err) {
           setError('Failed to load property');
         } finally {
@@ -149,11 +184,33 @@ const AddPropertyPage = () => {
         square_feet: formData.square_feet ? parseInt(formData.square_feet) : null,
         lot_size: formData.lot_size ? parseFloat(formData.lot_size) : null,
         year_built: formData.year_built ? parseInt(formData.year_built) : null,
-        features: formData.features ? formData.features.split(',').map(f => f.trim()).filter(f => f) : [],
+        features: featuresList.filter(f => f.key.trim()).map(f => ({ key: f.key.trim(), value: f.value?.trim() || '' })),
       };
 
       if (isEditMode) {
-        await propertiesAPI.updateProperty(slug, payload);
+        const attributes = {
+          bedrooms: formData.bedrooms ? parseInt(formData.bedrooms) : null,
+          bathrooms: formData.bathrooms ? parseFloat(formData.bathrooms) : null,
+          square_feet: formData.square_feet ? parseInt(formData.square_feet) : null,
+          lot_size: formData.lot_size ? parseFloat(formData.lot_size) : null,
+          year_built: formData.year_built ? parseInt(formData.year_built) : null,
+        };
+        
+        const updatePayload = {
+          title: formData.title,
+          description: formData.description,
+          price: parseFloat(formData.price),
+          property_type: formData.property_type,
+          status: formData.status,
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          zip_code: formData.zip_code || '',
+          attributes: attributes,
+          features: featuresList.filter(f => f.key.trim()).map(f => ({ key: f.key.trim(), value: f.value?.trim() || '' })),
+        };
+        
+        await propertiesAPI.updateProperty(slug, updatePayload);
         
         if (imageFiles.length > 0) {
           for (let i = 0; i < imageFiles.length; i++) {
@@ -172,9 +229,13 @@ const AddPropertyPage = () => {
         setSuccess(true);
         setTimeout(() => navigate('/dashboard'), 2000);
       } else {
+        const featuresJson = JSON.stringify(featuresList.filter(f => f.key.trim()).map(f => ({ key: f.key.trim(), value: f.value?.trim() || '' })));
+        
         const propertyFormData = new FormData();
         Object.keys(payload).forEach(key => {
-          if (payload[key] !== '' && payload[key] !== null) {
+          if (key === 'features') {
+            propertyFormData.append(key, featuresJson);
+          } else if (payload[key] !== '' && payload[key] !== null) {
             propertyFormData.append(key, payload[key]);
           }
         });
@@ -508,16 +569,42 @@ const AddPropertyPage = () => {
 
 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Features (comma-separated)
+                    Features
                   </label>
-                  <input
-                    type="text"
-                    name="features"
-                    value={formData.features}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Pool, Garage, Garden, Central AC"
-                  />
+                  <div className="space-y-2">
+                    {featuresList.map((feature, index) => (
+                      <div key={index} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={feature.key}
+                          onChange={(e) => handleFeatureChange(index, 'key', e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Feature name (e.g., Pool)"
+                        />
+                        <input
+                          type="text"
+                          value={feature.value}
+                          onChange={(e) => handleFeatureChange(index, 'value', e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Value (e.g., Yes)"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeFeature(index)}
+                          className="px-2 py-2 text-red-600 hover:bg-red-50 rounded-md"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={addFeature}
+                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    >
+                      + Add Feature
+                    </button>
+                  </div>
                 </div>
 
                 <div className="md:col-span-2">
@@ -559,6 +646,45 @@ const AddPropertyPage = () => {
                       ))}
                     </div>
                   )}
+                  {existingImages.length > 0 && (
+                    <div className="mt-4">
+                      <p className="text-sm font-medium text-gray-700 mb-2">Existing Images</p>
+                      <div className="grid grid-cols-4 gap-4">
+                        {existingImages.map((img) => (
+                          <div key={img.id} className="relative">
+                            <img
+                              src={img.image_url}
+                              alt={img.alt_text || 'Property image'}
+                              className={`h-24 w-full object-cover rounded-md ${img.is_primary ? 'ring-2 ring-blue-500' : ''}`}
+                            />
+                            {img.is_primary && (
+                              <span className="absolute top-1 left-1 bg-blue-500 text-white text-xs px-1 rounded">Primary</span>
+                            )}
+                            <div className="absolute top-1 right-1 flex gap-1">
+                              {!img.is_primary && (
+                                <button
+                                  type="button"
+                                  onClick={() => setPrimaryImage(img.id)}
+                                  className="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                                  title="Set as primary"
+                                >
+                                  ★
+                                </button>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => removeExistingImage(img.id)}
+                                className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                                title="Delete image"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -574,7 +700,7 @@ const AddPropertyPage = () => {
                   disabled={loading}
                   className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
                 >
-                  {loading ? 'Creating...' : 'Create Property'}
+                  {loading ? (isEditMode ? 'Saving...' : 'Creating...') : (isEditMode ? 'Save Property' : 'Create Property')}
                 </button>
               </div>
             </form>

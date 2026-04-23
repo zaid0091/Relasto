@@ -43,7 +43,10 @@ const authReducer = (state, action) => {
     case AUTH_ACTIONS.LOAD_USER_SUCCESS:
       return {
         ...state,
-        user: action.payload.user,
+        user: {
+          ...action.payload.user,
+          profile: action.payload.user.profile || action.payload.user
+        },
         isAuthenticated: true,
         isLoading: false,
         error: null,

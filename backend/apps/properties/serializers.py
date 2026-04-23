@@ -113,27 +113,11 @@ class PropertySerializer(serializers.ModelSerializer):
         except Exception:
             pass
         return None
-    
-    def validate_price(self, value):
-        """Validate price is positive"""
-        if value <= 0:
-            raise serializers.ValidationError("Price must be a positive number")
-        return value
-    
-    def validate_attributes(self, value):
-        """Validate attributes is a dictionary"""
-        if not isinstance(value, dict):
-            raise serializers.ValidationError("Attributes must be a dictionary")
-        return value
 
 
 class PropertyCreateSerializer(serializers.ModelSerializer):
     """Serializer for creating properties (agents only)"""
-    features = serializers.ListField(
-        child=serializers.CharField(),
-        required=False,
-        help_text="List of feature strings"
-    )
+    features = serializers.JSONField(required=False, help_text="List of feature objects with 'key' and 'value'")
     
     class Meta:
         model = Property
@@ -149,6 +133,12 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
         return value
     
     def validate_attributes(self, value):
+        import json
+        if isinstance(value, str):
+            try:
+                value = json.loads(value)
+            except json.JSONDecodeError:
+                raise serializers.ValidationError("Attributes must be a valid JSON object")
         if value and not isinstance(value, dict):
             raise serializers.ValidationError("Attributes must be a dictionary")
         return value
@@ -176,29 +166,33 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
             attributes=validated_data.get('attributes', {}),
         )
         
-        # Create features from string list
-        for feature_name in features_data:
-            PropertyFeature.objects.create(
-                property=property_obj,
-                feature_key=feature_name,
-                feature_value='true'
-            )
+        # Create features from key-value list
+        for feature in features_data:
+            if isinstance(feature, dict) and 'key' in feature:
+                PropertyFeature.objects.create(
+                    property=property_obj,
+                    feature_key=feature.get('key', ''),
+                    feature_value=feature.get('value', '')
+                )
+            elif isinstance(feature, str):
+                PropertyFeature.objects.create(
+                    property=property_obj,
+                    feature_key=feature,
+                    feature_value='true'
+                )
         
         return property_obj
 
 
 class PropertyUpdateSerializer(serializers.ModelSerializer):
     """Serializer for updating properties (ownership validated in view)"""
-    features = serializers.ListField(
-        child=serializers.CharField(),
-        required=False,
-        help_text="List of feature strings"
-    )
+    features = serializers.JSONField(required=False, help_text="List of feature objects with 'key' and 'value'")
+    property_type = serializers.CharField(required=False)
     
     class Meta:
         model = Property
         fields = [
-            'title', 'description', 'price', 'status', 'address',
+            'title', 'description', 'price', 'property_type', 'status', 'address',
             'city', 'state', 'zip_code', 'latitude', 'longitude',
             'attributes', 'features'
         ]
@@ -211,17 +205,42 @@ class PropertyUpdateSerializer(serializers.ModelSerializer):
     
     def validate_attributes(self, value):
         """Validate attributes is a dictionary"""
+        import json
+        if isinstance(value, str):
+            try:
+                value = json.loads(value)
+            except json.JSONDecodeError:
+                raise serializers.ValidationError("Attributes must be a valid JSON object")
         if value and not isinstance(value, dict):
             raise serializers.ValidationError("Attributes must be a dictionary")
+        return value
+    
+    def validate_features(self, value):
+        import json
+        if isinstance(value, str):
+            try:
+                value = json.loads(value)
+            except json.JSONDecodeError:
+                raise serializers.ValidationError("Features must be a valid JSON array")
         return value
     
     def update(self, instance, validated_data):
         """Update property with features"""
         features_data = validated_data.pop('features', None)
+        attributes_data = validated_data.pop('attributes', None)
         
-        # Update property
+        # Update property fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
+        
+        # Update attributes if provided
+        if attributes_data is not None:
+            current_attrs = instance.attributes or {}
+            for key, val in attributes_data.items():
+                if val is not None:
+                    current_attrs[key] = val
+            instance.attributes = current_attrs
+            
         instance.save()
         
         # Update features if provided and is a list
@@ -229,12 +248,18 @@ class PropertyUpdateSerializer(serializers.ModelSerializer):
             # Remove existing features
             instance.features.all().delete()
             
-            # Create new features from string list
-            for feature_name in features_data:
-                if isinstance(feature_name, str):
+            # Create new features from key-value list or string list
+            for feature in features_data:
+                if isinstance(feature, dict) and 'key' in feature and feature['key']:
                     PropertyFeature.objects.create(
                         property=instance,
-                        feature_key=feature_name,
+                        feature_key=feature.get('key', ''),
+                        feature_value=feature.get('value', '')
+                    )
+                elif isinstance(feature, str):
+                    PropertyFeature.objects.create(
+                        property=instance,
+                        feature_key=feature,
                         feature_value='true'
                     )
         

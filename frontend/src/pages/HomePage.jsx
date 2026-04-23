@@ -109,6 +109,17 @@ const HomePage = () => {
                   >
                     Dashboard
                   </button>
+                  {user?.profile?.is_agent && (
+                    <button
+                      onClick={() => navigate('/properties/new')}
+                      className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                      title="Add Property"
+                    >
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                    </button>
+                  )}
                   <button
                     onClick={logout}
                     className="text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium"

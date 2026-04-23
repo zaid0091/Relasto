@@ -177,7 +177,7 @@ class PropertyViewSet(viewsets.ModelViewSet):
             serializer = PropertyUpdateSerializer(property_obj, data=request.data, partial=True)
             
             if serializer.is_valid():
-                updated_property = PropertyService.update_property(property_obj, request.user, serializer.validated_data)
+                updated_property = serializer.save()
                 response_serializer = PropertySerializer(updated_property)
                 return Response({
                     'status': 'success',
@@ -247,6 +247,55 @@ class PropertyViewSet(viewsets.ModelViewSet):
                 'status': 'error',
                 'error': str(e),
                 'code': 'IMAGE_ADD_ERROR'
+            }, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=True, methods=['delete', 'post'], permission_classes=[IsPropertyOwner])
+    def manage_image(self, request, pk=None):
+        """Manage individual image - delete or set primary"""
+        try:
+            property_obj = PropertyService.validate_property_ownership(request.user, pk)
+            image_id = request.data.get('image_id') or request.query_params.get('image_id')
+            action_type = request.data.get('action') or request.query_params.get('action', 'delete')
+            
+            if not image_id:
+                return Response({
+                    'status': 'error',
+                    'error': 'image_id is required',
+                    'code': 'MISSING_IMAGE_ID'
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            image = property_obj.images.filter(id=image_id).first()
+            if not image:
+                return Response({
+                    'status': 'error',
+                    'error': 'Image not found',
+                    'code': 'IMAGE_NOT_FOUND'
+                }, status=status.HTTP_404_NOT_FOUND)
+            
+            if action_type == 'set_primary':
+                image.is_primary = True
+                image.save()
+                return Response({
+                    'status': 'success',
+                    'message': 'Primary image set successfully'
+                }, status=status.HTTP_200_OK)
+            elif action_type == 'delete':
+                image.delete()
+                return Response({
+                    'status': 'success',
+                    'message': 'Image deleted successfully'
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    'status': 'error',
+                    'error': 'Invalid action. Use "delete" or "set_primary"',
+                    'code': 'INVALID_ACTION'
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({
+                'status': 'error',
+                'error': str(e),
+                'code': 'IMAGE_MANAGE_ERROR'
             }, status=status.HTTP_400_BAD_REQUEST)
     
     @action(detail=True, methods=['get'])

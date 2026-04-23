@@ -196,7 +196,7 @@ const DashboardPage = () => {
             >
               Overview
             </button>
-            {user?.is_agent || user?.is_superuser && (
+            {user?.is_agent && (
               <button
                 onClick={() => setActiveTab('properties')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
@@ -268,10 +268,10 @@ const DashboardPage = () => {
                   <div className="ml-5 w-0 flex-1">
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">
-                        {user?.profile?.is_agent ? 'My Properties' : 'Visit Requests'}
+                        {user?.is_agent ? 'My Properties' : 'Visit Requests'}
                       </dt>
                       <dd className="text-lg font-medium text-gray-900">
-                        {user?.profile?.is_agent ? myProperties.length : myVisitRequests.length}
+                        {user?.is_agent ? myProperties.length : myVisitRequests.length}
                       </dd>
                     </dl>
                   </div>
@@ -325,7 +325,7 @@ const DashboardPage = () => {
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">Profile Status</dt>
                       <dd className="text-lg font-medium text-gray-900">
-                        {user?.is_superuser ? 'Admin' : user?.profile?.is_agent ? 'Agent' : 'User'}
+                        {user?.is_superuser ? 'Admin' : user?.is_agent ? 'Agent' : 'User'}
                       </dd>
                     </dl>
                   </div>
@@ -362,17 +362,19 @@ const DashboardPage = () => {
           </div>
         )}
 
-        {activeTab === 'properties' && user?.is_agent || user?.is_superuser && (
+        {activeTab === 'properties' && (user?.is_agent || user?.is_superuser) && (
           <div className="bg-white rounded-lg shadow">
             <div className="px-4 py-5 sm:p-6">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-lg leading-6 font-medium text-gray-900">My Properties</h3>
-                <Link
-                  to="/properties/new"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
-                >
-                  Add Property
-                </Link>
+                {user?.is_agent && (
+                  <Link
+                    to="/properties/new"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
+                  >
+                    Add Property
+                  </Link>
+                )}
               </div>
               {myProperties.length > 0 ? (
                 <div className="space-y-4">
@@ -528,7 +530,7 @@ const DashboardPage = () => {
           <div className="bg-white rounded-lg shadow">
             <div className="px-4 py-5 sm:p-6">
               <h3 className="text-lg leading-6 font-medium text-gray-900 mb-6">
-                {user?.profile?.is_agent ? 'Received Visit Requests' : 'My Visit Requests'}
+                {user?.is_agent ? 'Received Visit Requests' : 'My Visit Requests'}
               </h3>
               {myVisitRequests.length > 0 ? (
                 <div className="space-y-4">
@@ -615,7 +617,7 @@ const DashboardPage = () => {
                 </div>
               ) : (
                 <p className="text-gray-500">
-                  {user?.profile?.is_agent 
+                  {user?.is_agent 
                     ? "You haven't received any visit requests yet."
                     : "You haven't made any visit requests yet."
                   }

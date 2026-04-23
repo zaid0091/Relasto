@@ -45,10 +45,10 @@ api.interceptors.response.use(
           // Handle different response formats
           const tokens = response.data?.data?.tokens || response.data?.tokens || response.data;
           const access = tokens?.access || tokens?.access_token || access;
-          
+
           if (access) {
             localStorage.setItem('access_token', access);
-            
+
             // Retry the original request with new token
             originalRequest.headers.Authorization = `Bearer ${access}`;
             return api(originalRequest);
@@ -58,7 +58,7 @@ api.interceptors.response.use(
         // Refresh failed, clear tokens and force page reload to reset auth state
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
-        
+
         // Force page reload to reset authentication state
         window.location.href = '/login';
         return Promise.reject(refreshError);
@@ -98,6 +98,8 @@ export const propertiesAPI = {
   updateProperty: (id, data) => api.patch(`/properties/${id}/`, data),
   deleteProperty: (id) => api.delete(`/properties/${id}/`),
   addImage: (id, data, isFormData = false) => api.post(`/properties/${id}/images/`, data, isFormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}),
+  deleteImage: (propertyId, imageId) => api.post(`/properties/${propertyId}/manage_image/`, { image_id: imageId, action: 'delete' }),
+  setPrimaryImage: (propertyId, imageId) => api.post(`/properties/${propertyId}/manage_image/`, { image_id: imageId, action: 'set_primary' }),
   getPropertyImages: (id) => api.get(`/properties/${id}/images_list/`),
   getMyProperties: (params) => api.get('/my_properties/', { params }),
 };

@@ -368,12 +368,14 @@ const PropertyDetailPage = () => {
                 >
                   Contact Agent
                 </button>
-                <button 
-                  onClick={() => isAuthenticated ? setShowVisitModal(true) : window.location.href = '/login'}
-                  className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors duration-200"
-                >
-                  Schedule Visit
-                </button>
+                {(!user || (property?.agent && user.id !== property.agent.id)) && (
+                  <button 
+                    onClick={() => isAuthenticated ? setShowVisitModal(true) : window.location.href = '/login'}
+                    className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors duration-200"
+                  >
+                    Schedule Visit
+                  </button>
+                )}
               </div>
             </div>
 

@@ -115,6 +115,14 @@ class VisitRequestCreateSerializer(serializers.ModelSerializer):
                 "Property does not belong to this agent"
             )
         
+        # Check if user is the agent who owns this property
+        request = self.context.get('request')
+        if request and hasattr(request, 'user') and request.user.is_authenticated:
+            if property_obj.agent.user_id == request.user.id:
+                raise serializers.ValidationError(
+                    "You cannot request a visit for your own property"
+                )
+        
         # Check for duplicate requests
         request = self.context.get('request')
         if request and hasattr(request, 'user'):
