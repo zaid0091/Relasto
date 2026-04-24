@@ -11,79 +11,91 @@ class Profile(BaseModel):
     Separates user authentication from user profile data.
     Supports both regular users and agents.
     """
+
     user = models.OneToOneField(
-        'accounts.User',
+        "accounts.User",
         on_delete=models.CASCADE,
-        related_name='profile',
-        primary_key=True
+        related_name="profile",
+        primary_key=True,
     )
-    
+
     # Personal Information
     bio = models.TextField(blank=True, max_length=500)
-    
+    profile_image = models.ImageField(
+        upload_to="profiles/", blank=True, null=True, help_text="User profile picture"
+    )
+
     # Contact Information
     phone_regex = RegexValidator(
-        regex=r'^\+?1?\d{9,15}$',
-        message='Phone number must be in valid format'
+        regex=r"^\+?1?\d{9,15}$", message="Phone number must be in valid format"
     )
-    phone = models.CharField(
-        max_length=20,
-        blank=True,
-        validators=[phone_regex]
-    )
-    
+    phone = models.CharField(max_length=20, blank=True, validators=[phone_regex])
+
     # Address Information (for location-based search)
     address = models.CharField(max_length=255, blank=True, db_index=True)
     city = models.CharField(max_length=100, blank=True, db_index=True)
     state = models.CharField(max_length=100, blank=True)
     zip_code = models.CharField(max_length=20, blank=True)
-    
+
     # Agent-specific fields
     is_agent = models.BooleanField(
         default=False,
         db_index=True,
-        help_text='Indicates if this user can list properties'
+        help_text="Indicates if this user can list properties",
+    )
+    experience = models.PositiveIntegerField(default=0, help_text="Years of experience")
+    property_types = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Types of properties handled (e.g., Residential, Commercial)",
+    )
+    area = models.CharField(
+        max_length=255, blank=True, help_text="Service area/neighborhoods"
+    )
+    license_no = models.CharField(
+        max_length=50, blank=True, help_text="Real estate license number"
     )
     average_rating = models.FloatField(
-        default=0.0,
-        help_text='Denormalized average rating from reviews'
+        default=0.0, help_text="Denormalized average rating from reviews"
     )
-    
+
     class Meta:
-        db_table = 'profiles'
-        verbose_name = 'Profile'
-        verbose_name_plural = 'Profiles'
+        db_table = "profiles"
+        verbose_name = "Profile"
+        verbose_name_plural = "Profiles"
         indexes = [
-            models.Index(fields=['is_agent']),
-            models.Index(fields=['city', 'is_agent']),  # For agent search
-            models.Index(fields=['state', 'is_agent']),
+            models.Index(fields=["is_agent"]),
+            models.Index(fields=["city", "is_agent"]),  # For agent search
+            models.Index(fields=["state", "is_agent"]),
         ]
-    
+
     def __str__(self):
         return f"Profile of {self.user.username}"
-    
+
     @property
     def full_name(self):
         """Get full name from user"""
         return self.user.get_full_name() or self.user.username
-    
+
     @property
     def review_count(self):
         """Get count of reviews on this profile"""
         if self.is_agent:
             return self.received_reviews.count()
         return 0
-    
+
     def update_average_rating(self):
         """Recalculate average rating from reviews"""
         from django.db.models import Avg
-        avg = self.received_reviews.aggregate(avg=Avg('rating'))['avg'] or 0.0
+
+        avg = self.received_reviews.aggregate(avg=Avg("rating"))["avg"] or 0.0
         self.average_rating = round(avg, 2)
-        self.save(update_fields=['average_rating', 'updated_at'])
+        self.save(update_fields=["average_rating", "updated_at"])
 
 
 class ProfileSignals:
     """Handle profile creation signals"""
+
     @staticmethod
     def create_profile_on_user_creation(sender, instance, created, **kwargs):
         """Auto-create profile when user is created"""
@@ -95,6 +107,5 @@ class ProfileSignals:
 from django.db.models import Avg
 
 post_save.connect(
-    ProfileSignals.create_profile_on_user_creation,
-    sender='accounts.User'
+    ProfileSignals.create_profile_on_user_creation, sender="accounts.User"
 )

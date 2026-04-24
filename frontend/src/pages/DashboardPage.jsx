@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { propertiesAPI, reviewsAPI, visitsAPI } from '../services/api';
+import Navbar from '../components/Navbar';
 
 const DashboardPage = () => {
   const { user, logout } = useAuth();
@@ -148,30 +149,7 @@ const DashboardPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <div className="flex items-center">
-              <Link to="/" className="flex items-center">
-                <h1 className="text-2xl font-bold text-blue-600">Relasto</h1>
-              </Link>
-            </div>
-
-            {/* User Menu */}
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-700">Welcome, {user?.first_name || user?.username}</span>
-              <button
-                onClick={handleLogout}
-                className="text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar variant="light" />
 
       {/* Dashboard Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -250,7 +228,7 @@ const DashboardPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white rounded-lg shadow p-6">
                 <div className="flex items-center">
-                  <div className="flex-shrink-0 bg-blue-100 rounded-md p-3">
+                  <div className="shrink-0 bg-blue-100 rounded-md p-3">
                     <svg
                       className="h-6 w-6 text-blue-600"
                       fill="none"
@@ -280,7 +258,7 @@ const DashboardPage = () => {
 
               <div className="bg-white rounded-lg shadow p-6">
                 <div className="flex items-center">
-                  <div className="flex-shrink-0 bg-green-100 rounded-md p-3">
+                  <div className="shrink-0 bg-green-100 rounded-md p-3">
                     <svg
                       className="h-6 w-6 text-green-600"
                       fill="none"
@@ -306,7 +284,7 @@ const DashboardPage = () => {
 
               <div className="bg-white rounded-lg shadow p-6">
                 <div className="flex items-center">
-                  <div className="flex-shrink-0 bg-yellow-100 rounded-md p-3">
+                  <div className="shrink-0 bg-yellow-100 rounded-md p-3">
                     <svg
                       className="h-6 w-6 text-yellow-600"
                       fill="none"

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 const AboutPage = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -9,67 +9,9 @@ const AboutPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link to="/" className="text-2xl font-bold text-blue-600">Relasto</Link>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <Link to="/properties" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                Properties
-              </Link>
-              <Link to="/agents" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                Agents
-              </Link>
-              <Link to="/about" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                About
-              </Link>
-              <Link to="/contact" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                Contact
-              </Link>
-            </nav>
-            <div className="flex items-center space-x-4">
-              {isAuthenticated ? (
-                <>
-                  <span className="text-gray-700">
-                    Welcome, {user?.first_name || user?.username}
-                  </span>
-                  <button
-                    onClick={() => navigate('/dashboard')}
-                    className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Dashboard
-                  </button>
-                  <button
-                    onClick={logout}
-                    className="text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => navigate('/login')}
-                    className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Sign In
-                  </button>
-                  <button
-                    onClick={() => navigate('/register')}
-                    className="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium"
-                  >
-                    Sign Up
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar variant="light" />
 
-      <main>
+      <main className="pt-20">
         <section className="bg-blue-600 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="text-4xl font-bold mb-4">About Relasto</h1>
@@ -85,13 +27,13 @@ const AboutPage = () => {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
                 <p className="text-gray-600 mb-4">
-                  Relasto was founded with a simple mission: to make real estate transactions transparent, 
-                  efficient, and accessible to everyone. We believe that finding your dream property or 
+                  Relasto was founded with a simple mission: to make real estate transactions transparent,
+                  efficient, and accessible to everyone. We believe that finding your dream property or
                   connecting with qualified buyers should be a seamless experience.
                 </p>
                 <p className="text-gray-600">
-                  Our platform connects buyers directly with verified agents, eliminating intermediaries 
-                  and ensuring that every transaction is handled by professionals who understand the 
+                  Our platform connects buyers directly with verified agents, eliminating intermediaries
+                  and ensuring that every transaction is handled by professionals who understand the
                   local market.
                 </p>
               </div>

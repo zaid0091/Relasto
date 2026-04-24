@@ -1,286 +1,157 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 const ContactPage = () => {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '',
+    phone: '',
     message: '',
   });
-  const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: '' });
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = 'Name is required';
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
-    }
-    if (!formData.subject.trim()) newErrors.subject = 'Subject is required';
-    if (!formData.message.trim()) newErrors.message = 'Message is required';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
     setSubmitting(true);
-    setSuccess(false);
-
+    // Simulate API call
     setTimeout(() => {
       setSubmitting(false);
       setSuccess(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      setTimeout(() => setSuccess(false), 5000);
     }, 1000);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link to="/" className="text-2xl font-bold text-blue-600">Relasto</Link>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <Link to="/properties" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                Properties
-              </Link>
-              <Link to="/agents" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                Agents
-              </Link>
-              <Link to="/about" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                About
-              </Link>
-              <Link to="/contact" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                Contact
-              </Link>
-            </nav>
-            <div className="flex items-center space-x-4">
-              {isAuthenticated ? (
-                <>
-                  <span className="text-gray-700">
-                    Welcome, {user?.first_name || user?.username}
-                  </span>
-                  <button
-                    onClick={() => navigate('/dashboard')}
-                    className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Dashboard
-                  </button>
-                  <button
-                    onClick={logout}
-                    className="text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => navigate('/login')}
-                    className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Sign In
-                  </button>
-                  <button
-                    onClick={() => navigate('/register')}
-                    className="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium"
-                  >
-                    Sign Up
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#FFF8F1] font-['Inter']">
+      <Navbar variant="light" />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Contact Us</h1>
-          <p className="text-xl text-gray-600">
-            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+      <main className="max-w-7xl mx-auto px-6 py-20 pt-28">
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <h1 className="text-5xl font-black text-[#1A1A1A] mb-8 tracking-tight">Get in touch</h1>
+          <p className="text-gray-500 font-medium leading-relaxed text-lg">
+            On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div>
-            <div className="bg-white rounded-lg shadow-md p-8">
+        <div className="bg-white rounded-[48px] shadow-sm border border-gray-100 overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            {/* Contact Form */}
+            <div className="p-10 lg:p-16 border-r border-gray-50">
+              <h2 className="text-2xl font-black text-[#1A1A1A] mb-10 tracking-tight">Send a message</h2>
+
               {success && (
-                <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
-                  Thank you for your message! We'll get back to you soon.
+                <div className="mb-8 p-4 bg-green-50 border border-green-100 text-green-600 rounded-2xl font-bold text-sm flex items-center gap-3">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
+                  Message sent successfully!
                 </div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                    Your Name
-                  </label>
+                <div className="relative">
+                  <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+                  </div>
                   <input
                     type="text"
-                    id="name"
                     name="name"
+                    placeholder="Full Name"
                     value={formData.name}
                     onChange={handleChange}
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.name ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="John Doe"
+                    required
+                    className="w-full h-16 pl-16 pr-6 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-[#F47D31] font-medium text-gray-700 placeholder:text-gray-400 transition-all"
                   />
-                  {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
                 </div>
 
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    Email Address
-                  </label>
+                <div className="relative">
+                  <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+                  </div>
                   <input
                     type="email"
-                    id="email"
                     name="email"
+                    placeholder="Email Address"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.email ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="john@example.com"
+                    required
+                    className="w-full h-16 pl-16 pr-6 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-[#F47D31] font-medium text-gray-700 placeholder:text-gray-400 transition-all"
                   />
-                  {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
                 </div>
 
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
-                    Subject
-                  </label>
+                <div className="relative">
+                  <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+                  </div>
                   <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
+                    type="tel"
+                    name="phone"
+                    placeholder="Phone Number"
+                    value={formData.phone}
                     onChange={handleChange}
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.subject ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="How can we help?"
+                    className="w-full h-16 pl-16 pr-6 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-[#F47D31] font-medium text-gray-700 placeholder:text-gray-400 transition-all"
                   />
-                  {errors.subject && <p className="mt-1 text-sm text-red-600">{errors.subject}</p>}
                 </div>
 
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={5}
-                    value={formData.message}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.message ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    placeholder="Tell us more about your inquiry..."
-                  />
-                  {errors.message && <p className="mt-1 text-sm text-red-600">{errors.message}</p>}
-                </div>
+                <textarea
+                  name="message"
+                  placeholder="Message"
+                  rows={6}
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-6 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-[#F47D31] font-medium text-gray-700 placeholder:text-gray-400 transition-all resize-none"
+                />
 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-16 bg-[#1A1A1A] text-white rounded-2xl font-black text-sm hover:bg-[#F47D31] transition-all shadow-lg shadow-black/5 disabled:opacity-50"
                 >
-                  {submitting ? 'Sending...' : 'Send Message'}
+                  {submitting ? 'Sending...' : 'Send Request'}
                 </button>
               </form>
             </div>
-          </div>
 
-          <div className="space-y-8">
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Contact Information</h2>
-              <div className="space-y-4">
-                <div className="flex items-start">
-                  <svg className="h-6 w-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  <div>
-                    <h3 className="font-medium text-gray-900">Office Address</h3>
-                    <p className="text-gray-600">123 Real Estate Avenue, Suite 456<br />New York, NY 10001</p>
+            {/* Contact Info */}
+            <div className="p-10 lg:p-16 bg-gray-50/30">
+              <div className="mb-12">
+                <h3 className="text-xl font-black text-[#1A1A1A] mb-6">Office Address</h3>
+                <p className="text-gray-500 font-bold mb-8 leading-relaxed">
+                  1421 San Pedro St, Los Angeles,<br />CA 90015
+                </p>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4 text-gray-500 font-bold group cursor-pointer">
+                    <div className="w-10 h-10 bg-[#F47D31]/10 rounded-xl flex items-center justify-center group-hover:bg-[#F47D31] transition-colors">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-[#F47D31] group-hover:text-white"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+                    </div>
+                    <span className="group-hover:text-[#1A1A1A] transition-colors">(123) 456-7890</span>
                   </div>
-                </div>
-
-                <div className="flex items-start">
-                  <svg className="h-6 w-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  <div>
-                    <h3 className="font-medium text-gray-900">Phone</h3>
-                    <p className="text-gray-600">+1 (555) 123-4567</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <svg className="h-6 w-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  <div>
-                    <h3 className="font-medium text-gray-900">Email</h3>
-                    <p className="text-gray-600">support@relasto.com</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <svg className="h-6 w-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <div>
-                    <h3 className="font-medium text-gray-900">Business Hours</h3>
-                    <p className="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM<br />Saturday - Sunday: Closed</p>
+                  <div className="flex items-center gap-4 text-gray-500 font-bold group cursor-pointer">
+                    <div className="w-10 h-10 bg-[#F47D31]/10 rounded-xl flex items-center justify-center group-hover:bg-[#F47D31] transition-colors">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-[#F47D31] group-hover:text-white"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+                    </div>
+                    <span className="group-hover:text-[#1A1A1A] transition-colors">info@mail.com</span>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">FAQ</h2>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-medium text-gray-900">How do I list a property?</h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    Sign up as an agent, then use the "Add Property" feature in your dashboard.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900">How do I schedule a visit?</h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    Create an account, find your desired property, and use the "Request Visit" button on the property page.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900">Are all agents verified?</h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    Yes, all agents on Relasto undergo a verification process before they can list properties.
-                  </p>
+              <div>
+                <h3 className="text-xl font-black text-[#1A1A1A] mb-8">Social</h3>
+                <div className="flex flex-wrap gap-4">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="w-12 h-12 bg-white rounded-xl flex items-center justify-center border border-gray-100 hover:border-[#F47D31] hover:bg-[#F47D31]/5 transition-all cursor-pointer group shadow-sm">
+                      <div className="w-6 h-6 bg-gray-200 group-hover:bg-[#F47D31] transition-colors rounded-sm" />
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -288,9 +159,55 @@ const ContactPage = () => {
         </div>
       </main>
 
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p>&copy; 2024 Relasto. All rights reserved.</p>
+      {/* Footer */}
+      <footer className="bg-white pt-24 pb-12 mt-20 border-t border-[#F47D31]/10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
+            <div className="lg:col-span-2">
+              <Link to="/" className="flex items-center gap-2 mb-8">
+                <div className="w-10 h-10 bg-[#F47D31] rounded-xl flex items-center justify-center">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
+                  </svg>
+                </div>
+                <span className="text-2xl font-black text-[#1A1A1A] tracking-tight">Relasto</span>
+              </Link>
+              <p className="text-gray-500 font-medium mb-8 max-w-sm leading-relaxed">
+                59 Bervely Hill Ave, Brooklyn Town,<br />New York, NY 5630, CA, US
+              </p>
+              <div className="space-y-3 mb-8">
+                <p className="text-[#1A1A1A] font-bold">+(123) 456-7890</p>
+                <p className="text-[#1A1A1A] font-bold">info@mail.com</p>
+              </div>
+              <div className="flex gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center hover:bg-[#F47D31]/10 transition-colors cursor-pointer group">
+                    <div className="w-5 h-5 bg-gray-300 group-hover:bg-[#F47D31] transition-colors rounded-sm" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {[
+              { title: 'Features', links: ['Home v1', 'Home v2', 'About', 'Contact', 'Search'] },
+              { title: 'Information', links: ['Listing v1', 'Listing v2', 'Property Details', 'Agent List', 'Agent Profile'] },
+              { title: 'Documentation', links: ['Blog', 'FAQ', 'Privacy Policy', 'License'] }
+            ].map((col) => (
+              <div key={col.title}>
+                <h4 className="text-[#1A1A1A] font-black mb-8 uppercase tracking-widest text-xs">{col.title}</h4>
+                <ul className="space-y-4">
+                  {col.links.map((link) => (
+                    <li key={link}>
+                      <a href="#" className="text-gray-500 hover:text-[#F47D31] font-bold text-sm transition-colors">{link}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <div className="pt-12 border-t border-gray-100 flex flex-col md:row items-center justify-between gap-6">
+            <p className="text-gray-400 font-bold text-sm">© 2022. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>

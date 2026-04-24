@@ -2,6 +2,7 @@ import axios from 'axios';
 
 // API configuration
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:8000';
 
 // Create axios instance
 const api = axios.create({
@@ -10,6 +11,9 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+// Export BASE_URL for use in components
+export { BASE_URL };
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
@@ -83,7 +87,7 @@ export const authAPI = {
 
 export const profilesAPI = {
   getMyProfile: () => api.get('/profiles/me/'),
-  updateProfile: (data) => api.patch('/profiles/update_me/', data),
+  updateProfile: (data, isFormData = false) => api.patch('/profiles/update_me/', data, isFormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}),
   getProfile: (id) => api.get(`/profiles/${id}/`),
   searchAgents: (params) => api.get('/profiles/search_agents/', { params }),
   getAgentProperties: (id, params) => api.get(`/profiles/${id}/properties/`, { params }),
@@ -102,6 +106,7 @@ export const propertiesAPI = {
   setPrimaryImage: (propertyId, imageId) => api.post(`/properties/${propertyId}/manage_image/`, { image_id: imageId, action: 'set_primary' }),
   getPropertyImages: (id) => api.get(`/properties/${id}/images_list/`),
   getMyProperties: (params) => api.get('/my_properties/', { params }),
+  getStats: () => api.get('/properties/stats/'),
 };
 
 export const reviewsAPI = {

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { authAPI } from '../services/api';
+import { authAPI, profilesAPI } from '../services/api';
 
 // Initial state
 const initialState = {
@@ -117,6 +117,20 @@ export const AuthProvider = ({ children }) => {
           const responseData = response.data?.data || response.data;
           const user = responseData?.user || responseData?.user;
           
+          // Also fetch profile details to get profile_image
+          let profileData = null;
+          try {
+            const myProfileResponse = await profilesAPI.getMyProfile();
+            profileData = myProfileResponse.data?.data?.profile || myProfileResponse.data?.profile;
+          } catch (e) {
+            console.log('Could not fetch profile details');
+          }
+          
+          // Merge profile data into user object
+          if (profileData) {
+            user.profile = profileData;
+          }
+          
           dispatch({
             type: AUTH_ACTIONS.LOAD_USER_SUCCESS,
             payload: { user },
@@ -147,17 +161,31 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Invalid response format from server');
       }
       
-      localStorage.setItem('access_token', tokens.access || tokens.access_token);
-      localStorage.setItem('refresh_token', tokens.refresh || tokens.refresh_token);
-      
-      // Fetch full user profile including is_agent
-      const profileResponse = await authAPI.getProfile();
-      const userData = profileResponse.data?.data?.user || profileResponse.data?.data || profileResponse.data;
-      
-      dispatch({
-        type: AUTH_ACTIONS.LOGIN_SUCCESS,
-        payload: { user: userData },
-      });
+localStorage.setItem('access_token', tokens.access || tokens.access_token);
+        localStorage.setItem('refresh_token', tokens.refresh || tokens.refresh_token);
+        
+        // Fetch full user profile including is_agent
+        const profileResponse = await authAPI.getProfile();
+        const userData = profileResponse.data?.data?.user || profileResponse.data?.data || profileResponse.data;
+        
+        // Also fetch profile details to get profile_image
+        let profileData = null;
+        try {
+          const myProfileResponse = await profilesAPI.getMyProfile();
+          profileData = myProfileResponse.data?.data?.profile || myProfileResponse.data?.profile;
+        } catch (e) {
+          console.log('Could not fetch profile details');
+        }
+        
+        // Merge profile data into user object
+        if (profileData) {
+          userData.profile = profileData;
+        }
+        
+        dispatch({
+          type: AUTH_ACTIONS.LOAD_USER_SUCCESS,
+          payload: { user: userData },
+        });
       
       return { success: true };
     } catch (error) {

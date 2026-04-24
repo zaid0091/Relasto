@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { propertiesAPI } from '../services/api';
+import Navbar from '../components/Navbar';
 
 const AddPropertyPage = () => {
   const { user, logout } = useAuth();
@@ -60,7 +61,7 @@ const AddPropertyPage = () => {
   const removeImageUrlField = (index) => {
     setImageUrls(prev => prev.filter((_, i) => i !== index));
   };
-  
+
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
@@ -69,7 +70,7 @@ const AddPropertyPage = () => {
       setImagePreviews(prev => [...prev, ...newPreviews]);
     }
   };
-  
+
   const removeImage = (index) => {
     setImageFiles(prev => prev.filter((_, i) => i !== index));
     setImagePreviews(prev => {
@@ -195,7 +196,7 @@ const AddPropertyPage = () => {
           lot_size: formData.lot_size ? parseFloat(formData.lot_size) : null,
           year_built: formData.year_built ? parseInt(formData.year_built) : null,
         };
-        
+
         const updatePayload = {
           title: formData.title,
           description: formData.description,
@@ -209,9 +210,9 @@ const AddPropertyPage = () => {
           attributes: attributes,
           features: featuresList.filter(f => f.key.trim()).map(f => ({ key: f.key.trim(), value: f.value?.trim() || '' })),
         };
-        
+
         await propertiesAPI.updateProperty(slug, updatePayload);
-        
+
         if (imageFiles.length > 0) {
           for (let i = 0; i < imageFiles.length; i++) {
             try {
@@ -225,12 +226,12 @@ const AddPropertyPage = () => {
             }
           }
         }
-        
+
         setSuccess(true);
         setTimeout(() => navigate('/dashboard'), 2000);
       } else {
         const featuresJson = JSON.stringify(featuresList.filter(f => f.key.trim()).map(f => ({ key: f.key.trim(), value: f.value?.trim() || '' })));
-        
+
         const propertyFormData = new FormData();
         Object.keys(payload).forEach(key => {
           if (key === 'features') {
@@ -263,7 +264,7 @@ const AddPropertyPage = () => {
     } catch (err) {
       const errorData = err.response?.data?.error;
       let errorMessage = isEditMode ? 'Failed to update property' : 'Failed to create property';
-      
+
       if (typeof errorData === 'string') {
         errorMessage = errorData;
       } else if (typeof errorData === 'object') {
@@ -277,7 +278,7 @@ const AddPropertyPage = () => {
         }
         errorMessage = messages.join(' | ');
       }
-      
+
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -286,32 +287,9 @@ const AddPropertyPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link to="/" className="text-2xl font-bold text-blue-600">Relasto</Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-700">Welcome, {user?.first_name || user?.username}</span>
-              <Link
-                to="/dashboard"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={logout}
-                className="text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar variant="light" />
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         <div className="mb-6">
           <Link to="/dashboard" className="text-blue-600 hover:text-blue-800 text-sm">
             &larr; Back to Dashboard
@@ -353,9 +331,8 @@ const AddPropertyPage = () => {
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.title ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.title ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     placeholder="e.g., Beautiful 3BR House with Garden"
                   />
                   {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
@@ -370,9 +347,8 @@ const AddPropertyPage = () => {
                     rows={4}
                     value={formData.description}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.description ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.description ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     placeholder="Describe the property in detail..."
                   />
                   {errors.description && <p className="mt-1 text-sm text-red-600">{errors.description}</p>}
@@ -387,9 +363,8 @@ const AddPropertyPage = () => {
                     name="price"
                     value={formData.price}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.price ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.price ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     placeholder="250000"
                   />
                   {errors.price && <p className="mt-1 text-sm text-red-600">{errors.price}</p>}
@@ -511,9 +486,8 @@ const AddPropertyPage = () => {
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.address ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.address ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     placeholder="123 Main Street"
                   />
                   {errors.address && <p className="mt-1 text-sm text-red-600">{errors.address}</p>}
@@ -528,9 +502,8 @@ const AddPropertyPage = () => {
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.city ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.city ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     placeholder="New York"
                   />
                   {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city}</p>}
@@ -545,9 +518,8 @@ const AddPropertyPage = () => {
                     name="state"
                     value={formData.state}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.state ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.state ? 'border-red-500' : 'border-gray-300'
+                      }`}
                     placeholder="NY"
                   />
                   {errors.state && <p className="mt-1 text-sm text-red-600">{errors.state}</p>}
@@ -567,7 +539,7 @@ const AddPropertyPage = () => {
                   />
                 </div>
 
-<div className="md:col-span-2">
+                <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Features
                   </label>

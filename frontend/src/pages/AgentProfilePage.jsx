@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { profilesAPI, reviewsAPI } from '../services/api';
+import Navbar from '../components/Navbar';
 
 const AgentProfilePage = () => {
   const { id } = useParams();
@@ -12,20 +13,16 @@ const AgentProfilePage = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('properties');
+  const [activeTab, setActiveTab] = useState('Properties');
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewData, setReviewData] = useState({ rating: 5, comment: '' });
   const [submittingReview, setSubmittingReview] = useState(false);
   const [reviewSuccess, setReviewSuccess] = useState(false);
-  const [showEditForm, setShowEditForm] = useState(false);
-  const [editReviewData, setEditReviewData] = useState({ rating: 5, comment: '' });
-  const [updatingReview, setUpdatingReview] = useState(false);
 
   useEffect(() => {
     const fetchAgentData = async () => {
       try {
         setLoading(true);
-        
         const [agentResponse, propertiesResponse, reviewsResponse] = await Promise.all([
           profilesAPI.getProfile(id),
           profilesAPI.getAgentProperties(id),
@@ -60,6 +57,7 @@ const AgentProfilePage = () => {
       });
       setReviewSuccess(true);
       setShowReviewForm(false);
+      setReviewData({ rating: 5, comment: '' });
       const reviewsResponse = await profilesAPI.getAgentReviews(id);
       setReviews(reviewsResponse.data.data?.reviews || []);
       setTimeout(() => setReviewSuccess(false), 3000);
@@ -70,60 +68,29 @@ const AgentProfilePage = () => {
     }
   };
 
-  const handleEditClick = () => {
-    setEditReviewData({ rating: userReview.rating, comment: userReview.comment || '' });
-    setShowEditForm(true);
-  };
-
-  const handleUpdateReview = async (e) => {
-    e.preventDefault();
-    setUpdatingReview(true);
-    try {
-      await reviewsAPI.updateReview(userReview.id, {
-        rating: editReviewData.rating,
-        comment: editReviewData.comment,
-      });
-      setReviewSuccess(true);
-      setShowEditForm(false);
-      const reviewsResponse = await profilesAPI.getAgentReviews(id);
-      setReviews(reviewsResponse.data.data?.reviews || []);
-      setTimeout(() => setReviewSuccess(false), 3000);
-    } catch (err) {
-      alert(err.response?.data?.error || 'Failed to update review');
-    } finally {
-      setUpdatingReview(false);
-    }
-  };
-
-  const userReview = user ? reviews.find(r => r.reviewer?.id === user.id) : null;
+  const agentFullName = agent?.user ?
+    `${agent.user.first_name || ''} ${agent.user.last_name || ''}`.trim() || agent.user.username || 'Bruno Fernandes'
+    : 'Bruno Fernandes';
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-[#FFF8F1] flex items-center justify-center">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="w-16 h-16 bg-[#F47D31] rounded-full mb-4"></div>
+          <div className="h-4 w-32 bg-gray-200 rounded"></div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
-          <Link to="/agents" className="text-blue-600 hover:text-blue-800">
-            Back to Agents
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  if (!agent) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600 mb-4">Agent not found</p>
-          <Link to="/agents" className="text-blue-600 hover:text-blue-800">
+      <div className="min-h-screen bg-[#FFF8F1] flex items-center justify-center p-4">
+        <div className="text-center bg-white p-8 rounded-3xl shadow-xl max-w-md">
+          <div className="text-red-500 text-5xl mb-4">!</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Profile</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <Link to="/agents" className="inline-block bg-[#F47D31] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#d66a27] transition-all">
             Back to Agents
           </Link>
         </div>
@@ -132,290 +99,502 @@ const AgentProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link to="/" className="text-2xl font-bold text-blue-600">Relasto</Link>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <Link to="/properties" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                Properties
-              </Link>
-              <Link to="/agents" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                Agents
-              </Link>
-              <Link to="/about" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                About
-              </Link>
-              <Link to="/contact" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                Contact
-              </Link>
-            </nav>
-            <div className="flex items-center space-x-4">
-              {isAuthenticated ? (
-                <>
-                  <span className="text-gray-700">
-                    Welcome, {user?.first_name || user?.username}
-                  </span>
-                  <button
-                    onClick={() => navigate('/dashboard')}
-                    className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Dashboard
-                  </button>
-                  <button
-                    onClick={logout}
-                    className="text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => navigate('/login')}
-                    className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Sign In
-                  </button>
-                  <button
-                    onClick={() => navigate('/register')}
-                    className="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium"
-                  >
-                    Sign Up
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#FFF8F1] font-['Inter',sans-serif] text-[#2D2D2D]">
+      <Navbar variant="light" />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Link to="/agents" className="text-blue-600 hover:text-blue-800 text-sm mb-4 inline-block">
-          &larr; Back to Agents
-        </Link>
+      {/* Hero Section */}
+      <div className="relative w-full h-100 overflow-hidden pt-6">
+        <img
+          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=2000&q=80"
+          alt="Luxury Architecture"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/10"></div>
+      </div>
 
-        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-          <div className="flex items-start space-x-6">
-            <div className="h-24 w-24 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-              <span className="text-3xl font-bold text-blue-600">
-                {agent.user?.first_name?.[0] || agent.user?.username?.[0] || 'A'}
-              </span>
+      {/* Profile Bar */}
+      <div className="max-w-7xl mx-auto px-6 -mt-16 relative z-10">
+        <div className="bg-white rounded-4xl p-6 md:p-10 flex flex-col md:flex-row items-center md:items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.08)] gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden border-4 border-white shadow-lg">
+              <img
+                src={agent?.profile_image || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80"}
+                alt={agentFullName}
+                className="w-full h-full object-cover"
+              />
             </div>
-            <div className="flex-1">
-              <h1 className="text-2xl font-bold text-gray-900">
-                {agent.user?.first_name && agent.user?.last_name
-                  ? `${agent.user.first_name} ${agent.user.last_name}`
-                  : agent.user?.username || 'Agent'}
-              </h1>
-              <div className="mt-2 flex items-center space-x-4 text-sm text-gray-600">
-                {agent.city && (
-                  <span className="flex items-center">
-                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    {agent.city}{agent.state ? `, ${agent.state}` : ''}
-                  </span>
-                )}
-                <span className="flex items-center">
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                  </svg>
-                  {agent.average_rating?.toFixed(1) || '0.0'} ({agent.review_count || 0} reviews)
-                </span>
+            <div className="text-center md:text-left">
+              <h1 className="text-3xl font-extrabold text-gray-900 mb-1">{agentFullName}</h1>
+              <div className="flex items-center justify-center md:justify-start gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill={i < Math.floor(agent?.average_rating || 4.5) ? "#F47D31" : "#E5E7EB"}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                ))}
+                <span className="text-sm font-bold text-gray-400 ml-2">{agent?.average_rating?.toFixed(1) || "4.5"} Review</span>
               </div>
-              {agent.bio && (
-                <p className="mt-4 text-gray-600">{agent.bio}</p>
-              )}
-              {agent.phone && (
-                <p className="mt-2 text-gray-600">
-                  <span className="font-medium">Phone:</span> {agent.phone}
-                </p>
-              )}
-              {isAuthenticated && user && agent && user.id !== agent.user.id && !userReview && (
-                <button
-                  onClick={() => setShowReviewForm(true)}
-                  className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
-                >
-                  Write a Review
-                </button>
-              )}
-              {isAuthenticated && user && agent && user.id !== agent.user.id && userReview && (
-                <button
-                  onClick={handleEditClick}
-                  className="mt-4 bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
-                >
-                  Edit My Review
-                </button>
-              )}
+
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
+                <div className="flex items-center gap-2 text-gray-600">
+                  <div className="w-8 h-8 rounded-full bg-[#FFF8F1] flex items-center justify-center">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F47D31" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+                  </div>
+                  <span className="font-medium">{agent?.phone || "(123) 456-7890"}</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <div className="w-8 h-8 rounded-full bg-[#FFF8F1] flex items-center justify-center">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F47D31" strokeWidth="2"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>
+                  </div>
+                  <span className="font-medium">{agent?.user?.email || "bruno@relasto.com"}</span>
+                </div>
+              </div>
             </div>
           </div>
+
+          <button className="bg-[#1A1A1A] text-white px-10 py-4 rounded-full font-bold hover:bg-gray-800 transition-all shadow-xl">
+            Contact
+          </button>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md">
-          <div className="border-b border-gray-200">
-            <nav className="flex -mb-px">
-              <button
-                onClick={() => setActiveTab('properties')}
-                className={`py-4 px-6 text-sm font-medium ${
-                  activeTab === 'properties'
-                    ? 'border-b-2 border-blue-500 text-blue-600'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Properties ({properties.length})
-              </button>
-              <button
-                onClick={() => setActiveTab('reviews')}
-                className={`py-4 px-6 text-sm font-medium ${
-                  activeTab === 'reviews'
-                    ? 'border-b-2 border-blue-500 text-blue-600'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Reviews ({reviews.length})
-              </button>
-            </nav>
-          </div>
+        {/* Agent Info Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
+          {agent.experience > 0 && (
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-[#F47D31]/10 rounded-xl flex items-center justify-center">
+                <svg className="w-5 h-5 text-[#F47D31]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-2xl font-black text-gray-900">{agent.experience}+</p>
+                <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Years Experience</p>
+              </div>
+            </div>
+          )}
+          {agent.property_types && (
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-[#F47D31]/10 rounded-xl flex items-center justify-center">
+                <svg className="w-5 h-5 text-[#F47D31]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 21h-5m2 0v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5m2 0h5" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-lg font-black text-gray-900 line-clamp-1">{agent.property_types}</p>
+                <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Property Types</p>
+              </div>
+            </div>
+          )}
+          {agent.area && (
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-[#F47D31]/10 rounded-xl flex items-center justify-center">
+                <svg className="w-5 h-5 text-[#F47D31]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-lg font-black text-gray-900 line-clamp-1">{agent.area}</p>
+                <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Area</p>
+              </div>
+            </div>
+          )}
+          {agent.license_no && (
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-[#F47D31]/10 rounded-xl flex items-center justify-center">
+                <svg className="w-5 h-5 text-[#F47D31]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-lg font-black text-gray-900">{agent.license_no}</p>
+                <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">License No</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
-          <div className="p-6">
-            {activeTab === 'properties' && (
-              properties.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {properties.map((property) => (
-                    <Link
-                      key={property.id}
-                      to={`/properties/${property.slug}`}
-                      className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
-                    >
-                      {property.primary_image?.image_url ? (
-                        <img
-                          src={property.primary_image.image_url}
-                          alt={property.title}
-                          className="w-full h-48 object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                          <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                          </svg>
-                        </div>
-                      )}
-                      <div className="p-4">
-                        <h3 className="font-semibold text-gray-900 truncate">{property.title}</h3>
-                        <p className="text-sm text-gray-500 mt-1">{property.city}, {property.state}</p>
-                        <p className="text-lg font-bold text-blue-600 mt-2">
-                          ${property.price?.toLocaleString()}
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1 capitalize">{property.status?.replace('_', ' ')}</p>
+      {/* Tabs & Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="flex flex-wrap gap-4 mb-10">
+          {['Properties', 'Reviews', 'About', 'Contact'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-8 py-3 rounded-2xl font-bold transition-all border-2 ${activeTab === tab
+                ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
+                : 'bg-white text-gray-500 border-gray-100 hover:border-gray-200'
+                }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {activeTab === 'Properties' && (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {properties.length > 0 ? properties.map((property) => (
+                <div key={property.id} className="bg-white rounded-4xl overflow-hidden group shadow-sm hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-gray-100">
+                  <div className="relative h-72 overflow-hidden">
+                    <img
+                      src={property.primary_image?.image_url || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"}
+                      alt={property.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute top-6 left-6 bg-[#1A1A1A]/50 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider">
+                      {property.status?.replace('_', ' ') || "For Sale"}
+                    </div>
+                  </div>
+                  <div className="p-8">
+                    <div className="flex items-start gap-2 mb-4">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F47D31" strokeWidth="2" className="mt-1 shrink-0"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
+                      <h3 className="text-xl font-extrabold text-gray-900 group-hover:text-[#F47D31] transition-colors line-clamp-1">
+                        {property.title}
+                      </h3>
+                    </div>
+
+                    <div className="flex items-center gap-6 text-gray-500 font-bold text-sm mb-8">
+                      <div className="flex items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 4v16" /><path d="M2 8h18a2 2 0 0 1 2 2v10" /><path d="M2 17h20" /><path d="M6 8v9" /></svg>
+                        <span>{property.attributes?.bedrooms || '—'} Bed</span>
                       </div>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-500 text-center py-8">This agent has no properties listed yet.</p>
-              )
-            )}
-
-            {activeTab === 'reviews' && (
-              reviews.length > 0 ? (
-                <div className="space-y-4">
-                  {reviews.map((review) => (
-                    <div key={review.id} className="border-b border-gray-200 pb-4 last:border-b-0">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <div className="flex items-center">
-                            <span className="font-medium text-gray-900">
-                              {review.reviewer?.username || 'Anonymous'}
-                            </span>
-                            <div className="ml-2 flex">
-                              {[...Array(5)].map((_, i) => (
-                                <svg
-                                  key={i}
-                                  className={`h-4 w-4 ${
-                                    i < review.rating ? 'text-yellow-400' : 'text-gray-300'
-                                  }`}
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                              ))}
-                            </div>
-                          </div>
-                          {review.comment && (
-                            <p className="text-gray-600 mt-2">{review.comment}</p>
-                          )}
-                        </div>
-                        <span className="text-sm text-gray-500">
-                          {new Date(review.created_at).toLocaleDateString()}
-                        </span>
+                      <div className="flex items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1 0L3 6" /><path d="M12 21h7a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3" /><path d="M9 14h1.5a2.5 2.5 0 0 0 0-5H9v5Z" /><path d="M12 11V3" /><path d="M3 11V3" /><path d="M9 21v-4" /></svg>
+                        <span>{property.attributes?.bathrooms || '—'} Bath</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M3 9h18" /><path d="M9 21V9" /></svg>
+                        <span>{property.attributes?.square_feet?.toLocaleString() || '—'} sqft</span>
                       </div>
                     </div>
-                  ))}
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <span className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-1">Price</span>
+                        <span className="text-2xl font-black text-[#1A1A1A]">${property.price?.toLocaleString() || '—'}</span>
+                      </div>
+                      <Link to={`/properties/${property.slug}`} className="bg-[#1A1A1A] text-white px-6 py-3 rounded-2xl font-bold hover:bg-[#F47D31] transition-all text-sm">
+                        View Details
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              ) : (
-                <p className="text-gray-500 text-center py-8">This agent has no reviews yet.</p>
-              )
-            )}
+              )) : (
+                <div className="col-span-full py-20 text-center">
+                  <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E5E7EB" strokeWidth="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">No Properties Found</h3>
+                  <p className="text-gray-500">This agent hasn't listed any properties yet.</p>
+                </div>
+              )}
+            </div>
+
+            {/* Pagination */}
+            <div className="flex justify-center items-center gap-3 mt-16">
+              {[1, 2, 3, 4, 5].map(p => (
+                <button key={p} className={`w-12 h-12 rounded-xl font-bold transition-all border-2 ${p === 1 ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-white text-gray-500 border-gray-100 hover:border-gray-300'}`}>
+                  {p}
+                </button>
+              ))}
+              <button className="px-6 h-12 bg-white rounded-xl font-bold text-gray-500 border-2 border-gray-100 hover:border-gray-300 flex items-center gap-2">
+                Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6" /></svg>
+              </button>
+            </div>
+          </>
+        )}
+
+        {activeTab === 'Reviews' && (
+          <>
+            {/* Reviews Section */}
+            <div className="mt-4">
+              <div className="flex justify-between items-end mb-12">
+                <div>
+                  <h2 className="text-4xl font-black text-gray-900 mb-2">Clients Review</h2>
+                  <p className="text-gray-500 font-medium">What people say about working with {agentFullName}</p>
+                </div>
+                <button
+                  onClick={() => setShowReviewForm(true)}
+                  className="bg-[#1A1A1A] text-white px-8 py-4 rounded-2xl font-bold hover:bg-gray-800 transition-all shadow-xl flex items-center gap-3"
+                >
+                  Write a Review <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12h14" /></svg>
+                </button>
+              </div>
+
+              <div className="space-y-8">
+                {reviews.length > 0 ? reviews.map((review) => (
+                  <div key={review.id} className="bg-white rounded-[40px] p-8 md:p-12 shadow-sm border border-gray-50 hover:shadow-xl transition-all duration-500">
+                    <div className="flex items-center gap-1 mb-6">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill={i < review.rating ? "#F47D31" : "#E5E7EB"}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                      ))}
+                      <span className="text-sm font-bold text-gray-400 ml-3">
+                        {new Date(review.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      </span>
+                    </div>
+                    <p className="text-xl text-gray-600 leading-relaxed italic mb-10">"{review.comment}"</p>
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-full bg-[#FFF8F1] overflow-hidden border-2 border-[#F47D31]/10">
+                        <img
+                          src={review.reviewer?.profile_image || `https://ui-avatars.com/api/?name=${review.reviewer?.first_name || 'User'}&background=FFF8F1&color=F47D31`}
+                          alt={review.reviewer?.first_name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div>
+                        <h4 className="text-xl font-black text-gray-900">{review.reviewer?.first_name || review.reviewer?.username || 'Anonymous'}</h4>
+                      </div>
+                    </div>
+                  </div>
+                )) : (
+                  <div className="text-center py-20 bg-white rounded-[48px] shadow-sm">
+                    <div className="w-20 h-20 bg-[#FFF8F1] rounded-full flex items-center justify-center mx-auto mb-6">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F47D31" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">No Reviews Yet</h3>
+                    <p className="text-gray-500">Be the first to share your experience!</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+
+        {activeTab === 'About' && (
+          <>
+            {/* About Section */}
+            <div className="bg-white rounded-[48px] p-8 md:p-16 mt-4 shadow-sm border border-gray-50">
+              <div className="flex flex-col lg:flex-row gap-16 items-start">
+                <div className="w-full lg:w-1/3 flex flex-col items-center">
+                  <div className="w-full aspect-4/5 rounded-4xl overflow-hidden shadow-2xl mb-8">
+                    <img
+                      src={agent?.profile_image || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80"}
+                      alt={agentFullName}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-12 gap-x-8 mb-12">
+                    {agent?.experience > 0 && (
+                      <div>
+                        <h4 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-2">Experience</h4>
+                        <p className="text-xl font-extrabold text-gray-900">{agent.experience}+ Years</p>
+                      </div>
+                    )}
+                    {agent?.property_types && (
+                      <div>
+                        <h4 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-2">Property Types</h4>
+                        <p className="text-xl font-extrabold text-gray-900">{agent.property_types}</p>
+                      </div>
+                    )}
+                    {agent?.area && (
+                      <div>
+                        <h4 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-2">Area</h4>
+                        <p className="text-xl font-extrabold text-gray-900">{agent.area}</p>
+                      </div>
+                    )}
+                    {agent?.address && (
+                      <div>
+                        <h4 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-2">Address</h4>
+                        <p className="text-xl font-extrabold text-gray-900">{agent.address}</p>
+                      </div>
+                    )}
+                    {agent?.license_no && (
+                      <div>
+                        <h4 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-2">License No</h4>
+                        <p className="text-xl font-extrabold text-gray-900">{agent.license_no}</p>
+                      </div>
+                    )}
+                  </div>
+                  {agent?.bio && (
+                    <div className="mt-12">
+                      <h4 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-4">About</h4>
+                      <p className="text-gray-600 leading-relaxed text-lg italic">{agent.bio}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {activeTab === 'Contact' && (
+          <>
+            {/* Contact Section */}
+            <div className="bg-white rounded-[48px] p-8 md:p-16 mt-4 shadow-sm border border-gray-50">
+              <div className="flex flex-col lg:flex-row gap-16 items-start">
+                <div className="w-full lg:w-1/3 flex flex-col items-center">
+                  <div className="w-full aspect-4/5 rounded-4xl overflow-hidden shadow-2xl mb-8">
+                    <img
+                      src={agent?.profile_image || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80"}
+                      alt={agentFullName}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <div className="text-center">
+                    <h2 className="text-3xl font-black text-gray-900 mb-2">{agentFullName}</h2>
+                    <div className="flex flex-col gap-4 text-left max-w-xs mx-auto">
+                      {agent?.phone && (
+                        <div className="flex items-center gap-4 text-gray-600 font-bold">
+                          <div className="w-10 h-10 rounded-full bg-[#FFF8F1] flex items-center justify-center shrink-0">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F47D31" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+                          </div>
+                          <span>{agent.phone}</span>
+                        </div>
+                      )}
+                      {agent?.user?.email && (
+                        <div className="flex items-center gap-4 text-gray-600 font-bold">
+                          <div className="w-10 h-10 rounded-full bg-[#FFF8F1] flex items-center justify-center shrink-0">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F47D31" strokeWidth="2"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>
+                          </div>
+                          <span>{agent.user.email}</span>
+                        </div>
+                      )}
+                    </div>
+                    <button className="w-full mt-10 bg-[#1A1A1A] text-white py-5 rounded-2xl font-extrabold hover:bg-gray-800 transition-all shadow-xl">
+                      Contact
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-100 pt-24 pb-12 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 mb-24">
+            <div className="lg:col-span-2">
+              <div className="flex items-center gap-2 mb-8">
+                <div className="w-10 h-10 bg-[#F47D31] rounded-xl flex items-center justify-center">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
+                </div>
+                <span className="text-3xl font-black tracking-tight text-[#F47D31]">Relasto</span>
+              </div>
+              <p className="text-gray-500 font-medium leading-relaxed max-w-sm mb-10 text-lg">
+                259 East 24th Street, New York City, NY 10010, US
+              </p>
+              <div className="flex flex-col gap-3 font-bold text-gray-800">
+                <p>+123 456 7890</p>
+                <p>info@relasto.com</p>
+              </div>
+              <div className="flex gap-6 mt-10">
+                {['fb', 'tw', 'ig', 'li', 'yt'].map(s => (
+                  <div key={s} className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center hover:bg-[#F47D31] hover:text-white text-gray-400 transition-all cursor-pointer">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /></svg>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-xl font-black text-gray-900 mb-8">Features</h4>
+              <div className="flex flex-col gap-4 font-bold text-gray-500">
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">Home</Link>
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">Listing</Link>
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">About</Link>
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">Contact</Link>
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">Search</Link>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-xl font-black text-gray-900 mb-8">Information</h4>
+              <div className="flex flex-col gap-4 font-bold text-gray-500">
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">Listing</Link>
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">About Us</Link>
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">Property Detail</Link>
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">Agent List</Link>
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">Agent Profile</Link>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-xl font-black text-gray-900 mb-8">Others</h4>
+              <div className="flex flex-col gap-4 font-bold text-gray-500">
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">Blog</Link>
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">Log In</Link>
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">Enter OTP</Link>
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">New Password</Link>
+                <Link to="#" className="hover:text-[#F47D31] transition-colors">Reset Password</Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-12 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p className="text-gray-400 font-bold">© 2024 Relasto. All rights reserved.</p>
+            <div className="flex gap-10 font-bold text-gray-400">
+              <Link to="#" className="hover:text-gray-900 transition-colors">Privacy Policy</Link>
+              <Link to="#" className="hover:text-gray-900 transition-colors">Terms of Service</Link>
+            </div>
           </div>
         </div>
-      </main>
+      </footer>
 
+      {/* Review Form Modal */}
       {showReviewForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Write a Review</h2>
+        <div className="fixed inset-0 bg-[#1A1A1A]/40 backdrop-blur-md flex items-center justify-center z-100 p-4">
+          <div className="bg-white rounded-[48px] p-10 md:p-16 w-full max-w-2xl shadow-2xl">
+            <div className="flex justify-between items-start mb-10">
+              <div>
+                <h2 className="text-4xl font-black text-gray-900 mb-2">Write a Review</h2>
+                <p className="text-gray-500 font-medium">Share your experience working with {agentFullName}</p>
+              </div>
+              <button onClick={() => setShowReviewForm(false)} className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12" /></svg>
+              </button>
+            </div>
             <form onSubmit={handleSubmitReview}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
-                <div className="flex space-x-1">
+              <div className="mb-10">
+                <label className="block text-gray-900 font-black mb-4">How would you rate your experience?</label>
+                <div className="flex gap-4">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
                       key={star}
                       type="button"
                       onClick={() => setReviewData({ ...reviewData, rating: star })}
-                      className="focus:outline-none"
+                      className="focus:outline-none transition-transform hover:scale-125"
                     >
                       <svg
-                        className={`h-8 w-8 ${star <= reviewData.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
+                        width="48" height="48"
+                        viewBox="0 0 24 24"
+                        fill={star <= reviewData.rating ? '#F47D31' : '#F1F1F1'}
+                        className="transition-colors duration-300"
                       >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                       </svg>
                     </button>
                   ))}
                 </div>
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Comment (optional)</label>
+              <div className="mb-12">
+                <label className="block text-gray-900 font-black mb-4">Your detailed feedback</label>
                 <textarea
                   value={reviewData.comment}
                   onChange={(e) => setReviewData({ ...reviewData, comment: e.target.value })}
-                  rows={4}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Share your experience with this agent..."
+                  rows={6}
+                  className="w-full bg-[#FFF8F1] border-2 border-transparent rounded-4xl px-8 py-6 focus:outline-none focus:border-[#F47D31] transition-all text-gray-700 font-medium text-lg"
+                  placeholder="Tell us more about the service, communication, and overall process..."
                 />
               </div>
-              <div className="flex justify-end space-x-3">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   type="button"
                   onClick={() => setShowReviewForm(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                  className="flex-1 px-10 py-5 bg-gray-50 rounded-2xl text-gray-500 font-black hover:bg-gray-100 transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submittingReview}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                  className="flex-1 px-10 py-5 bg-[#1A1A1A] text-white rounded-2xl font-black hover:bg-gray-800 transition-all shadow-xl disabled:opacity-50"
                 >
-                  {submittingReview ? 'Submitting...' : 'Submit Review'}
+                  {submittingReview ? 'Sending...' : 'Submit Review'}
                 </button>
               </div>
             </form>
@@ -423,74 +602,15 @@ const AgentProfilePage = () => {
         </div>
       )}
 
-      {showEditForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Edit Review</h2>
-            <form onSubmit={handleUpdateReview}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
-                <div className="flex space-x-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setEditReviewData({ ...editReviewData, rating: star })}
-                      className="focus:outline-none"
-                    >
-                      <svg
-                        className={`h-8 w-8 ${star <= editReviewData.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Comment (optional)</label>
-                <textarea
-                  value={editReviewData.comment}
-                  onChange={(e) => setEditReviewData({ ...editReviewData, comment: e.target.value })}
-                  rows={4}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Share your experience with this agent..."
-                />
-              </div>
-              <div className="flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={() => setShowEditForm(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={updatingReview}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-                >
-                  {updatingReview ? 'Updating...' : 'Update Review'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
+      {/* Success Toast */}
       {reviewSuccess && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
-          Review submitted successfully!
+        <div className="fixed bottom-10 right-10 bg-[#1A1A1A] text-white px-10 py-6 rounded-3xl shadow-2xl z-200 flex items-center gap-4 animate-bounce">
+          <div className="w-10 h-10 bg-[#F47D31] rounded-full flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><path d="M20 6 9 17l-5-5" /></svg>
+          </div>
+          <span className="font-extrabold text-lg">Thank you! Your review has been shared.</span>
         </div>
       )}
-
-      <footer className="bg-gray-800 text-white py-8 mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p>&copy; 2024 Relasto. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 };
