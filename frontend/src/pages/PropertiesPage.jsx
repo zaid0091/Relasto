@@ -71,7 +71,7 @@ const PropertiesPage = () => {
       <Navbar />
 
       <main className="pt-32 pb-20 px-6 md:px-16 max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-10">Find Property</h1>
+        <h1 className="text-5xl font-bold mb-10">Find Property</h1>
 
         {/* Filter Bar */}
         <div className="bg-white p-2 rounded-2xl shadow-xl flex flex-col md:flex-row items-center gap-2 mb-6">

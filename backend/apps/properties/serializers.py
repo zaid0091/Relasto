@@ -103,6 +103,10 @@ class PropertySerializer(serializers.ModelSerializer):
         if not obj.agent:
             return None
         try:
+            profile_image = None
+            if obj.agent.profile_image:
+                profile_image = obj.agent.profile_image.url
+            
             return {
                 "id": obj.agent.user_id,
                 "user": {
@@ -115,11 +119,12 @@ class PropertySerializer(serializers.ModelSerializer):
                 "bio": obj.agent.bio,
                 "phone": obj.agent.phone,
                 "average_rating": obj.agent.average_rating,
+                "profile_image": profile_image,
                 "review_count": obj.agent.received_reviews.count()
                 if hasattr(obj.agent, "received_reviews")
                 else 0,
             }
-        except Exception:
+        except Exception as e:
             return {
                 "id": obj.agent.user_id,
                 "bio": obj.agent.bio,

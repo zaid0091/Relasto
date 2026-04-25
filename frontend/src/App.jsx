@@ -13,12 +13,38 @@ import ContactPage from './pages/ContactPage';
 import DashboardPage from './pages/DashboardPage';
 import AddPropertyPage from './pages/AddPropertyPage';
 import ProfilePage from './pages/ProfilePage';
+import NotFoundPage from './pages/NotFoundPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+// Component to handle scrolling to hash elements
+const ScrollToHash = () => {
+  const { hash, pathname } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    } else if (pathname) {
+      // Optional: scroll to top on page change if no hash
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [hash, pathname]);
+
+  return null;
+};
 
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToHash />
         <div className="App">
           <Routes>
             {/* Public Routes */}
@@ -66,8 +92,8 @@ function App() {
               }
             />
 
-            {/* Catch all route - redirect to home */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Catch all route - show 404 */}
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
       </Router>

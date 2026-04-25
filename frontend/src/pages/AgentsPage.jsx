@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { profilesAPI } from '../services/api';
+import Navbar from '../components/Navbar';
 
 const AgentsPage = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -53,7 +54,8 @@ const AgentsPage = () => {
   return (
     <div className="min-h-screen bg-[#FFF8F1] font-['Inter']">
       {/* Navigation */}
-      <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-[#F47D31]/10">
+      <Navbar/>
+      {/* <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-[#F47D31]/10">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 group">
             <div className="w-10 h-10 bg-[#F47D31] rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
@@ -99,9 +101,9 @@ const AgentsPage = () => {
             )}
           </div>
         </div>
-      </nav>
+      </nav> */}
 
-      <main className="max-w-7xl mx-auto px-6 py-16">
+      <main className="max-w-7xl mx-auto mt-10 px-6 py-16">
         <h1 className="text-4xl md:text-5xl font-black text-[#1A1A1A] mb-12 tracking-tight">
           Some Nearby Good Agents
         </h1>

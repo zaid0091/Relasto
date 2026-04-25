@@ -148,7 +148,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="mt-20 min-h-screen bg-gray-50">
       <Navbar variant="light" />
 
       {/* Dashboard Content */}

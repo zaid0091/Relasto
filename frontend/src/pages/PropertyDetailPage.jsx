@@ -242,12 +242,12 @@ const PropertyDetailPage = () => {
               <h2 className="text-2xl font-bold mb-10">Home Highlights</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-16">
                 {[
-                  { label: 'Parking', value: property.features?.find(f => f.feature_key === 'parking')?.feature_value || 'No Info' },
-                  { label: 'Outdoor', value: property.features?.find(f => f.feature_key === 'outdoor')?.feature_value || 'No Info' },
-                  { label: 'A/C', value: property.features?.find(f => f.feature_key === 'ac')?.feature_value || 'No Info' },
-                  { label: 'Year Built', value: property.features?.find(f => f.feature_key === 'year_built')?.feature_value || '2021' },
-                  { label: 'HOA', value: property.features?.find(f => f.feature_key === 'hoa')?.feature_value || 'None' },
-                  { label: 'Price/sqft', value: `$${Math.round(property.price / property.area)}` },
+                  { label: 'Parking', value: property.attributes?.parking || 'No Info' },
+                  { label: 'Outdoor', value: property.attributes?.outdoor || 'No Info' },
+                  { label: 'A/C', value: property.attributes?.ac || 'No Info' },
+                  { label: 'Year Built', value: property.attributes?.year_built || 'No Info' },
+                  { label: 'HOA', value: property.attributes?.hoa || 'None' },
+                  { label: 'Price/sqft', value: property.attributes?.square_feet ? `$${Math.round(property.price / property.attributes.square_feet)}` : 'No Info' },
                   { label: 'Listed', value: new Date(property.created_at).toLocaleDateString() },
                 ].map((item, i) => (
                   <div key={i} className="flex justify-between items-center border-b border-gray-50 pb-4">
@@ -261,7 +261,7 @@ const PropertyDetailPage = () => {
             {/* Agent Info */}
             <div className="bg-white p-10 rounded-[40px] shadow-sm border border-gray-100 mb-12 flex items-center gap-8">
               <img
-                src={property.agent?.user?.profile_image || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1976'}
+                src={property.agent?.profile_image || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1976'}
                 className="w-24 h-24 rounded-3xl object-cover shadow-lg"
                 alt="Agent"
               />
@@ -275,7 +275,7 @@ const PropertyDetailPage = () => {
                   ))}
                   <span className="text-gray-400 text-xs font-bold ml-1">Premier Agent</span>
                 </div>
-                <div className="text-sm font-bold text-gray-500">{property.agent?.user?.phone || '+1 234 567 890'}</div>
+                <div className="text-sm font-bold text-gray-500">{property.agent?.phone || '+1 234 567 890'}</div>
               </div>
             </div>
           </div>
@@ -357,7 +357,7 @@ const PropertyDetailPage = () => {
               <div key={prop.id} className="bg-white rounded-[40px] overflow-hidden shadow-sm hover:shadow-2xl transition-all group">
                 <div className="relative h-60 overflow-hidden">
                   <img
-                    src={prop.primary_image?.image || 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2070'}
+                    src={prop.primary_image?.image_url || prop.primary_image?.image || 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2070'}
                     alt={prop.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
@@ -368,9 +368,9 @@ const PropertyDetailPage = () => {
                     <h3 className="font-bold text-lg leading-tight line-clamp-1">{prop.title}</h3>
                   </div>
                   <div className="flex items-center gap-4 mb-8 text-gray-400 text-[11px] font-bold">
-                    <div>🛏️ {prop.bedrooms} Bed</div>
-                    <div>🚿 {prop.bathrooms} Bath</div>
-                    <div>📐 {prop.area} sqft</div>
+                    <div>🛏️ {prop.attributes?.bedrooms || '-'} Bed</div>
+                    <div>🚿 {prop.attributes?.bathrooms || '-'} Bath</div>
+                    <div>📐 {prop.attributes?.square_feet || '-'} sqft</div>
                   </div>
                   <div className="flex items-center justify-between pt-6 border-t border-gray-100">
                     <Link to={`/properties/${prop.slug}`} className="bg-[#1A1A1A] text-white px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-[#333] transition-all">
