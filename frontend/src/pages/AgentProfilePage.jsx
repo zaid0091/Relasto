@@ -113,7 +113,7 @@ const AgentProfilePage = () => {
       </div>
 
       {/* Profile Bar */}
-      <div className="max-w-7xl mx-auto px-6 -mt-16 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-16 -mt-16 relative z-10">
         <div className="bg-white rounded-4xl p-6 md:p-10 flex flex-col md:flex-row items-center md:items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.08)] gap-8">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="w-32 h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden border-4 border-white shadow-lg">
@@ -213,13 +213,13 @@ const AgentProfilePage = () => {
       </div>
 
       {/* Tabs & Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="flex flex-wrap gap-4 mb-10">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-16 py-12">
+        <div className="flex overflow-x-auto pb-4 md:pb-0 md:flex-wrap gap-4 mb-10 no-scrollbar">
           {['Properties', 'Reviews', 'About', 'Contact'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-8 py-3 rounded-2xl font-bold transition-all border-2 ${activeTab === tab
+              className={`whitespace-nowrap px-8 py-3 rounded-2xl font-bold transition-all border-2 ${activeTab === tab
                 ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
                 : 'bg-white text-gray-500 border-gray-100 hover:border-gray-200'
                 }`}
@@ -233,48 +233,59 @@ const AgentProfilePage = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {properties.length > 0 ? properties.map((property) => (
-                <div key={property.id} className="bg-white rounded-4xl overflow-hidden group shadow-sm hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-gray-100">
+                <div key={property.id} className="bg-[#FDF8F5] rounded-[15px] overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-orange-200 w-full">
                   <div className="relative h-72 overflow-hidden">
                     <img
-                      src={property.primary_image?.image_url || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"}
+                      src={property.primary_image?.image_url || property.primary_image?.image || 'https://images.unsplash.com/photo-1600585154340-be6199f7c096?auto=format&fit=crop&q=80&w=2070'}
                       alt={property.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
-                    <div className="absolute top-6 left-6 bg-[#1A1A1A]/50 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider">
-                      {property.status?.replace('_', ' ') || "For Sale"}
+                    <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
+                      {property.status === 'for_sale' ? 'For Sale' : 'For Rent'}
                     </div>
                   </div>
-                  <div className="p-8">
-                    <div className="flex items-start gap-2 mb-4">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F47D31" strokeWidth="2" className="mt-1 shrink-0"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
-                      <h3 className="text-xl font-extrabold text-gray-900 group-hover:text-[#F47D31] transition-colors line-clamp-1">
-                        {property.title}
-                      </h3>
+                  <div className="p-8 md:p-10">
+                    <div className="flex items-start gap-4 mb-8">
+                      <div className="mt-1 shrink-0">
+                        <svg className="w-7 h-7 text-[#1A1A1A]" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM12 11.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                        </svg>
+                      </div>
+                      <h3 className="font-bold text-2xl leading-tight text-[#1A1A1A] line-clamp-2">{property.title}</h3>
                     </div>
 
-                    <div className="flex items-center gap-6 text-gray-500 font-bold text-sm mb-8">
-                      <div className="flex items-center gap-2">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 4v16" /><path d="M2 8h18a2 2 0 0 1 2 2v10" /><path d="M2 17h20" /><path d="M6 8v9" /></svg>
-                        <span>{property.attributes?.bedrooms || '—'} Bed</span>
+                    <div className="grid grid-cols-2 gap-y-5 gap-x-4 mb-10">
+                      <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M2 20V9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11" /><path d="M2 11h20" /><path d="M2 15h20" /><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" />
+                        </svg>
+                        <span>{property.attributes?.bedrooms || '0'} Bed Room</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1 0L3 6" /><path d="M12 21h7a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3" /><path d="M9 14h1.5a2.5 2.5 0 0 0 0-5H9v5Z" /><path d="M12 11V3" /><path d="M3 11V3" /><path d="M9 21v-4" /></svg>
-                        <span>{property.attributes?.bathrooms || '—'} Bath</span>
+                      <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M14 11V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v8" /><path d="M21 15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4h18v4z" />
+                        </svg>
+                        <span>{property.attributes?.bathrooms || '0'} Bath</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M3 9h18" /><path d="M9 21V9" /></svg>
-                        <span>{property.attributes?.square_feet?.toLocaleString() || '—'} sqft</span>
+                      <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="m15 3 6 6" /><path d="m9 21-6-6" /><path d="M21 3h-6" /><path d="M21 3v6" /><path d="M3 21h6" /><path d="M3 21v-6" />
+                        </svg>
+                        <span>{(property.attributes?.sqft || property.attributes?.square_feet || '1,032').toLocaleString()} sqft</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <circle cx="6" cy="6" r="2" /><circle cx="18" cy="6" r="2" /><circle cx="6" cy="18" r="2" /><circle cx="18" cy="18" r="2" />
+                        </svg>
+                        <span>{property.property_type || 'Family'}</span>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <div className="flex flex-col">
-                        <span className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-1">Price</span>
-                        <span className="text-2xl font-black text-[#1A1A1A]">${property.price?.toLocaleString() || '—'}</span>
-                      </div>
-                      <Link to={`/properties/${property.slug}`} className="bg-[#1A1A1A] text-white px-6 py-3 rounded-2xl font-bold hover:bg-[#F47D31] transition-all text-sm">
+                      <Link to={`/properties/${property.slug}`} className="bg-[#1A1A1A] text-white px-8 py-4 rounded-2xl text-base font-bold hover:bg-[#333] transition-all shadow-lg active:scale-95">
                         View Details
                       </Link>
+                      <span className="text-3xl font-bold text-[#1A1A1A] tracking-tight">${Number(property.price).toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
@@ -464,76 +475,6 @@ const AgentProfilePage = () => {
         )}
       </div>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-100 pt-24 pb-12 px-6 md:px-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 mb-24">
-            <div className="lg:col-span-2">
-              <div className="flex items-center gap-2 mb-8">
-                <div className="w-10 h-10 bg-[#F47D31] rounded-xl flex items-center justify-center">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
-                </div>
-                <span className="text-3xl font-black tracking-tight text-[#F47D31]">Relasto</span>
-              </div>
-              <p className="text-gray-500 font-medium leading-relaxed max-w-sm mb-10 text-lg">
-                259 East 24th Street, New York City, NY 10010, US
-              </p>
-              <div className="flex flex-col gap-3 font-bold text-gray-800">
-                <p>+123 456 7890</p>
-                <p>info@relasto.com</p>
-              </div>
-              <div className="flex gap-6 mt-10">
-                {['fb', 'tw', 'ig', 'li', 'yt'].map(s => (
-                  <div key={s} className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center hover:bg-[#F47D31] hover:text-white text-gray-400 transition-all cursor-pointer">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /></svg>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-xl font-black text-gray-900 mb-8">Features</h4>
-              <div className="flex flex-col gap-4 font-bold text-gray-500">
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">Home</Link>
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">Listing</Link>
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">About</Link>
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">Contact</Link>
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">Search</Link>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-xl font-black text-gray-900 mb-8">Information</h4>
-              <div className="flex flex-col gap-4 font-bold text-gray-500">
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">Listing</Link>
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">About Us</Link>
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">Property Detail</Link>
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">Agent List</Link>
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">Agent Profile</Link>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-xl font-black text-gray-900 mb-8">Others</h4>
-              <div className="flex flex-col gap-4 font-bold text-gray-500">
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">Blog</Link>
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">Log In</Link>
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">Enter OTP</Link>
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">New Password</Link>
-                <Link to="#" className="hover:text-[#F47D31] transition-colors">Reset Password</Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-12 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-gray-400 font-bold">© 2024 Relasto. All rights reserved.</p>
-            <div className="flex gap-10 font-bold text-gray-400">
-              <Link to="#" className="hover:text-gray-900 transition-colors">Privacy Policy</Link>
-              <Link to="#" className="hover:text-gray-900 transition-colors">Terms of Service</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
 
       {/* Review Form Modal */}
       {showReviewForm && (

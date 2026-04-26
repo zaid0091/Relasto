@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { propertiesAPI, visitsAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import Navbar from '../components/Navbar';
 
 const PropertyDetailPage = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -107,47 +108,10 @@ const PropertyDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-[#FFF8F1] font-['Inter'] text-[#1A1A1A]">
-      {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#FFF8F1]/80 backdrop-blur-md px-6 md:px-16 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-12">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#F47D31] rounded-full flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-              </svg>
-            </div>
-            <span className="text-xl font-bold tracking-tight">Relasto</span>
-          </Link>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <Link to="/" className="hover:text-[#F47D31] transition-colors">Home</Link>
-            <Link to="/properties" className="hover:text-[#F47D31] transition-colors">Listing</Link>
-            <Link to="/agents" className="hover:text-[#F47D31] transition-colors">Agents</Link>
-            <Link to="/properties" className="text-[#F47D31]">Property</Link>
-            <Link to="/about" className="hover:text-[#F47D31] transition-colors">Blog</Link>
-          </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <button className="hidden md:flex items-center gap-2 text-sm font-medium hover:text-[#F47D31] transition-colors">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
-            </svg>
-            Search
-          </button>
-          {isAuthenticated ? (
-            <Link to="/dashboard" className="bg-[#1A1A1A] text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-[#333] transition-all">
-              Dashboard
-            </Link>
-          ) : (
-            <Link to="/login" className="bg-[#1A1A1A] text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-[#333] transition-all shadow-lg">
-              Login
-            </Link>
-          )}
-        </div>
-      </nav>
-
-      <main className="pt-32 pb-20 px-6 md:px-16 max-w-7xl mx-auto">
+      <Navbar />
+      <main className="pt-32 pb-20 px-6 md:px-16 max-w-[1440px] mx-auto">
         {/* Gallery Collage */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 h-75 md:h-125">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 h-[300px] md:h-[500px]">
           <div className="md:col-span-2 relative overflow-hidden rounded-[40px] shadow-2xl">
             <img
               src={property.primary_image?.image || 'https://images.unsplash.com/photo-1600585154340-be6199f7c096?auto=format&fit=crop&q=80&w=2070'}
@@ -179,68 +143,81 @@ const PropertyDetailPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
           {/* Left Column: Details */}
           <div className="lg:col-span-2">
-            <div className="mb-10">
-              <h1 className="text-4xl font-bold mb-4 leading-tight">{property.title}</h1>
-              <div className="flex items-center gap-2 text-gray-400 font-medium">
-                <svg className="w-5 h-5 text-[#F47D31]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
+            <div className="mb-8 md:mb-10">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-black mb-4 md:mb-6 leading-tight tracking-tight text-[#1A1A1A]">{property.title}</h1>
+              <div className="flex items-center gap-3 text-gray-400 font-bold text-xs md:text-sm uppercase tracking-widest bg-white/50 backdrop-blur-sm self-start py-2 rounded-full">
+                <div className="w-8 h-8 rounded-full bg-[#F47D31]/10 flex items-center justify-center text-[#F47D31]">📍</div>
                 {property.address}, {property.city}, {property.state} {property.zip_code}
               </div>
             </div>
 
             {/* Price Boxes */}
-            <div className="flex flex-wrap gap-6 mb-12">
-              <div className="bg-white p-8 rounded-[30px] shadow-sm border border-gray-100 flex-1 min-w-50">
-                <span className="text-gray-400 text-sm font-bold block mb-2 uppercase tracking-widest">Full Price</span>
-                <div className="text-4xl font-black">${Number(property.price).toLocaleString()}</div>
-                <span className="text-gray-400 text-xs font-bold mt-2 block">Est. $3,450/mo</span>
+            <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-12">
+              <div className="bg-white p-6 md:p-8 rounded-[32px] md:rounded-[40px] shadow-sm border border-gray-50 flex-1 hover:shadow-xl transition-all group">
+                <span className="text-gray-400 text-[10px] md:text-xs font-black block mb-2 uppercase tracking-[0.2em]">Full Price</span>
+                <div className="text-3xl md:text-4xl font-black text-[#1A1A1A] group-hover:text-[#F47D31] transition-colors">${Number(property.price).toLocaleString()}</div>
+                <div className="w-full h-1 bg-gray-50 rounded-full mt-4 overflow-hidden">
+                  <div className="w-2/3 h-full bg-[#F47D31] rounded-full"></div>
+                </div>
+                <span className="text-gray-400 text-[10px] font-bold mt-3 block">Est. $3,450/mo mortgage</span>
               </div>
-              <div className="bg-white p-8 rounded-[30px] shadow-sm border border-gray-100 flex-1 min-w-50">
-                <span className="text-gray-400 text-sm font-bold block mb-2 uppercase tracking-widest">Estimated Rent</span>
-                <div className="text-4xl font-black">${Math.round(property.price / 300).toLocaleString()} / month</div>
-                <span className="text-gray-400 text-xs font-bold mt-2 block">Market Avg.</span>
+              <div className="bg-white p-6 md:p-8 rounded-[32px] md:rounded-[40px] shadow-sm border border-gray-50 flex-1 hover:shadow-xl transition-all group">
+                <span className="text-gray-400 text-[10px] md:text-xs font-black block mb-2 uppercase tracking-[0.2em]">Estimated Rent</span>
+                <div className="text-3xl md:text-4xl font-black text-[#1A1A1A] group-hover:text-[#F47D31] transition-colors">${Math.round(property.price / 300).toLocaleString()} <span className="text-sm md:text-lg font-bold text-gray-300">/ mo</span></div>
+                <div className="w-full h-1 bg-gray-50 rounded-full mt-4 overflow-hidden">
+                  <div className="w-1/2 h-full bg-[#1A1A1A] rounded-full"></div>
+                </div>
+                <span className="text-gray-400 text-[10px] font-bold mt-3 block">Market Average Performance</span>
               </div>
             </div>
 
             {/* Description */}
             <div className="mb-12">
-              <h2 className="text-2xl font-bold mb-6">About this home</h2>
-              <p className="text-gray-500 leading-loose text-lg">
+              <h2 className="text-xl md:text-2xl font-black mb-6 text-[#1A1A1A] flex items-center gap-3">
+                <span className="w-1.5 h-6 bg-[#F47D31] rounded-full"></span>
+                About this home
+              </h2>
+              <p className="text-gray-500 leading-[1.8] text-base md:text-lg font-medium">
                 {property.description}
               </p>
             </div>
 
             {/* Local Information Tabs */}
             <div className="mb-12">
-              <h2 className="text-2xl font-bold mb-6">Local Information</h2>
-              <div className="flex gap-4 mb-6">
+              <h2 className="text-xl md:text-2xl font-black mb-6 text-[#1A1A1A] flex items-center gap-3">
+                <span className="w-1.5 h-6 bg-[#F47D31] rounded-full"></span>
+                Local Information
+              </h2>
+              <div className="flex gap-2 md:gap-4 mb-8 overflow-x-auto pb-2 scrollbar-hide">
                 {['Map', 'Schools', 'Crime', 'Shop & Eat'].map((tab, i) => (
                   <button
                     key={tab}
-                    className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${i === 1 ? 'bg-[#1A1A1A] text-white shadow-lg' : 'bg-white border border-gray-200 text-gray-400 hover:bg-gray-50'
+                    className={`px-5 md:px-7 py-2.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${i === 1 ? 'bg-[#1A1A1A] text-white shadow-xl scale-105' : 'bg-white border border-gray-100 text-gray-400 hover:border-[#F47D31]/30 hover:text-[#F47D31]'
                       }`}
                   >
                     {tab}
                   </button>
                 ))}
               </div>
-              <div className="h-96 bg-white rounded-[40px] overflow-hidden shadow-sm relative border border-gray-100">
+              <div className="h-64 md:h-96 bg-white rounded-[32px] md:rounded-[40px] overflow-hidden shadow-inner relative border border-gray-100 group">
                 <img
                   src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=2074"
-                  className="w-full h-full object-cover grayscale opacity-50"
+                  className="w-full h-full object-cover grayscale opacity-30 group-hover:opacity-40 transition-opacity duration-1000"
                   alt="Local Map"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-10 h-10 bg-[#F47D31] rounded-full border-4 border-white shadow-2xl animate-pulse"></div>
+                  <div className="w-12 h-12 bg-[#F47D31] rounded-full border-4 border-white shadow-2xl animate-bounce flex items-center justify-center text-white font-black text-xl">📍</div>
                 </div>
               </div>
             </div>
 
             {/* Home Highlights */}
-            <div className="bg-white p-12 rounded-[40px] shadow-sm border border-gray-100 mb-12">
-              <h2 className="text-2xl font-bold mb-10">Home Highlights</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-16">
+            <div className="bg-white p-6 md:p-10 lg:p-12 rounded-[32px] md:rounded-[40px] shadow-sm border border-gray-50 mb-12 hover:shadow-xl transition-all duration-500">
+              <h2 className="text-xl md:text-2xl font-black mb-10 text-[#1A1A1A] flex items-center gap-3">
+                <span className="w-1.5 h-6 bg-[#F47D31] rounded-full"></span>
+                Home Highlights
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 md:gap-y-8 gap-x-12 md:gap-x-16">
                 {[
                   { label: 'Parking', value: property.attributes?.parking || 'No Info' },
                   { label: 'Outdoor', value: property.attributes?.outdoor || 'No Info' },
@@ -250,77 +227,84 @@ const PropertyDetailPage = () => {
                   { label: 'Price/sqft', value: property.attributes?.square_feet ? `$${Math.round(property.price / property.attributes.square_feet)}` : 'No Info' },
                   { label: 'Listed', value: new Date(property.created_at).toLocaleDateString() },
                 ].map((item, i) => (
-                  <div key={i} className="flex justify-between items-center border-b border-gray-50 pb-4">
-                    <span className="text-gray-400 font-bold text-sm uppercase tracking-wider">• {item.label}</span>
-                    <span className="font-bold text-sm">{item.value}</span>
+                  <div key={i} className="flex justify-between items-center border-b border-gray-50 pb-4 group">
+                    <span className="text-gray-400 font-bold text-[10px] md:text-xs uppercase tracking-widest transition-colors group-hover:text-[#F47D31]">• {item.label}</span>
+                    <span className="font-black text-xs md:text-sm text-[#1A1A1A]">{item.value}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Agent Info */}
-            <div className="bg-white p-10 rounded-[40px] shadow-sm border border-gray-100 mb-12 flex items-center gap-8">
-              <img
-                src={property.agent?.profile_image || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1976'}
-                className="w-24 h-24 rounded-3xl object-cover shadow-lg"
-                alt="Agent"
-              />
-              <div>
-                <h3 className="text-xl font-bold mb-1">{property.agent?.user?.first_name} {property.agent?.user?.last_name}</h3>
-                <div className="flex items-center gap-1 text-yellow-400 mb-2">
+            <div className="bg-white p-6 md:p-8 rounded-[32px] md:rounded-[40px] shadow-sm border border-gray-50 mb-12 flex flex-col sm:flex-row items-center gap-6 md:gap-8 hover:shadow-xl transition-all group">
+              <div className="relative shrink-0">
+                <img
+                  src={property.agent?.profile_image || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1976'}
+                  className="w-20 h-20 md:w-24 md:h-24 rounded-3xl object-cover shadow-lg group-hover:scale-105 transition-transform duration-500"
+                  alt="Agent"
+                />
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-4 border-white rounded-full"></div>
+              </div>
+              <div className="text-center sm:text-left">
+                <div className="text-[10px] font-black text-[#F47D31] uppercase tracking-[0.2em] mb-1">Listing Agent</div>
+                <h3 className="text-lg md:text-xl font-black mb-1 text-[#1A1A1A]">{property.agent?.user?.first_name} {property.agent?.user?.last_name}</h3>
+                <div className="flex items-center justify-center sm:justify-start gap-1 text-yellow-400 mb-3">
                   {[...Array(5)].map((_, i) => (
-                    <svg key={i} className={`w-4 h-4 ${i < Math.round(property.agent?.average_rating || 5) ? 'fill-current' : 'text-gray-200'}`} viewBox="0 0 20 20">
+                    <svg key={i} className={`w-3.5 h-3.5 ${i < Math.round(property.agent?.average_rating || 5) ? 'fill-current' : 'text-gray-100'}`} viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
-                  <span className="text-gray-400 text-xs font-bold ml-1">Premier Agent</span>
+                  <span className="text-gray-300 text-[10px] font-black ml-1 uppercase tracking-widest">Premier</span>
                 </div>
-                <div className="text-sm font-bold text-gray-500">{property.agent?.phone || '+1 234 567 890'}</div>
+                <div className="inline-flex items-center gap-2 bg-gray-50 px-4 py-1.5 rounded-full text-[10px] font-black text-gray-500 uppercase tracking-widest border border-gray-100">
+                  <span className="text-lg">📞</span> {property.agent?.phone || '+1 234 567 890'}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Right Column: Visit Form Sidebar */}
-          <div className="lg:sticky lg:top-32">
-            <div className="bg-white p-10 rounded-[40px] shadow-2xl border border-gray-50">
-              <h2 className="text-2xl font-bold mb-8">Request for Visit</h2>
-              <form onSubmit={handleVisitSubmit} className="space-y-4">
+          <div className="lg:sticky lg:top-32 mb-12 lg:mb-0">
+            <div className="bg-white p-6 md:p-8 lg:p-10 rounded-[32px] md:rounded-[40px] shadow-2xl border border-gray-50 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-[#F47D31]/5 rounded-bl-full -mr-8 -mt-8 transition-transform duration-700 group-hover:scale-150"></div>
+              <h2 className="text-xl md:text-2xl font-black mb-8 text-[#1A1A1A] relative">Request for Visit</h2>
+              <form onSubmit={handleVisitSubmit} className="space-y-4 relative">
                 <div className="relative">
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400">✉️</span>
+                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-lg">✉️</span>
                   <input
                     type="email"
                     placeholder="Email Address"
                     required
-                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-[#F47D31] transition-all"
+                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-transparent rounded-2xl outline-none focus:bg-white focus:border-[#F47D31] focus:ring-4 focus:ring-[#F47D31]/5 transition-all text-sm font-medium"
                     value={visitForm.contact_email}
                     onChange={(e) => setVisitForm({ ...visitForm, contact_email: e.target.value })}
                   />
                 </div>
                 <div className="relative">
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400">📞</span>
+                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-lg">📞</span>
                   <input
                     type="tel"
                     placeholder="Phone Number"
                     required
-                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-[#F47D31] transition-all"
+                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-transparent rounded-2xl outline-none focus:bg-white focus:border-[#F47D31] focus:ring-4 focus:ring-[#F47D31]/5 transition-all text-sm font-medium"
                     value={visitForm.contact_phone}
                     onChange={(e) => setVisitForm({ ...visitForm, contact_phone: e.target.value })}
                   />
                 </div>
                 <div className="relative">
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400">📅</span>
+                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-lg">📅</span>
                   <input
                     type="date"
                     required
-                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-[#F47D31] transition-all"
+                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-transparent rounded-2xl outline-none focus:bg-white focus:border-[#F47D31] focus:ring-4 focus:ring-[#F47D31]/5 transition-all text-sm font-medium"
                     value={visitForm.preferred_date}
                     onChange={(e) => setVisitForm({ ...visitForm, preferred_date: e.target.value })}
                   />
                 </div>
                 <textarea
-                  placeholder="Message"
-                  rows="4"
-                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-[#F47D31] transition-all"
+                  placeholder="Tell us about your needs..."
+                  rows="3"
+                  className="w-full px-6 py-4 bg-gray-50 border border-transparent rounded-2xl outline-none focus:bg-white focus:border-[#F47D31] focus:ring-4 focus:ring-[#F47D31]/5 transition-all text-sm font-medium resize-none"
                   value={visitForm.message}
                   onChange={(e) => setVisitForm({ ...visitForm, message: e.target.value })}
                 ></textarea>
@@ -328,13 +312,17 @@ const PropertyDetailPage = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full bg-[#1A1A1A] text-white py-5 rounded-2xl font-bold hover:bg-[#333] transition-all shadow-xl disabled:opacity-50"
+                  className="w-full bg-[#1A1A1A] text-white py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-[#F47D31] hover:translate-y-[-2px] active:translate-y-0 transition-all shadow-xl disabled:opacity-50 relative overflow-hidden"
                 >
-                  {submitting ? 'Sending...' : 'Send Request'}
+                  <span className="relative z-10">{submitting ? 'Sending Request...' : 'Schedule Visit Now'}</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-1000"></div>
                 </button>
 
                 {submitStatus === 'success' && (
-                  <p className="text-green-500 text-center font-bold text-sm mt-4">✓ Request sent successfully!</p>
+                  <div className="p-4 bg-green-50 rounded-xl border border-green-100 flex items-center gap-3 animate-in fade-in zoom-in duration-300 mt-4">
+                    <span className="text-xl">✅</span>
+                    <p className="text-green-700 font-bold text-xs">Your visit request has been sent to our premier agent!</p>
+                  </div>
                 )}
               </form>
             </div>
@@ -342,41 +330,71 @@ const PropertyDetailPage = () => {
         </div>
 
         {/* Latest Listings */}
-        <section className="mt-32">
-          <div className="flex items-center justify-between mb-12">
-            <h2 className="text-4xl font-bold">Latest Property Listings</h2>
-            <Link to="/properties" className="text-[#F47D31] font-bold flex items-center gap-2 group">
+        <section className="mt-20 md:mt-32">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 md:mb-12 gap-4">
+            <h2 className="text-3xl md:text-4xl font-black text-[#1A1A1A]">Latest Listings</h2>
+            <Link to="/properties" className="text-[#F47D31] font-black flex items-center gap-2 group text-sm uppercase tracking-widest bg-white px-6 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all">
               Explore All
-              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
             {latestProperties.map((prop) => (
-              <div key={prop.id} className="bg-white rounded-[40px] overflow-hidden shadow-sm hover:shadow-2xl transition-all group">
-                <div className="relative h-60 overflow-hidden">
+              <div key={prop.id} className="bg-[#FDF8F5] rounded-[15px] overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-orange-200 w-full">
+                <div className="relative h-72 overflow-hidden">
                   <img
-                    src={prop.primary_image?.image_url || prop.primary_image?.image || 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2070'}
+                    src={prop.primary_image?.image_url || prop.primary_image?.image || 'https://images.unsplash.com/photo-1600585154340-be6199f7c096?auto=format&fit=crop&q=80&w=2070'}
                     alt={prop.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
+                  <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
+                    {prop.status === 'for_sale' ? 'For Sale' : 'For Rent'}
+                  </div>
                 </div>
-                <div className="p-8">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0">📍</div>
-                    <h3 className="font-bold text-lg leading-tight line-clamp-1">{prop.title}</h3>
+                <div className="p-8 md:p-10">
+                  <div className="flex items-start gap-4 mb-8">
+                    <div className="mt-1 shrink-0">
+                      <svg className="w-7 h-7 text-[#1A1A1A]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM12 11.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-2xl leading-tight text-[#1A1A1A] line-clamp-2">{prop.title}</h3>
                   </div>
-                  <div className="flex items-center gap-4 mb-8 text-gray-400 text-[11px] font-bold">
-                    <div>🛏️ {prop.attributes?.bedrooms || '-'} Bed</div>
-                    <div>🚿 {prop.attributes?.bathrooms || '-'} Bath</div>
-                    <div>📐 {prop.attributes?.square_feet || '-'} sqft</div>
+
+                  <div className="grid grid-cols-2 gap-y-5 gap-x-4 mb-10">
+                    <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                      <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M2 20V9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11" /><path d="M2 11h20" /><path d="M2 15h20" /><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" />
+                      </svg>
+                      <span>{prop.attributes?.bedrooms || '0'} Bed Room</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                      <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M14 11V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v8" /><path d="M21 15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4h18v4z" />
+                      </svg>
+                      <span>{prop.attributes?.bathrooms || '0'} Bath</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                      <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="m15 3 6 6" /><path d="m9 21-6-6" /><path d="M21 3h-6" /><path d="M21 3v6" /><path d="M3 21h6" /><path d="M3 21v-6" />
+                      </svg>
+                      <span>{(prop.attributes?.sqft || prop.attributes?.square_feet || '1,032').toLocaleString()} sqft</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                      <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="6" cy="6" r="2" /><circle cx="18" cy="6" r="2" /><circle cx="6" cy="18" r="2" /><circle cx="18" cy="18" r="2" />
+                      </svg>
+                      <span>{prop.property_type || 'Family'}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between pt-6 border-t border-gray-100">
-                    <Link to={`/properties/${prop.slug}`} className="bg-[#1A1A1A] text-white px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-[#333] transition-all">
+
+                  <div className="flex items-center justify-between">
+                    <Link to={`/properties/${prop.slug}`} className="bg-[#1A1A1A] text-white px-8 py-4 rounded-2xl text-base font-bold hover:bg-[#333] transition-all shadow-lg active:scale-95">
                       View Details
                     </Link>
-                    <span className="text-xl font-bold">${Number(prop.price).toLocaleString()}</span>
+                    <span className="text-3xl font-bold text-[#1A1A1A] tracking-tight">${Number(prop.price).toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -385,63 +403,6 @@ const PropertyDetailPage = () => {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="px-6 md:px-16 py-20 border-t border-gray-100 bg-white/50">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-20 max-w-7xl mx-auto">
-          <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 bg-[#F47D31] rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <span className="text-xl font-bold tracking-tight">Relasto</span>
-            </Link>
-            <p className="text-gray-400 mb-8 max-w-sm">
-              59 Bervely Hill Ave, Brooklyn Town, <br /> NYC, NY 5630, US
-            </p>
-            <div className="flex gap-4">
-              {['FB', 'TW', 'IG', 'LN', 'YT'].map((sc) => (
-                <div key={sc} className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-400 hover:border-[#F47D31] hover:text-[#F47D31] cursor-pointer transition-all">
-                  {sc}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h4 className="font-bold mb-6 text-sm uppercase tracking-wider">Features</h4>
-            <ul className="space-y-4 text-gray-400 text-sm font-medium">
-              <li><Link to="/properties" className="hover:text-[#F47D31]">Property</Link></li>
-              <li><Link to="/properties" className="hover:text-[#F47D31]">Financing</Link></li>
-              <li><Link to="/properties" className="hover:text-[#F47D31]">Process</Link></li>
-              <li><Link to="/contact" className="hover:text-[#F47D31]">Contact</Link></li>
-              <li><Link to="/about" className="hover:text-[#F47D31]">Review</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold mb-6 text-sm uppercase tracking-wider">Information</h4>
-            <ul className="space-y-4 text-gray-400 text-sm font-medium">
-              <li><Link to="/about" className="hover:text-[#F47D31]">Listing</Link></li>
-              <li><Link to="/properties" className="hover:text-[#F47D31]">Managed</Link></li>
-              <li><Link to="/properties" className="hover:text-[#F47D31]">Property Details</Link></li>
-              <li><Link to="/agents" className="hover:text-[#F47D31]">Agent List</Link></li>
-              <li><Link to="/profile" className="hover:text-[#F47D31]">Agent Profile</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold mb-6 text-sm uppercase tracking-wider">Documentation</h4>
-            <ul className="space-y-4 text-gray-400 text-sm font-medium">
-              <li><Link to="/about" className="hover:text-[#F47D31]">Blog</Link></li>
-              <li><Link to="/about" className="hover:text-[#F47D31]">FAQ</Link></li>
-              <li><Link to="/about" className="hover:text-[#F47D31]">Privacy Policy</Link></li>
-              <li><Link to="/about" className="hover:text-[#F47D31]">License</Link></li>
-            </ul>
-          </div>
-        </div>
-        <div className="text-center text-gray-400 text-xs font-bold border-t border-gray-100 pt-10">
-          © 2026. ALL RIGHTS RESERVED.
-        </div>
-      </footer>
     </div>
   );
 };

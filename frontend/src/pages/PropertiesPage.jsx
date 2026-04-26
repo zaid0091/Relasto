@@ -70,27 +70,27 @@ const PropertiesPage = () => {
     <div className="min-h-screen bg-[#FFF8F1] font-['Inter'] text-[#1A1A1A]">
       <Navbar />
 
-      <main className="pt-32 pb-20 px-6 md:px-16 max-w-7xl mx-auto">
+      <main className="pt-32 pb-20 px-6 md:px-16 max-w-[1440px] mx-auto">
         <h1 className="text-5xl font-bold mb-10">Find Property</h1>
 
         {/* Filter Bar */}
-        <div className="bg-white p-2 rounded-2xl shadow-xl flex flex-col md:flex-row items-center gap-2 mb-6">
-          <div className="flex-1 flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 min-w-62.5">
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <div className="bg-white p-4 md:p-2 rounded-[32px] md:rounded-2xl shadow-xl flex flex-col md:flex-row items-center gap-3 md:gap-2 mb-10 border border-gray-100">
+          <div className="w-full md:flex-1 flex items-center gap-3 px-6 md:px-4 py-4 md:py-3 bg-gray-50 rounded-2xl md:rounded-xl border border-gray-100">
+            <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
             </svg>
             <input
               type="text"
               placeholder="Enter your address"
-              className="bg-transparent outline-none flex-1 text-sm"
+              className="bg-transparent outline-none flex-1 text-sm font-medium"
               value={filters.search}
               onChange={(e) => setFilters({ ...filters, search: e.target.value })}
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          <div className="grid grid-cols-2 md:flex md:flex-row items-center gap-2 w-full md:w-auto">
             <select
-              className="px-6 py-3 bg-gray-50 rounded-xl border border-gray-100 text-sm font-medium outline-none appearance-none cursor-pointer"
+              className="w-full md:w-auto px-4 md:px-6 py-4 md:py-3 bg-gray-50 rounded-2xl md:rounded-xl border border-gray-100 text-sm font-medium outline-none appearance-none cursor-pointer hover:bg-gray-100 transition-colors"
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
             >
@@ -100,7 +100,7 @@ const PropertiesPage = () => {
             </select>
 
             <select
-              className="px-6 py-3 bg-gray-50 rounded-xl border border-gray-100 text-sm font-medium outline-none appearance-none cursor-pointer"
+              className="w-full md:w-auto px-4 md:px-6 py-4 md:py-3 bg-gray-50 rounded-2xl md:rounded-xl border border-gray-100 text-sm font-medium outline-none appearance-none cursor-pointer hover:bg-gray-100 transition-colors"
               value={filters.price_min}
               onChange={(e) => setFilters({ ...filters, price_min: e.target.value })}
             >
@@ -111,7 +111,7 @@ const PropertiesPage = () => {
             </select>
 
             <select
-              className="px-6 py-3 bg-gray-50 rounded-xl border border-gray-100 text-sm font-medium outline-none appearance-none cursor-pointer"
+              className="w-full md:w-auto px-4 md:px-6 py-4 md:py-3 bg-gray-50 rounded-2xl md:rounded-xl border border-gray-100 text-sm font-medium outline-none appearance-none cursor-pointer hover:bg-gray-100 transition-colors"
               value={filters.bedrooms}
               onChange={(e) => setFilters({ ...filters, bedrooms: e.target.value })}
             >
@@ -122,13 +122,9 @@ const PropertiesPage = () => {
               <option value="4">4+ Bed</option>
             </select>
 
-            <button className="px-6 py-3 bg-gray-50 rounded-xl border border-gray-100 text-sm font-medium hover:bg-gray-100">
-              More +
-            </button>
-
             <button
               onClick={handleSearch}
-              className="bg-[#1A1A1A] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#333] transition-all flex items-center gap-2"
+              className="col-span-2 md:w-auto bg-[#1A1A1A] text-white px-8 py-4 md:py-3 rounded-2xl md:rounded-xl font-bold hover:bg-[#333] transition-all flex items-center justify-center gap-2 shadow-lg active:scale-[0.98]"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
@@ -139,200 +135,210 @@ const PropertiesPage = () => {
         </div>
 
         {/* Active Filter Tags */}
-        <div className="flex flex-wrap gap-3 mb-10">
+        <div className="flex flex-wrap gap-2 md:gap-3 mb-8 md:mb-10 animate-in fade-in slide-in-from-top-2 duration-500">
           {filters.bedrooms && (
-            <div className="bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-2">
-              Bedroom: {filters.bedrooms} <button onClick={() => setFilters({ ...filters, bedrooms: '' })} className="text-gray-400 hover:text-black">×</button>
+            <div className="bg-white border border-gray-200 px-3 md:px-4 py-2 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold flex items-center gap-2 shadow-sm hover:border-[#F47D31]/20 transition-all group">
+              <span className="text-gray-400 font-medium">Bedroom:</span>
+              <span className="text-[#1A1A1A]">{filters.bedrooms}</span>
+              <button
+                onClick={() => setFilters({ ...filters, bedrooms: '' })}
+                className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-red-50 text-gray-300 hover:text-red-500 transition-all ml-1"
+                aria-label="Remove bedroom filter"
+              >
+                <span className="text-lg leading-none">×</span>
+              </button>
             </div>
           )}
           {filters.property_type && (
-            <div className="bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-2">
-              Type: {filters.property_type} <button onClick={() => setFilters({ ...filters, property_type: '' })} className="text-gray-400 hover:text-black">×</button>
+            <div className="bg-white border border-gray-200 px-3 md:px-4 py-2 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold flex items-center gap-2 shadow-sm hover:border-[#F47D31]/20 transition-all group">
+              <span className="text-gray-400 font-medium">Type:</span>
+              <span className="text-[#1A1A1A]">{filters.property_type}</span>
+              <button
+                onClick={() => setFilters({ ...filters, property_type: '' })}
+                className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-red-50 text-gray-300 hover:text-red-500 transition-all ml-1"
+                aria-label="Remove property type filter"
+              >
+                <span className="text-lg leading-none">×</span>
+              </button>
             </div>
           )}
           {filters.status && (
-            <div className="bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-2">
-              Status: {filters.status === 'for_sale' ? 'Buy' : 'Rent'} <button onClick={() => setFilters({ ...filters, status: '' })} className="text-gray-400 hover:text-black">×</button>
+            <div className="bg-white border border-gray-200 px-3 md:px-4 py-2 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold flex items-center gap-2 shadow-sm hover:border-[#F47D31]/20 transition-all group">
+              <span className="text-gray-400 font-medium">Status:</span>
+              <span className="text-[#1A1A1A]">{filters.status === 'for_sale' ? 'Buy' : 'Rent'}</span>
+              <button
+                onClick={() => setFilters({ ...filters, status: '' })}
+                className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-red-50 text-gray-300 hover:text-red-500 transition-all ml-1"
+                aria-label="Remove status filter"
+              >
+                <span className="text-lg leading-none">×</span>
+              </button>
             </div>
           )}
         </div>
 
         {/* Content Area */}
-        <div className="flex flex-col lg:flex-row gap-10">
-          {/* Map Section */}
-          <div className="w-full lg:w-87.5 shrink-0">
-            <div className="bg-white rounded-[40px] overflow-hidden shadow-sm h-150 relative">
-              <img
-                src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=1000"
-                className="w-full h-full object-cover grayscale opacity-60"
-                alt="Map Background"
-              />
-              <div className="absolute inset-0 p-8 flex flex-col justify-center">
-                {/* Simulated Pins */}
-                <div className="absolute top-1/4 left-1/3 w-8 h-8 bg-[#F47D31] rounded-full border-4 border-white shadow-xl animate-bounce"></div>
-                <div className="absolute top-1/2 left-1/2 w-6 h-6 bg-[#F47D31] rounded-full border-2 border-white shadow-lg opacity-80"></div>
-                <div className="absolute top-2/3 left-1/4 w-6 h-6 bg-[#F47D31] rounded-full border-2 border-white shadow-lg opacity-80"></div>
+        {/* Map Section (Now on top) */}
+        <div className="w-full mb-12">
+          <div className="bg-white rounded-[32px] md:rounded-[40px] overflow-hidden shadow-2xl h-[350px] md:h-[450px] relative border border-white/50 group">
+            <img
+              src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=1000"
+              className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-50 transition-opacity duration-1000"
+              alt="Map Background"
+            />
+            <div className="absolute inset-0 p-4 md:p-8 flex flex-col">
+              {/* Status Badge */}
+              <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl shadow-xl self-start flex items-center gap-2 mb-auto transform hover:scale-105 transition-transform cursor-pointer border border-white/20">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#1A1A1A]">Live Activity</span>
+              </div>
 
-                {/* Featured Pin Info */}
-                <div className="bg-white p-6 rounded-3xl shadow-2xl relative mt-auto border border-gray-100">
-                  <div className="flex items-center gap-2 text-[10px] font-bold text-[#F47D31] mb-2 uppercase tracking-widest">
-                    📍 Premium Listing
-                  </div>
-                  <h4 className="font-bold text-sm mb-3">{properties[0]?.title || 'Property Title'}</h4>
-                  <div className="grid grid-cols-2 gap-3 text-[10px] text-gray-400 font-bold mb-4">
-                    <div className="flex items-center gap-2">🛏️ {properties[0]?.attributes?.bedrooms || '-'} Bed</div>
-                    <div className="flex items-center gap-2">🚿 {properties[0]?.attributes?.bathrooms || '-'} Bath</div>
-                    <div className="flex items-center gap-2">📐 {properties[0]?.attributes?.square_feet || '-'} sqft</div>
-                    <div className="flex items-center gap-2">🏠 {properties[0]?.property_type || '-'}</div>
-                  </div>
-                  <div className="text-lg font-black">${Number(properties[0]?.price || 0).toLocaleString()}</div>
+              {/* Simulated Pins */}
+              <div className="absolute top-1/4 left-1/3 w-8 h-8 bg-[#F47D31] rounded-full border-4 border-white shadow-xl animate-bounce"></div>
+              <div className="absolute top-1/2 left-1/2 w-6 h-6 bg-[#F47D31] rounded-full border-2 border-white shadow-lg opacity-80"></div>
+              <div className="absolute top-2/3 left-1/4 w-6 h-6 bg-[#F47D31] rounded-full border-2 border-white shadow-lg opacity-80"></div>
+
+              {/* Featured Pin Info */}
+              <div className="bg-white p-5 md:p-6 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] relative mt-auto border border-gray-50 transform group-hover:translate-y-[-4px] transition-transform duration-500 max-w-sm">
+                <div className="flex items-center gap-2 text-[10px] font-bold text-[#F47D31] mb-2 uppercase tracking-widest">
+                  📍 Featured Listing
+                </div>
+                <h4 className="font-bold text-sm md:text-base mb-3 text-[#1A1A1A] line-clamp-1">{properties[0]?.title || 'Luxury Residence'}</h4>
+                <div className="grid grid-cols-2 gap-3 text-[10px] text-gray-400 font-bold mb-5 border-b border-gray-50 pb-4">
+                  <div className="flex items-center gap-2">🛏️ {properties[0]?.attributes?.bedrooms || '3'} Bed</div>
+                  <div className="flex items-center gap-2">🚿 {properties[0]?.attributes?.bathrooms || '2'} Bath</div>
+                  <div className="flex items-center gap-2">📐 {properties[0]?.attributes?.square_feet || '2,450'} sqft</div>
+                  <div className="flex items-center gap-2">🏠 {properties[0]?.property_type || 'Villa'}</div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="text-xl font-black text-[#1A1A1A]">${Number(properties[0]?.price || 850000).toLocaleString()}</div>
+                  <Link to={`/properties/${properties[0]?.slug}`} className="text-[#F47D31] text-[10px] font-black uppercase tracking-widest hover:underline">
+                    Details →
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Property Grid */}
-          <div className="flex-1">
-            {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-pulse">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="bg-gray-100 h-112.5 rounded-[40px]"></div>
-                ))}
-              </div>
-            ) : properties.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {properties.map((prop) => (
-                  <div key={prop.id} className="bg-white rounded-[40px] overflow-hidden shadow-sm hover:shadow-2xl transition-all group">
-                    <div className="relative h-60 overflow-hidden">
-                      <img
-                        src={prop.primary_image?.image_url || prop.primary_image?.image || 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2070'}
-                        alt={prop.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
-                      <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm">
-                        {prop.status === 'for_sale' ? 'For Sale' : 'For Rent'}
-                      </div>
-                    </div>
-                    <div className="p-8">
-                      <div className="flex items-start gap-3 mb-4">
-                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0">📍</div>
-                        <h3 className="font-bold text-lg leading-tight line-clamp-1">{prop.title}</h3>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4 mb-8 text-gray-400 text-[11px] font-bold">
-                        <div className="flex items-center gap-2">🛏️ {prop.attributes?.bedrooms || '-'} Bed</div>
-                        <div className="flex items-center gap-2">🚿 {prop.attributes?.bathrooms || '-'} Bath</div>
-                        <div className="flex items-center gap-2">📐 {prop.attributes?.square_feet || '-'} sqft</div>
-                        <div className="flex items-center gap-2">🏠 {prop.property_type}</div>
-                      </div>
-                      <div className="flex items-center justify-between pt-6 border-t border-gray-100">
-                        <Link to={`/properties/${prop.slug}`} className="bg-[#1A1A1A] text-white px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-[#333] transition-all">
-                          View Details
-                        </Link>
-                        <span className="text-xl font-bold">${Number(prop.price).toLocaleString()}</span>
-                      </div>
+        {/* Property Grid */}
+        <div className="w-full">
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 animate-pulse">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="bg-gray-100 h-96 md:h-112.5 rounded-[32px] md:rounded-[40px]"></div>
+              ))}
+            </div>
+          ) : properties.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
+              {properties.map((prop) => (
+                <div key={prop.id} className="bg-[#FDF8F5] rounded-[15px] overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-orange-200 w-full">
+                  <div className="relative h-72 overflow-hidden">
+                    <img
+                      src={prop.primary_image?.image_url || prop.primary_image?.image || 'https://images.unsplash.com/photo-1600585154340-be6199f7c096?auto=format&fit=crop&q=80&w=2070'}
+                      alt={prop.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
+                      {prop.status === 'for_sale' ? 'For Sale' : 'For Rent'}
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-20 bg-white rounded-[40px] border-2 border-dashed border-gray-100">
-                <div className="text-6xl mb-4">🏠</div>
-                <h3 className="text-xl font-bold mb-2">No properties found</h3>
-                <p className="text-gray-400">Try adjusting your filters to find what you're looking for.</p>
-              </div>
-            )}
+                  <div className="p-8 md:p-10">
+                    <div className="flex items-start gap-4 mb-8">
+                      <div className="mt-1 shrink-0">
+                        <svg className="w-7 h-7 text-[#1A1A1A]" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM12 11.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                        </svg>
+                      </div>
+                      <h3 className="font-bold text-2xl leading-tight text-[#1A1A1A] line-clamp-2">{prop.title}</h3>
+                    </div>
 
-            {/* Pagination */}
-            {pagination && pagination.total_pages > 1 && (
-              <div className="mt-16 flex items-center justify-between">
-                <div className="flex gap-2">
-                  {[...Array(pagination.total_pages)].map((_, i) => (
-                    <button
-                      key={i + 1}
-                      onClick={() => handlePageChange(i + 1)}
-                      className={`w-10 h-10 rounded-xl font-bold text-sm transition-all ${pagination.current_page === i + 1
-                          ? 'bg-[#1A1A1A] text-white shadow-lg'
-                          : 'bg-white text-gray-400 hover:bg-gray-100 border border-gray-100'
-                        }`}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-                </div>
-                {pagination.current_page < pagination.total_pages && (
-                  <button
-                    onClick={() => handlePageChange(pagination.current_page + 1)}
-                    className="flex items-center gap-2 bg-white px-6 py-2.5 rounded-xl font-bold text-sm border border-gray-100 hover:bg-gray-100 transition-all"
-                  >
-                    Next Page
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                      <path d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </main>
+                    <div className="grid grid-cols-2 gap-y-5 gap-x-4 mb-10">
+                      <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M2 20V9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11" /><path d="M2 11h20" /><path d="M2 15h20" /><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" />
+                        </svg>
+                        <span>{prop.attributes?.bedrooms || '0'} Bed Room</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M14 11V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v8" /><path d="M21 15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4h18v4z" />
+                        </svg>
+                        <span>{prop.attributes?.bathrooms || '0'} Bath</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="m15 3 6 6" /><path d="m9 21-6-6" /><path d="M21 3h-6" /><path d="M21 3v6" /><path d="M3 21h6" /><path d="M3 21v-6" />
+                        </svg>
+                        <span>{(prop.attributes?.sqft || prop.attributes?.square_feet || '1,032').toLocaleString()} sqft</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <circle cx="6" cy="6" r="2" /><circle cx="18" cy="6" r="2" /><circle cx="6" cy="18" r="2" /><circle cx="18" cy="18" r="2" />
+                        </svg>
+                        <span>{prop.property_type || 'Family'}</span>
+                      </div>
+                    </div>
 
-      {/* Footer */}
-      <footer className="px-6 md:px-16 py-20 border-t border-gray-100 bg-white/50">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-20 max-w-7xl mx-auto">
-          <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 bg-[#F47D31] rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <span className="text-xl font-bold tracking-tight">Relasto</span>
-            </Link>
-            <p className="text-gray-400 mb-8 max-w-sm">
-              59 Bervely Hill Ave, Brooklyn Town, <br /> NYC, NY 5630, US
-            </p>
-            <div className="flex gap-4">
-              {['FB', 'TW', 'IG', 'LN', 'YT'].map((sc) => (
-                <div key={sc} className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-400 hover:border-[#F47D31] hover:text-[#F47D31] cursor-pointer transition-all">
-                  {sc}
+                    <div className="flex items-center justify-between">
+                      <Link to={`/properties/${prop.slug}`} className="bg-[#1A1A1A] text-white px-8 py-4 rounded-2xl text-base font-bold hover:bg-[#333] transition-all shadow-lg active:scale-95">
+                        View Details
+                      </Link>
+                      <span className="text-3xl font-bold text-[#1A1A1A] tracking-tight">${Number(prop.price).toLocaleString()}</span>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
-          </div>
-          <div>
-            <h4 className="font-bold mb-6 text-sm uppercase tracking-wider">Features</h4>
-            <ul className="space-y-4 text-gray-400 text-sm font-medium">
-              <li><Link to="/properties" className="hover:text-[#F47D31]">Property</Link></li>
-              <li><Link to="/properties" className="hover:text-[#F47D31]">Financing</Link></li>
-              <li><Link to="/properties" className="hover:text-[#F47D31]">Process</Link></li>
-              <li><Link to="/contact" className="hover:text-[#F47D31]">Contact</Link></li>
-              <li><Link to="/about" className="hover:text-[#F47D31]">Review</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold mb-6 text-sm uppercase tracking-wider">Information</h4>
-            <ul className="space-y-4 text-gray-400 text-sm font-medium">
-              <li><Link to="/about" className="hover:text-[#F47D31]">Listing</Link></li>
-              <li><Link to="/properties" className="hover:text-[#F47D31]">Managed</Link></li>
-              <li><Link to="/properties" className="hover:text-[#F47D31]">Property Details</Link></li>
-              <li><Link to="/agents" className="hover:text-[#F47D31]">Agent List</Link></li>
-              <li><Link to="/profile" className="hover:text-[#F47D31]">Agent Profile</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold mb-6 text-sm uppercase tracking-wider">Documentation</h4>
-            <ul className="space-y-4 text-gray-400 text-sm font-medium">
-              <li><Link to="/about" className="hover:text-[#F47D31]">Blog</Link></li>
-              <li><Link to="/about" className="hover:text-[#F47D31]">FAQ</Link></li>
-              <li><Link to="/about" className="hover:text-[#F47D31]">Privacy Policy</Link></li>
-              <li><Link to="/about" className="hover:text-[#F47D31]">License</Link></li>
-            </ul>
-          </div>
+          ) : (
+            <div className="text-center py-16 md:py-32 bg-white rounded-[32px] md:rounded-[40px] border border-gray-100 shadow-sm px-6 animate-in zoom-in duration-500">
+              <div className="text-5xl md:text-7xl mb-6">🏠</div>
+              <h3 className="text-xl md:text-2xl font-black mb-3 text-[#1A1A1A]">No properties found</h3>
+              <p className="text-gray-400 max-w-xs mx-auto text-sm font-medium leading-relaxed">
+                We couldn't find anything matching your search. Try adjusting your filters.
+              </p>
+              <button
+                onClick={() => setFilters({ search: '', status: '', price_min: '', bedrooms: '' })}
+                className="mt-8 text-[#F47D31] font-bold text-sm hover:underline"
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
+
+          {/* Pagination */}
+          {pagination && pagination.total_pages > 1 && (
+            <div className="mt-20 flex flex-col sm:flex-row items-center justify-between gap-8 pb-10">
+              <div className="flex flex-wrap justify-center gap-3">
+                {[...Array(pagination.total_pages)].map((_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => handlePageChange(i + 1)}
+                    className={`w-12 h-12 rounded-2xl font-black text-sm transition-all shadow-sm ${pagination.current_page === i + 1
+                      ? 'bg-[#1A1A1A] text-white shadow-xl scale-110'
+                      : 'bg-white text-gray-400 hover:bg-gray-50 border border-gray-100 hover:border-[#F47D31]/30 hover:text-[#F47D31]'
+                      }`}
+                  >
+                    {String(i + 1).padStart(2, '0')}
+                  </button>
+                ))}
+              </div>
+              {pagination.current_page < pagination.total_pages && (
+                <button
+                  onClick={() => handlePageChange(pagination.current_page + 1)}
+                  className="group flex items-center gap-3 bg-white px-8 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest border border-gray-100 hover:border-[#F47D31]/30 hover:text-[#F47D31] transition-all shadow-sm active:scale-95"
+                >
+                  Next Page
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                    <path d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          )}
         </div>
-        <div className="text-center text-gray-400 text-xs font-bold border-t border-gray-100 pt-10">
-          © 2026. ALL RIGHTS RESERVED.
-        </div>
-      </footer>
+      </main>
+
     </div>
   );
 };

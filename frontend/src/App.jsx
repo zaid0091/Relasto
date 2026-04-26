@@ -15,6 +15,7 @@ import AddPropertyPage from './pages/AddPropertyPage';
 import ProfilePage from './pages/ProfilePage';
 import NotFoundPage from './pages/NotFoundPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import Footer from './components/Footer';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -45,56 +46,59 @@ function App() {
     <AuthProvider>
       <Router>
         <ScrollToHash />
-        <div className="App">
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/properties" element={<PropertiesPage />} />
-            <Route path="/properties/:slug" element={<PropertyDetailPage />} />
-            <Route path="/agents" element={<AgentsPage />} />
-            <Route path="/agents/:id" element={<AgentProfilePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
+        <div className="App flex flex-col min-h-screen">
+          <div className="flex-grow">
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/properties" element={<PropertiesPage />} />
+              <Route path="/properties/:slug" element={<PropertyDetailPage />} />
+              <Route path="/agents" element={<AgentsPage />} />
+              <Route path="/agents/:id" element={<AgentProfilePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
 
-            {/* Protected Routes */}
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/properties/new"
-              element={
-                <ProtectedRoute>
-                  <AddPropertyPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/properties/:slug/edit"
-              element={
-                <ProtectedRoute>
-                  <AddPropertyPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
+              {/* Protected Routes */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/properties/new"
+                element={
+                  <ProtectedRoute>
+                    <AddPropertyPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/properties/:slug/edit"
+                element={
+                  <ProtectedRoute>
+                    <AddPropertyPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* Catch all route - show 404 */}
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
+              {/* Catch all route - show 404 */}
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
       </Router>
     </AuthProvider>

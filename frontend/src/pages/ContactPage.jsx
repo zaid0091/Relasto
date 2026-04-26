@@ -51,12 +51,12 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF8F1] font-['Inter'] mt-6">
+    <div className="min-h-screen bg-[#FFF8F1] font-['Inter']">
       <Navbar variant="light" />
 
-      <main className="max-w-7xl mx-auto px-6 py-20 pt-28">
+      <main className="max-w-7xl mx-auto px-6 md:px-16 py-20 pt-28">
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <h1 className="text-5xl font-black text-[#1A1A1A] mb-8 tracking-tight">Get in touch</h1>
+          <h1 className="text-4xl md:text-5xl font-black text-[#1A1A1A] mb-8 tracking-tight">Get in touch</h1>
           <p className="text-gray-500 font-medium leading-relaxed text-lg">
             On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble.
           </p>
@@ -65,7 +65,7 @@ const ContactPage = () => {
         <div className="bg-white rounded-[48px] shadow-sm border border-gray-100 overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Contact Form */}
-            <div className="p-10 lg:p-16 border-r border-gray-50">
+            <div className="p-6 md:p-16 border-r border-gray-50">
               <h2 className="text-2xl font-black text-[#1A1A1A] mb-10 tracking-tight">Send a message</h2>
 
               {success && (
@@ -148,7 +148,7 @@ const ContactPage = () => {
             </div>
 
             {/* Contact Info */}
-            <div className="p-10 lg:p-16 bg-gray-50/30">
+            <div className="p-6 md:p-16 bg-gray-50/30">
               <div className="mb-12">
                 <h3 className="text-xl font-black text-[#1A1A1A] mb-6">Office Address</h3>
                 <p className="text-gray-500 font-bold mb-8 leading-relaxed">
@@ -194,58 +194,6 @@ const ContactPage = () => {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-white pt-24 pb-12 mt-20 border-t border-[#F47D31]/10">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
-            <div className="lg:col-span-2">
-              <Link to="/" className="flex items-center gap-2 mb-8">
-                <div className="w-10 h-10 bg-[#F47D31] rounded-xl flex items-center justify-center">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
-                  </svg>
-                </div>
-                <span className="text-2xl font-black text-[#1A1A1A] tracking-tight">Relasto</span>
-              </Link>
-              <p className="text-gray-500 font-medium mb-8 max-w-sm leading-relaxed">
-                59 Bervely Hill Ave, Brooklyn Town,<br />New York, NY 5630, CA, US
-              </p>
-              <div className="space-y-3 mb-8">
-                <p className="text-[#1A1A1A] font-bold">+(123) 456-7890</p>
-                <p className="text-[#1A1A1A] font-bold">info@mail.com</p>
-              </div>
-              <div className="flex gap-4">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center hover:bg-[#F47D31]/10 transition-colors cursor-pointer group">
-                    <div className="w-5 h-5 bg-gray-300 group-hover:bg-[#F47D31] transition-colors rounded-sm" />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {[
-              { title: 'Features', links: ['Home v1', 'Home v2', 'About', 'Contact', 'Search'] },
-              { title: 'Information', links: ['Listing v1', 'Listing v2', 'Property Details', 'Agent List', 'Agent Profile'] },
-              { title: 'Documentation', links: ['Blog', 'FAQ', 'Privacy Policy', 'License'] }
-            ].map((col) => (
-              <div key={col.title}>
-                <h4 className="text-[#1A1A1A] font-black mb-8 uppercase tracking-widest text-xs">{col.title}</h4>
-                <ul className="space-y-4">
-                  {col.links.map((link) => (
-                    <li key={link}>
-                      <a href="#" className="text-gray-500 hover:text-[#F47D31] font-bold text-sm transition-colors">{link}</a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <div className="pt-12 border-t border-gray-100 flex flex-col md:row items-center justify-between gap-6">
-            <p className="text-gray-400 font-bold text-sm">© 2022. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
