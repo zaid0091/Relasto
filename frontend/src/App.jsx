@@ -19,11 +19,33 @@ import Footer from './components/Footer';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-// Component to handle scrolling to hash elements
-const ScrollToHash = () => {
+// Component to handle scrolling and document titles
+const RouteHandler = () => {
   const { hash, pathname } = useLocation();
 
   useEffect(() => {
+    // 1. Update Document Title
+    const pathSegments = pathname.split('/').filter(Boolean);
+    let title = 'Relasto | Real Estate';
+    
+    if (pathSegments.length === 0) {
+      title = 'Relasto | Home';
+    } else if (pathname.includes('/properties/new')) {
+      title = 'Relasto | Add Property';
+    } else if (pathname.includes('/edit')) {
+      title = 'Relasto | Edit Property';
+    } else if (pathSegments[0] === 'properties' && pathSegments.length > 1) {
+      title = 'Relasto | Property Details';
+    } else if (pathSegments[0] === 'agents' && pathSegments.length > 1) {
+      title = 'Relasto | Agent Profile';
+    } else {
+      const formattedPath = pathSegments[0].charAt(0).toUpperCase() + pathSegments[0].slice(1);
+      title = `Relasto | ${formattedPath}`;
+    }
+    
+    document.title = title;
+
+    // 2. Handle Scroll
     if (hash) {
       const id = hash.replace('#', '');
       const element = document.getElementById(id);
@@ -45,7 +67,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <ScrollToHash />
+        <RouteHandler />
         <div className="App flex flex-col min-h-screen">
           <div className="flex-grow">
             <Routes>

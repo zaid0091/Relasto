@@ -149,236 +149,252 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <Navbar/>
-      <div className="max-w-2xl mx-auto px-4">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">My Profile</h1>
+    <div className="min-h-screen bg-[#FDF9F6]">
+      <Navbar />
+      <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-20">
+        <div className="mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">My Profile</h1>
+          <p className="text-[#666] text-lg">Manage your account settings and professional profile information.</p>
+        </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-[15px] border border-orange-200 shadow-sm p-6 md:p-10 lg:p-12">
           {success && (
-            <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-md">
-              Profile updated successfully!
+            <div className="mb-8 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl flex items-center gap-3">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+              <span className="font-medium">Profile updated successfully!</span>
             </div>
           )}
 
           {error && (
-            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
-              {error}
+            <div className="mb-8 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center gap-3">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              <span className="font-medium">{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="mb-6 flex items-center gap-6">
-              <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
-                {(formData.profile_imagePreview || userData?.profile?.profile_image) ? (
-                  <img 
-                    src={formData.profile_imagePreview || (userData?.profile?.profile_image ? (userData.profile.profile_image.startsWith('http') ? userData.profile.profile_image : `${BASE_URL}${userData.profile.profile_image}`) : null)} 
-                    alt="Profile" 
-                    className="w-full h-full object-cover"
+          <form onSubmit={handleSubmit} className="space-y-10">
+            {/* Profile Header / Image Section */}
+            <div className="flex flex-col md:flex-row items-center gap-8 pb-10 border-b border-gray-100">
+              <div className="relative group">
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-orange-50 overflow-hidden border-4 border-white shadow-md flex items-center justify-center transition-transform group-hover:scale-105">
+                  {(formData.profile_imagePreview || userData?.profile?.profile_image) ? (
+                    <img 
+                      src={formData.profile_imagePreview || (userData?.profile?.profile_image ? (userData.profile.profile_image.startsWith('http') ? userData.profile.profile_image : `${BASE_URL}${userData.profile.profile_image}`) : null)} 
+                      alt="Profile" 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-5xl text-orange-200">👤</span>
+                  )}
+                </div>
+                <label className="absolute bottom-1 right-1 bg-[#F47D31] text-white p-2.5 rounded-full shadow-lg cursor-pointer hover:bg-[#e06d25] transition-colors">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                    <circle cx="12" cy="13" r="4" />
+                  </svg>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setFormData({ ...formData, profile_image: file, profile_imagePreview: URL.createObjectURL(file) });
+                      }
+                    }}
+                    className="hidden"
                   />
-                ) : (
-                  <span className="text-3xl text-gray-400">👤</span>
-                )}
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Profile Image
                 </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      setFormData({ ...formData, profile_image: file, profile_imagePreview: URL.createObjectURL(file) });
-                    }
-                  }}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#F47D31] file:text-white hover:file:bg-[#e06d25]"
-                />
+              </div>
+              <div className="text-center md:text-left">
+                <h3 className="text-2xl font-bold text-[#1A1A1A]">Profile Photo</h3>
+                <p className="text-[#666] mt-1 mb-4">Click the icon to upload a new image. JPG, PNG or GIF.</p>
                 {formData.profile_image && (
-                  <p className="mt-1 text-xs text-gray-500">Selected: {formData.profile_image.name}</p>
+                  <span className="inline-block bg-orange-50 text-[#F47D31] px-3 py-1 rounded-full text-xs font-bold">
+                    Selected: {formData.profile_image.name}
+                  </span>
                 )}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  name="first_name"
-                  value={formData.first_name}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+            {/* Basic Information */}
+            <div>
+              <h3 className="text-xl font-bold text-[#1A1A1A] mb-6 flex items-center gap-2">
+                <div className="w-1.5 h-6 bg-[#F47D31] rounded-full" />
+                Basic Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-[#1A1A1A]">First Name</label>
+                  <input
+                    type="text"
+                    name="first_name"
+                    value={formData.first_name}
+                    onChange={handleChange}
+                    className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:border-[#F47D31] focus:ring-0 outline-none transition-all placeholder:text-[#999]"
+                    placeholder="Enter first name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-[#1A1A1A]">Last Name</label>
+                  <input
+                    type="text"
+                    name="last_name"
+                    value={formData.last_name}
+                    onChange={handleChange}
+                    className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:border-[#F47D31] focus:ring-0 outline-none transition-all placeholder:text-[#999]"
+                    placeholder="Enter last name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-[#1A1A1A]">Email Address</label>
+                  <input
+                    type="email"
+                    value={localUser?.email || user?.email || ''}
+                    disabled
+                    className="w-full px-5 py-3 rounded-xl border border-[#F0F0F0] bg-[#F9F9F9] text-[#999] cursor-not-allowed"
+                  />
+                  <p className="text-xs text-[#999] pl-1 italic">Email cannot be changed</p>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-[#1A1A1A]">Phone Number</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:border-[#F47D31] focus:ring-0 outline-none transition-all placeholder:text-[#999]"
+                    placeholder="Enter phone number"
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  name="last_name"
-                  value={formData.last_name}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                value={localUser?.email || user?.email || ''}
-                disabled
-                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
-              />
-              <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter phone number"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Bio
-              </label>
+            {/* About / Bio Section */}
+            <div className="space-y-4">
+              <label className="text-sm font-bold text-[#1A1A1A]">Professional Bio</label>
               <textarea
                 name="bio"
-                rows={4}
+                rows={5}
                 value={formData.bio}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Tell us about yourself..."
+                className="w-full px-5 py-4 rounded-xl border border-[#E5E5E5] focus:border-[#F47D31] focus:ring-0 outline-none transition-all placeholder:text-[#999] resize-none"
+                placeholder="Tell us about your background, expertise and what you can offer to clients..."
               />
             </div>
 
             {/* Agent Fields - Only show for agents */}
             {(localUser?.profile?.is_agent || user?.profile?.is_agent) && (
-              <div className="border-t pt-4 mt-4">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Agent Information</h3>
+              <div className="pt-6">
+                <h3 className="text-xl font-bold text-[#1A1A1A] mb-8 flex items-center gap-2">
+                  <div className="w-1.5 h-6 bg-[#F47D31] rounded-full" />
+                  Agent Professional Details
+                </h3>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Years of Experience
-                    </label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-[#1A1A1A]">Years of Experience</label>
                     <input
                       type="number"
                       name="experience"
                       value={formData.experience}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:border-[#F47D31] focus:ring-0 outline-none transition-all"
                       placeholder="e.g., 5"
                       min="0"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      License No.
-                    </label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-[#1A1A1A]">License Number</label>
                     <input
                       type="text"
                       name="license_no"
                       value={formData.license_no}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:border-[#F47D31] focus:ring-0 outline-none transition-all"
                       placeholder="e.g., RE-12345"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Property Types
-                    </label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-[#1A1A1A]">Property Types</label>
                     <input
                       type="text"
                       name="property_types"
                       value={formData.property_types}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Residential, Commercial"
+                      className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:border-[#F47D31] focus:ring-0 outline-none transition-all"
+                      placeholder="e.g., Residential, Commercial"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Service Area
-                    </label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-[#1A1A1A]">Service Area</label>
                     <input
                       type="text"
                       name="area"
                       value={formData.area}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:border-[#F47D31] focus:ring-0 outline-none transition-all"
                       placeholder="e.g., Downtown, Suburbs"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      City
-                    </label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-[#1A1A1A]">City</label>
                     <input
                       type="text"
                       name="city"
                       value={formData.city}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:border-[#F47D31] focus:ring-0 outline-none transition-all"
                       placeholder="e.g., New York"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      State
-                    </label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-[#1A1A1A]">State / Province</label>
                     <input
                       type="text"
                       name="state"
                       value={formData.state}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:border-[#F47D31] focus:ring-0 outline-none transition-all"
                       placeholder="e.g., NY"
                     />
                   </div>
-                  <div className="col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Address
-                    </label>
+                  <div className="col-span-1 md:col-span-2 space-y-2">
+                    <label className="text-sm font-bold text-[#1A1A1A]">Full Office Address</label>
                     <input
                       type="text"
                       name="address"
                       value={formData.address}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Full address"
+                      className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:border-[#F47D31] focus:ring-0 outline-none transition-all"
+                      placeholder="Enter full address"
                     />
                   </div>
                 </div>
               </div>
             )}
 
-
-            <div className="pt-4">
+            <div className="pt-10 flex justify-end border-t border-gray-100">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
+                className="w-full md:w-auto px-12 py-4 bg-[#F47D31] text-white rounded-xl font-bold hover:bg-[#e06d25] transition-all shadow-lg shadow-orange-200 disabled:opacity-50 disabled:shadow-none flex items-center justify-center gap-2"
               >
-                {loading ? 'Saving...' : 'Save Changes'}
+                {loading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Saving...
+                  </>
+                ) : 'Save Changes'}
               </button>
             </div>
           </form>
@@ -386,6 +402,7 @@ const ProfilePage = () => {
       </div>
     </div>
   );
+
 };
 
 export default ProfilePage;

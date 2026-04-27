@@ -286,36 +286,37 @@ const AddPropertyPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FDF9F6]">
       <Navbar variant="light" />
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
-        <div className="mb-6">
-          <Link to="/dashboard" className="text-blue-600 hover:text-blue-800 text-sm">
-            &larr; Back to Dashboard
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 md:pt-32">
+        <div className="mb-8">
+          <Link to="/dashboard" className="inline-flex items-center gap-2 text-[#F47D31] hover:text-orange-600 transition-colors text-sm font-medium">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+            Back to Dashboard
           </Link>
         </div>
 
-        <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-6">
+        <div className="bg-white rounded-[15px] border border-[#E5E5E5] shadow-sm overflow-hidden">
+          <div className="p-6 md:p-10">
+            <h1 className="text-3xl font-bold text-[#1A1A1A] mb-8">
               {isEditMode ? 'Edit Property' : 'Add New Property'}
             </h1>
 
             {fetching && (
-              <div className="mb-6 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded-md">
+              <div className="mb-8 p-4 bg-orange-50 border border-orange-200 text-[#F47D31] rounded-[10px] font-medium">
                 Loading property data...
               </div>
             )}
 
             {success && (
-              <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
+              <div className="mb-8 p-4 bg-green-50 border border-green-200 text-green-700 rounded-[10px] font-medium">
                 {isEditMode ? 'Property updated successfully! Redirecting to dashboard...' : 'Property created successfully! Redirecting to dashboard...'}
               </div>
             )}
 
             {error && (
-              <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+              <div className="mb-8 p-4 bg-red-50 border border-red-200 text-red-700 rounded-[10px] font-medium">
                 {error}
               </div>
             )}
@@ -323,7 +324,7 @@ const AddPropertyPage = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     Property Title *
                   </label>
                   <input
@@ -331,7 +332,7 @@ const AddPropertyPage = () => {
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.title ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-4 py-3 bg-gray-50 border rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors ${errors.title ? 'border-red-500' : 'border-[#E5E5E5]'
                       }`}
                     placeholder="e.g., Beautiful 3BR House with Garden"
                   />
@@ -339,7 +340,7 @@ const AddPropertyPage = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     Description *
                   </label>
                   <textarea
@@ -347,7 +348,7 @@ const AddPropertyPage = () => {
                     rows={4}
                     value={formData.description}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.description ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-4 py-3 bg-gray-50 border rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors ${errors.description ? 'border-red-500' : 'border-[#E5E5E5]'
                       }`}
                     placeholder="Describe the property in detail..."
                   />
@@ -355,7 +356,7 @@ const AddPropertyPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     Price ($) *
                   </label>
                   <input
@@ -363,7 +364,7 @@ const AddPropertyPage = () => {
                     name="price"
                     value={formData.price}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.price ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-4 py-3 bg-gray-50 border rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors ${errors.price ? 'border-red-500' : 'border-[#E5E5E5]'
                       }`}
                     placeholder="250000"
                   />
@@ -371,14 +372,14 @@ const AddPropertyPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     Property Type
                   </label>
                   <select
                     name="property_type"
                     value={formData.property_type}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-gray-50 border border-[#E5E5E5] rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors"
                   >
                     <option value="residential">Residential</option>
                     <option value="commercial">Commercial</option>
@@ -388,14 +389,14 @@ const AddPropertyPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     Status
                   </label>
                   <select
                     name="status"
                     value={formData.status}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-gray-50 border border-[#E5E5E5] rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors"
                   >
                     <option value="sale">For Sale</option>
                     <option value="rent">For Rent</option>
@@ -406,7 +407,7 @@ const AddPropertyPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     Bedrooms
                   </label>
                   <input
@@ -414,13 +415,13 @@ const AddPropertyPage = () => {
                     name="bedrooms"
                     value={formData.bedrooms}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-gray-50 border border-[#E5E5E5] rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors"
                     placeholder="3"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     Bathrooms
                   </label>
                   <input
@@ -429,13 +430,13 @@ const AddPropertyPage = () => {
                     name="bathrooms"
                     value={formData.bathrooms}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-gray-50 border border-[#E5E5E5] rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors"
                     placeholder="2"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     Square Feet
                   </label>
                   <input
@@ -443,13 +444,13 @@ const AddPropertyPage = () => {
                     name="square_feet"
                     value={formData.square_feet}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-gray-50 border border-[#E5E5E5] rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors"
                     placeholder="2000"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     Lot Size (acres)
                   </label>
                   <input
@@ -458,13 +459,13 @@ const AddPropertyPage = () => {
                     name="lot_size"
                     value={formData.lot_size}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-gray-50 border border-[#E5E5E5] rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors"
                     placeholder="0.5"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     Year Built
                   </label>
                   <input
@@ -472,13 +473,13 @@ const AddPropertyPage = () => {
                     name="year_built"
                     value={formData.year_built}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-gray-50 border border-[#E5E5E5] rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors"
                     placeholder="2020"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     Address *
                   </label>
                   <input
@@ -486,7 +487,7 @@ const AddPropertyPage = () => {
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.address ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-4 py-3 bg-gray-50 border rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors ${errors.address ? 'border-red-500' : 'border-[#E5E5E5]'
                       }`}
                     placeholder="123 Main Street"
                   />
@@ -494,7 +495,7 @@ const AddPropertyPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     City *
                   </label>
                   <input
@@ -502,7 +503,7 @@ const AddPropertyPage = () => {
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.city ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-4 py-3 bg-gray-50 border rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors ${errors.city ? 'border-red-500' : 'border-[#E5E5E5]'
                       }`}
                     placeholder="New York"
                   />
@@ -510,7 +511,7 @@ const AddPropertyPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     State *
                   </label>
                   <input
@@ -518,7 +519,7 @@ const AddPropertyPage = () => {
                     name="state"
                     value={formData.state}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.state ? 'border-red-500' : 'border-gray-300'
+                    className={`w-full px-4 py-3 bg-gray-50 border rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors ${errors.state ? 'border-red-500' : 'border-[#E5E5E5]'
                       }`}
                     placeholder="NY"
                   />
@@ -526,7 +527,7 @@ const AddPropertyPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     ZIP Code
                   </label>
                   <input
@@ -534,36 +535,36 @@ const AddPropertyPage = () => {
                     name="zip_code"
                     value={formData.zip_code}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-gray-50 border border-[#E5E5E5] rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors"
                     placeholder="10001"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-2">
                     Features
                   </label>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {featuresList.map((feature, index) => (
-                      <div key={index} className="flex gap-2">
+                      <div key={index} className="flex gap-3">
                         <input
                           type="text"
                           value={feature.key}
                           onChange={(e) => handleFeatureChange(index, 'key', e.target.value)}
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="flex-1 px-4 py-3 bg-gray-50 border border-[#E5E5E5] rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors"
                           placeholder="Feature name (e.g., Pool)"
                         />
                         <input
                           type="text"
                           value={feature.value}
                           onChange={(e) => handleFeatureChange(index, 'value', e.target.value)}
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="flex-1 px-4 py-3 bg-gray-50 border border-[#E5E5E5] rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[#F47D31]/20 focus:border-[#F47D31] transition-colors"
                           placeholder="Value (e.g., Yes)"
                         />
                         <button
                           type="button"
                           onClick={() => removeFeature(index)}
-                          className="px-2 py-2 text-red-600 hover:bg-red-50 rounded-md"
+                          className="px-4 py-3 text-red-600 hover:bg-red-50 rounded-[10px] transition-colors border border-transparent hover:border-red-200"
                         >
                           ×
                         </button>
@@ -572,15 +573,16 @@ const AddPropertyPage = () => {
                     <button
                       type="button"
                       onClick={addFeature}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      className="inline-flex items-center gap-2 text-[#F47D31] hover:text-orange-600 text-sm font-semibold transition-colors mt-2"
                     >
-                      + Add Feature
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
+                      Add Feature
                     </button>
                   </div>
                 </div>
 
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                <div className="md:col-span-2 pt-4 border-t border-[#E5E5E5]">
+                  <label className="block text-sm font-medium text-[#1A1A1A] mb-3">
                     Property Images
                   </label>
                   <input
@@ -594,23 +596,23 @@ const AddPropertyPage = () => {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                    className="px-6 py-3 border border-[#E5E5E5] rounded-[10px] text-[#1A1A1A] font-medium hover:bg-gray-50 transition-colors shadow-sm"
                   >
                     Choose Files
                   </button>
                   {imagePreviews.length > 0 && (
-                    <div className="mt-4 grid grid-cols-4 gap-4">
+                    <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                       {imagePreviews.map((preview, index) => (
-                        <div key={index} className="relative">
+                        <div key={index} className="relative group">
                           <img
                             src={preview}
                             alt={`Preview ${index + 1}`}
-                            className="h-24 w-full object-cover rounded-md"
+                            className="h-28 w-full object-cover rounded-[10px] border border-[#E5E5E5]"
                           />
                           <button
                             type="button"
                             onClick={() => removeImage(index)}
-                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow-md hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
                           >
                             ×
                           </button>
@@ -619,25 +621,25 @@ const AddPropertyPage = () => {
                     </div>
                   )}
                   {existingImages.length > 0 && (
-                    <div className="mt-4">
-                      <p className="text-sm font-medium text-gray-700 mb-2">Existing Images</p>
-                      <div className="grid grid-cols-4 gap-4">
+                    <div className="mt-8">
+                      <p className="text-sm font-medium text-[#1A1A1A] mb-4">Existing Images</p>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                         {existingImages.map((img) => (
-                          <div key={img.id} className="relative">
+                          <div key={img.id} className="relative group">
                             <img
                               src={img.image_url}
                               alt={img.alt_text || 'Property image'}
-                              className={`h-24 w-full object-cover rounded-md ${img.is_primary ? 'ring-2 ring-blue-500' : ''}`}
+                              className={`h-28 w-full object-cover rounded-[10px] border ${img.is_primary ? 'border-2 border-[#F47D31]' : 'border-[#E5E5E5]'}`}
                             />
                             {img.is_primary && (
-                              <span className="absolute top-1 left-1 bg-blue-500 text-white text-xs px-1 rounded">Primary</span>
+                              <span className="absolute top-2 left-2 bg-[#F47D31] text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">Primary</span>
                             )}
-                            <div className="absolute top-1 right-1 flex gap-1">
+                            <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                               {!img.is_primary && (
                                 <button
                                   type="button"
                                   onClick={() => setPrimaryImage(img.id)}
-                                  className="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                                  className="bg-white text-[#F47D31] hover:bg-orange-50 border border-orange-100 rounded-full w-8 h-8 flex items-center justify-center text-sm shadow-sm transition-colors"
                                   title="Set as primary"
                                 >
                                   ★
@@ -646,7 +648,7 @@ const AddPropertyPage = () => {
                               <button
                                 type="button"
                                 onClick={() => removeExistingImage(img.id)}
-                                className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                                className="bg-white text-red-500 hover:bg-red-50 border border-red-100 rounded-full w-8 h-8 flex items-center justify-center text-sm shadow-sm transition-colors"
                                 title="Delete image"
                               >
                                 ×
@@ -660,17 +662,17 @@ const AddPropertyPage = () => {
                 </div>
               </div>
 
-              <div className="flex justify-end space-x-4 pt-4 border-t">
+              <div className="flex items-center justify-end gap-4 pt-8 mt-4 border-t border-[#E5E5E5]">
                 <Link
                   to="/dashboard"
-                  className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                  className="px-6 py-3 border border-[#E5E5E5] rounded-[10px] text-[#1A1A1A] font-medium hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </Link>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                  className="px-8 py-3 bg-[#F47D31] text-white font-semibold rounded-[10px] hover:bg-orange-600 transition-all shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (isEditMode ? 'Saving...' : 'Creating...') : (isEditMode ? 'Save Property' : 'Create Property')}
                 </button>
