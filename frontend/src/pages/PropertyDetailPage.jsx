@@ -107,34 +107,35 @@ const PropertyDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF8F1] font-['Inter'] text-[#1A1A1A]">
+    <div className="min-h-screen bg-[#FDF9F6] font-['Inter'] text-[#1A1A1A]">
       <Navbar />
       <main className="pt-32 pb-20 px-6 md:px-16 max-w-[1440px] mx-auto">
         {/* Gallery Collage */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 h-[300px] md:h-[500px]">
-          <div className="md:col-span-2 relative overflow-hidden rounded-[40px] shadow-2xl">
+          <div className="md:col-span-2 relative overflow-hidden rounded-[15px]">
             <img
               src={property.primary_image?.image || 'https://images.unsplash.com/photo-1600585154340-be6199f7c096?auto=format&fit=crop&q=80&w=2070'}
               alt={property.title}
-              className="w-full h-full object-cover"
+              className="w-full h-130 object-cover border border-orange-200"
             />
           </div>
           <div className="hidden md:grid grid-rows-2 gap-4">
-            <div className="relative overflow-hidden rounded-[30px] shadow-lg">
+            <div className="relative overflow-hidden rounded-[15px]">
               <img
                 src={galleryImages[0]?.image_url || galleryImages[0]?.image || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2075'}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover border border-gray-300"
                 alt="Interior 1"
               />
             </div>
-            <div className="relative overflow-hidden rounded-[30px] shadow-lg group h-full">
+            <div className="relative overflow-hidden rounded-[15px] group h-full">
               <img
                 src={galleryImages[1]?.image_url || galleryImages[1]?.image || 'https://images.unsplash.com/photo-1600607687940-4e7a5336d397?auto=format&fit=crop&q=80&w=2070'}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover border border-gray-200"
                 alt="Interior 2"
               />
-              <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                <span className="text-white font-bold text-lg">+{galleryImages.length > 2 ? galleryImages.length - 2 : 0} more</span>
+              <div className="absolute bottom-4 right-4 bg-white text-[#1A1A1A] font-bold text-sm px-4 py-2 rounded-lg flex items-center gap-2 shadow-md cursor-pointer hover:bg-gray-50 border border-gray-200 transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                {galleryImages.length > 2 ? galleryImages.length - 2 : 0} more
               </div>
             </div>
           </div>
@@ -144,167 +145,186 @@ const PropertyDetailPage = () => {
           {/* Left Column: Details */}
           <div className="lg:col-span-2">
             <div className="mb-8 md:mb-10">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-black mb-4 md:mb-6 leading-tight tracking-tight text-[#1A1A1A]">{property.title}</h1>
-              <div className="flex items-center gap-3 text-gray-400 font-bold text-xs md:text-sm uppercase tracking-widest bg-white/50 backdrop-blur-sm self-start py-2 rounded-full">
-                <div className="w-8 h-8 rounded-full bg-[#F47D31]/10 flex items-center justify-center text-[#F47D31]">📍</div>
+              <h1 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A] leading-tight">{property.title}</h1>
+              <div className="text-gray-500 font-medium">
                 {property.address}, {property.city}, {property.state} {property.zip_code}
               </div>
             </div>
 
             {/* Price Boxes */}
-            <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-12">
-              <div className="bg-white p-6 md:p-8 rounded-[32px] md:rounded-[40px] shadow-sm border border-gray-50 flex-1 hover:shadow-xl transition-all group">
-                <span className="text-gray-400 text-[10px] md:text-xs font-black block mb-2 uppercase tracking-[0.2em]">Full Price</span>
-                <div className="text-3xl md:text-4xl font-black text-[#1A1A1A] group-hover:text-[#F47D31] transition-colors">${Number(property.price).toLocaleString()}</div>
-                <div className="w-full h-1 bg-gray-50 rounded-full mt-4 overflow-hidden">
-                  <div className="w-2/3 h-full bg-[#F47D31] rounded-full"></div>
-                </div>
-                <span className="text-gray-400 text-[10px] font-bold mt-3 block">Est. $3,450/mo mortgage</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-10">
+              <div className="bg-white p-6 rounded-[15px] border border-gray-200 flex flex-col justify-center">
+                <div className="text-2xl font-bold text-[#1A1A1A] mb-1">${Number(property.price).toLocaleString()}</div>
+                <div className="text-sm text-gray-500 font-medium">Property Price</div>
               </div>
-              <div className="bg-white p-6 md:p-8 rounded-[32px] md:rounded-[40px] shadow-sm border border-gray-50 flex-1 hover:shadow-xl transition-all group">
-                <span className="text-gray-400 text-[10px] md:text-xs font-black block mb-2 uppercase tracking-[0.2em]">Estimated Rent</span>
-                <div className="text-3xl md:text-4xl font-black text-[#1A1A1A] group-hover:text-[#F47D31] transition-colors">${Math.round(property.price / 300).toLocaleString()} <span className="text-sm md:text-lg font-bold text-gray-300">/ mo</span></div>
-                <div className="w-full h-1 bg-gray-50 rounded-full mt-4 overflow-hidden">
-                  <div className="w-1/2 h-full bg-[#1A1A1A] rounded-full"></div>
-                </div>
-                <span className="text-gray-400 text-[10px] font-bold mt-3 block">Market Average Performance</span>
+              <div className="bg-white p-6 rounded-[15px] border border-gray-200 flex flex-col justify-center">
+                <div className="text-2xl font-bold text-[#1A1A1A] mb-1">${Math.round(property.price / 300).toLocaleString()} <span className="text-lg">/ month</span></div>
+                <div className="text-sm text-gray-500 font-medium">Estimated Mortgage</div>
               </div>
             </div>
 
             {/* Description */}
             <div className="mb-12">
-              <h2 className="text-xl md:text-2xl font-black mb-6 text-[#1A1A1A] flex items-center gap-3">
-                <span className="w-1.5 h-6 bg-[#F47D31] rounded-full"></span>
-                About this home
+              <h2 className="text-xl font-bold mb-4 text-[#1A1A1A]">
+                Well-constructed {(property.attributes?.sqft || property.attributes?.square_feet || '1,562').toLocaleString()} Sq Ft Home Is Now Offering To You In {property.city || 'Ottawa'} For {property.status === 'for_sale' ? 'Sale' : 'Rent'}
               </h2>
-              <p className="text-gray-500 leading-[1.8] text-base md:text-lg font-medium">
+              <p className="text-gray-500 leading-relaxed text-sm md:text-base">
                 {property.description}
               </p>
             </div>
 
             {/* Local Information Tabs */}
             <div className="mb-12">
-              <h2 className="text-xl md:text-2xl font-black mb-6 text-[#1A1A1A] flex items-center gap-3">
-                <span className="w-1.5 h-6 bg-[#F47D31] rounded-full"></span>
+              <h2 className="text-xl font-bold mb-6 text-[#1A1A1A]">
                 Local Information
               </h2>
-              <div className="flex gap-2 md:gap-4 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+              <div className="flex gap-3 mb-6 overflow-x-auto pb-2 scrollbar-hide">
                 {['Map', 'Schools', 'Crime', 'Shop & Eat'].map((tab, i) => (
                   <button
                     key={tab}
-                    className={`px-5 md:px-7 py-2.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${i === 1 ? 'bg-[#1A1A1A] text-white shadow-xl scale-105' : 'bg-white border border-gray-100 text-gray-400 hover:border-[#F47D31]/30 hover:text-[#F47D31]'
+                    className={`px-6 py-2.5 rounded-[10px] text-sm font-medium transition-all whitespace-nowrap ${i === 1 ? 'bg-[#1A1A1A] text-white' : 'bg-white border border-gray-200 text-[#1A1A1A] hover:border-[#1A1A1A]'
                       }`}
                   >
                     {tab}
                   </button>
                 ))}
               </div>
-              <div className="h-64 md:h-96 bg-white rounded-[32px] md:rounded-[40px] overflow-hidden shadow-inner relative border border-gray-100 group">
+              <div className="h-64 md:h-[350px] bg-white rounded-[15px] overflow-hidden relative border border-gray-100">
                 <img
                   src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=2074"
-                  className="w-full h-full object-cover grayscale opacity-30 group-hover:opacity-40 transition-opacity duration-1000"
+                  className="w-full h-full object-cover opacity-80"
                   alt="Local Map"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-12 h-12 bg-[#F47D31] rounded-full border-4 border-white shadow-2xl animate-bounce flex items-center justify-center text-white font-black text-xl">📍</div>
+                  <div className="w-10 h-10 bg-[#F47D31] rounded-full flex items-center justify-center text-white text-lg shadow-md">📍</div>
                 </div>
               </div>
             </div>
 
             {/* Home Highlights */}
-            <div className="bg-white p-6 md:p-10 lg:p-12 rounded-[32px] md:rounded-[40px] shadow-sm border border-gray-50 mb-12 hover:shadow-xl transition-all duration-500">
-              <h2 className="text-xl md:text-2xl font-black mb-10 text-[#1A1A1A] flex items-center gap-3">
-                <span className="w-1.5 h-6 bg-[#F47D31] rounded-full"></span>
+            <div className="bg-white p-6 md:p-8 rounded-[15px] border border-gray-200 mb-12">
+              <h2 className="text-xl font-bold mb-6 text-[#1A1A1A]">
                 Home Highlights
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 md:gap-y-8 gap-x-12 md:gap-x-16">
-                {[
-                  { label: 'Parking', value: property.attributes?.parking || 'No Info' },
-                  { label: 'Outdoor', value: property.attributes?.outdoor || 'No Info' },
-                  { label: 'A/C', value: property.attributes?.ac || 'No Info' },
-                  { label: 'Year Built', value: property.attributes?.year_built || 'No Info' },
-                  { label: 'HOA', value: property.attributes?.hoa || 'None' },
-                  { label: 'Price/sqft', value: property.attributes?.square_feet ? `$${Math.round(property.price / property.attributes.square_feet)}` : 'No Info' },
-                  { label: 'Listed', value: new Date(property.created_at).toLocaleDateString() },
-                ].map((item, i) => (
-                  <div key={i} className="flex justify-between items-center border-b border-gray-50 pb-4 group">
-                    <span className="text-gray-400 font-bold text-[10px] md:text-xs uppercase tracking-widest transition-colors group-hover:text-[#F47D31]">• {item.label}</span>
-                    <span className="font-black text-xs md:text-sm text-[#1A1A1A]">{item.value}</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-4">
+                {/* Column 1 */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-500 flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Parking</span>
+                    <span className="font-semibold text-[#1A1A1A]">{property.attributes?.parking || 'No Info'}</span>
                   </div>
-                ))}
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-500 flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Outdoor</span>
+                    <span className="font-semibold text-[#1A1A1A]">{property.attributes?.outdoor || 'No Info'}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-500 flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span> A/C</span>
+                    <span className="font-semibold text-[#1A1A1A]">{property.attributes?.ac || 'No Info'}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-500 flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Year Built</span>
+                    <span className="font-semibold text-[#1A1A1A]">{property.attributes?.year_built || '2021'}</span>
+                  </div>
+                </div>
+                {/* Column 2 */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-500 flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span> HOA</span>
+                    <span className="font-semibold text-[#1A1A1A]">{property.attributes?.hoa || 'None'}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-500 flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Price/Sqft</span>
+                    <span className="font-semibold text-[#1A1A1A]">{property.attributes?.square_feet ? `$${Math.round(property.price / property.attributes.square_feet)}` : '$560'}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-500 flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Listed</span>
+                    <span className="font-semibold text-[#1A1A1A]">No Info</span>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Agent Info */}
-            <div className="bg-white p-6 md:p-8 rounded-[32px] md:rounded-[40px] shadow-sm border border-gray-50 mb-12 flex flex-col sm:flex-row items-center gap-6 md:gap-8 hover:shadow-xl transition-all group">
-              <div className="relative shrink-0">
+            <div className="bg-white p-6 md:p-8 rounded-[15px] border border-gray-200 mb-12">
+              <h2 className="text-xl font-bold mb-6 text-[#1A1A1A]">Agent Information</h2>
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                 <img
                   src={property.agent?.profile_image || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1976'}
-                  className="w-20 h-20 md:w-24 md:h-24 rounded-3xl object-cover shadow-lg group-hover:scale-105 transition-transform duration-500"
+                  className="w-24 h-24 rounded-[15px] object-cover"
                   alt="Agent"
                 />
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-4 border-white rounded-full"></div>
-              </div>
-              <div className="text-center sm:text-left">
-                <div className="text-[10px] font-black text-[#F47D31] uppercase tracking-[0.2em] mb-1">Listing Agent</div>
-                <h3 className="text-lg md:text-xl font-black mb-1 text-[#1A1A1A]">{property.agent?.user?.first_name} {property.agent?.user?.last_name}</h3>
-                <div className="flex items-center justify-center sm:justify-start gap-1 text-yellow-400 mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className={`w-3.5 h-3.5 ${i < Math.round(property.agent?.average_rating || 5) ? 'fill-current' : 'text-gray-100'}`} viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                  <span className="text-gray-300 text-[10px] font-black ml-1 uppercase tracking-widest">Premier</span>
-                </div>
-                <div className="inline-flex items-center gap-2 bg-gray-50 px-4 py-1.5 rounded-full text-[10px] font-black text-gray-500 uppercase tracking-widest border border-gray-100">
-                  <span className="text-lg">📞</span> {property.agent?.phone || '+1 234 567 890'}
+                <div className="text-center sm:text-left pt-1">
+                  <h3 className="text-lg font-bold text-[#1A1A1A] mb-1">{property.agent?.user?.first_name || 'Bruno'} {property.agent?.user?.last_name || 'Fernandes'}</h3>
+                  <div className="flex items-center justify-center sm:justify-start gap-1 text-[#F47D31] mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className={`w-4 h-4 ${i < Math.round(property.agent?.average_rating || 4) ? 'fill-current' : 'text-gray-200'}`} viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                    <span className="text-gray-500 text-sm font-medium ml-2">1 review</span>
+                  </div>
+                  <div className="flex items-center justify-center sm:justify-start gap-2 text-sm text-gray-500 mb-1">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    {property.agent?.user?.email || 'bruno@relasto.com'}
+                  </div>
+                  <div className="flex items-center justify-center sm:justify-start gap-2 text-sm text-gray-500">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                    {property.agent?.phone || '+1 234 567 890'}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Right Column: Visit Form Sidebar */}
-          <div className="lg:sticky lg:top-32 mb-12 lg:mb-0">
-            <div className="bg-white p-6 md:p-8 lg:p-10 rounded-[32px] md:rounded-[40px] shadow-2xl border border-gray-50 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-[#F47D31]/5 rounded-bl-full -mr-8 -mt-8 transition-transform duration-700 group-hover:scale-150"></div>
-              <h2 className="text-xl md:text-2xl font-black mb-8 text-[#1A1A1A] relative">Request for Visit</h2>
-              <form onSubmit={handleVisitSubmit} className="space-y-4 relative">
+          <div className="lg:mt-85 mb-12 sm:mt-2 lg:mb-0">
+            <div className="bg-white p-6 md:p-8 rounded-[15px] border border-gray-200">
+              <h2 className="text-xl font-bold mb-6 text-[#1A1A1A]">Request for Visit</h2>
+              <form onSubmit={handleVisitSubmit} className="space-y-4">
                 <div className="relative">
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-lg">✉️</span>
+                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                  <input
+                    type="text"
+                    placeholder="Full Name"
+                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-[10px] outline-none focus:border-[#F47D31] text-sm text-[#1A1A1A]"
+                  />
+                </div>
+                <div className="relative">
+                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                   <input
                     type="email"
                     placeholder="Email Address"
                     required
-                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-transparent rounded-2xl outline-none focus:bg-white focus:border-[#F47D31] focus:ring-4 focus:ring-[#F47D31]/5 transition-all text-sm font-medium"
+                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-[10px] outline-none focus:border-[#F47D31] text-sm text-[#1A1A1A]"
                     value={visitForm.contact_email}
                     onChange={(e) => setVisitForm({ ...visitForm, contact_email: e.target.value })}
                   />
                 </div>
                 <div className="relative">
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-lg">📞</span>
+                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                   <input
                     type="tel"
                     placeholder="Phone Number"
                     required
-                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-transparent rounded-2xl outline-none focus:bg-white focus:border-[#F47D31] focus:ring-4 focus:ring-[#F47D31]/5 transition-all text-sm font-medium"
+                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-[10px] outline-none focus:border-[#F47D31] text-sm text-[#1A1A1A]"
                     value={visitForm.contact_phone}
                     onChange={(e) => setVisitForm({ ...visitForm, contact_phone: e.target.value })}
                   />
                 </div>
                 <div className="relative">
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-lg">📅</span>
+                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                   <input
                     type="date"
                     required
-                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-transparent rounded-2xl outline-none focus:bg-white focus:border-[#F47D31] focus:ring-4 focus:ring-[#F47D31]/5 transition-all text-sm font-medium"
+                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-[10px] outline-none focus:border-[#F47D31] text-sm text-[#1A1A1A]"
                     value={visitForm.preferred_date}
                     onChange={(e) => setVisitForm({ ...visitForm, preferred_date: e.target.value })}
                   />
                 </div>
                 <textarea
-                  placeholder="Tell us about your needs..."
-                  rows="3"
-                  className="w-full px-6 py-4 bg-gray-50 border border-transparent rounded-2xl outline-none focus:bg-white focus:border-[#F47D31] focus:ring-4 focus:ring-[#F47D31]/5 transition-all text-sm font-medium resize-none"
+                  placeholder="Message"
+                  rows="4"
+                  className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-[10px] outline-none focus:border-[#F47D31] text-sm text-[#1A1A1A] resize-none"
                   value={visitForm.message}
                   onChange={(e) => setVisitForm({ ...visitForm, message: e.target.value })}
                 ></textarea>
@@ -312,16 +332,15 @@ const PropertyDetailPage = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full bg-[#1A1A1A] text-white py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-[#F47D31] hover:translate-y-[-2px] active:translate-y-0 transition-all shadow-xl disabled:opacity-50 relative overflow-hidden"
+                  className="w-full bg-[#1A1A1A] text-white py-3.5 rounded-[10px] font-medium text-sm hover:bg-[#333] transition-colors disabled:opacity-50 mt-2"
                 >
-                  <span className="relative z-10">{submitting ? 'Sending Request...' : 'Schedule Visit Now'}</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-1000"></div>
+                  {submitting ? 'Sending Request...' : 'Send Request'}
                 </button>
 
                 {submitStatus === 'success' && (
-                  <div className="p-4 bg-green-50 rounded-xl border border-green-100 flex items-center gap-3 animate-in fade-in zoom-in duration-300 mt-4">
-                    <span className="text-xl">✅</span>
-                    <p className="text-green-700 font-bold text-xs">Your visit request has been sent to our premier agent!</p>
+                  <div className="p-3 bg-green-50 rounded-[10px] border border-green-100 flex items-start gap-2 mt-4 text-green-700 text-sm">
+                    <svg className="w-5 h-5 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
+                    Your visit request has been sent!
                   </div>
                 )}
               </form>
@@ -330,12 +349,12 @@ const PropertyDetailPage = () => {
         </div>
 
         {/* Latest Listings */}
-        <section className="mt-20 md:mt-32">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 md:mb-12 gap-4">
-            <h2 className="text-3xl md:text-4xl font-black text-[#1A1A1A]">Latest Listings</h2>
-            <Link to="/properties" className="text-[#F47D31] font-black flex items-center gap-2 group text-sm uppercase tracking-widest bg-white px-6 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all">
+        <section className="mt-20">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
+            <h2 className="text-2xl font-bold text-[#1A1A1A]">Latest Property Listings</h2>
+            <Link to="/properties" className="text-[#F47D31] font-semibold flex items-center gap-2 hover:underline text-sm">
               Explore All
-              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
