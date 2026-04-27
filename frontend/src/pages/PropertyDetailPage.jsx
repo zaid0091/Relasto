@@ -116,7 +116,7 @@ const PropertyDetailPage = () => {
             <img
               src={property.primary_image?.image || 'https://images.unsplash.com/photo-1600585154340-be6199f7c096?auto=format&fit=crop&q=80&w=2070'}
               alt={property.title}
-              className="w-full h-130 object-cover border border-orange-200"
+              className="w-full h-130 object-cover"
             />
           </div>
           <div className="hidden md:grid grid-rows-2 gap-4">
@@ -140,13 +140,14 @@ const PropertyDetailPage = () => {
             </div>
           </div>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+       
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start bg-">
           {/* Left Column: Details */}
+          
           <div className="lg:col-span-2">
             <div className="mb-8 md:mb-10">
               <h1 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A] leading-tight">{property.title}</h1>
-              <div className="text-gray-500 font-medium">
+              <div className="text-gray-900 font-medium">
                 {property.address}, {property.city}, {property.state} {property.zip_code}
               </div>
             </div>
@@ -168,7 +169,7 @@ const PropertyDetailPage = () => {
               <h2 className="text-xl font-bold mb-4 text-[#1A1A1A]">
                 Well-constructed {(property.attributes?.sqft || property.attributes?.square_feet || '1,562').toLocaleString()} Sq Ft Home Is Now Offering To You In {property.city || 'Ottawa'} For {property.status === 'for_sale' ? 'Sale' : 'Rent'}
               </h2>
-              <p className="text-gray-500 leading-relaxed text-sm md:text-base">
+              <p className="text-gray-400 leading-relaxed text-sm md:text-base">
                 {property.description}
               </p>
             </div>
