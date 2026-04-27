@@ -239,9 +239,9 @@ const PropertiesPage = () => {
                       alt={prop.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
-                    <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
+                    {/* <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
                       {prop.status === 'for_sale' ? 'For Sale' : 'For Rent'}
-                    </div>
+                    </div> */}
                   </div>
                   <div className="p-8 md:p-10">
                     <div className="flex items-start gap-4 mb-8">
