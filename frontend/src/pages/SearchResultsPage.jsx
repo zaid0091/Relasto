@@ -6,7 +6,7 @@ import Navbar from '../components/Navbar';
 const SearchResultsPage = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
-  
+
   const [results, setResults] = useState({
     properties: [],
     agents: [],
@@ -25,7 +25,7 @@ const SearchResultsPage = () => {
       try {
         setLoading(true);
         setError(null);
-        
+
         const response = await searchAPI.universalSearch({ q: query });
         setResults(response.data.data);
       } catch (err) {
@@ -82,7 +82,7 @@ const SearchResultsPage = () => {
   return (
     <div className="min-h-screen bg-[#FFF8F1]">
       <Navbar />
-      
+
       <main className="max-w-6xl mx-auto px-6 pt-24 pb-12">
 
         <div className="mb-12">
@@ -94,7 +94,7 @@ const SearchResultsPage = () => {
           </p>
         </div>
 
-       
+
         {results.properties.length > 0 && (
           <div className="mb-16">
             <h2 className="text-2xl font-bold text-[#1A1A1A] mb-6 flex items-center gap-3">
@@ -146,7 +146,7 @@ const SearchResultsPage = () => {
           </div>
         )}
 
-        
+
         {results.agents.length > 0 && (
           <div className="mb-16">
             <h2 className="text-2xl font-bold text-[#1A1A1A] mb-6 flex items-center gap-3">
@@ -195,7 +195,7 @@ const SearchResultsPage = () => {
           </div>
         )}
 
-       
+
         {results.properties.length === 0 && results.agents.length === 0 && (
           <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
             <div className="text-6xl mb-6">🔍</div>
