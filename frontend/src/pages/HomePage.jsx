@@ -475,7 +475,7 @@ const HomePage = () => {
             <h2 className="text-3xl md:text-5xl font-black text-[#1A1A1A] mb-4">News & Consult</h2>
             <p className="text-gray-400 font-medium text-sm md:text-base max-w-md">Stay updated with the latest trends and insights from our real estate experts.</p>
           </div>
-          <Link to="/about" className="text-[#F47D31] font-black flex items-center gap-2 group text-xs uppercase tracking-[0.2em] bg-gray-50 px-8 py-3.5 rounded-full hover:bg-[#F47D31] hover:text-white transition-all shadow-sm">
+          <Link to="/blog" className="text-[#F47D31] font-black flex items-center gap-2 group text-xs uppercase tracking-[0.2em] bg-gray-50 px-8 py-3.5 rounded-full hover:bg-[#F47D31] hover:text-white transition-all shadow-sm">
             Explore All News
             <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
               <path d="M5 12h14M12 5l7 7-7 7" />
@@ -503,7 +503,7 @@ const HomePage = () => {
                 <span>{news.date}</span>
               </div>
               <h3 className="text-xl md:text-2xl font-black mb-6 group-hover:text-[#F47D31] transition-colors leading-tight line-clamp-2">{news.title}</h3>
-              <Link to="/about" className="text-[#1A1A1A] font-black flex items-center gap-3 text-xs uppercase tracking-widest hover:gap-5 transition-all">
+              <Link to="/blog" className="text-[#1A1A1A] font-black flex items-center gap-3 text-xs uppercase tracking-widest hover:gap-5 transition-all">
                 Continue Reading
                 <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-[#F47D31] group-hover:bg-[#F47D31] group-hover:text-white transition-all">
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
