@@ -111,7 +111,7 @@ const RegisterForm = () => {
             </div>
           )}
 
-          {/* Google Sign Up */}
+     
           <div className="flex justify-center overflow-hidden w-full mb-4">
             <GoogleLogin
               onSuccess={async (credentialResponse) => {
@@ -131,7 +131,6 @@ const RegisterForm = () => {
             />
           </div>
 
-          {/* Divider */}
           <div className="relative my-5">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-200"></div>
@@ -142,7 +141,7 @@ const RegisterForm = () => {
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
-            {/* Email */}
+        
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email address
@@ -163,7 +162,6 @@ const RegisterForm = () => {
               {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
             </div>
 
-            {/* Username */}
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
                 Username
@@ -184,7 +182,7 @@ const RegisterForm = () => {
               {errors.username && <p className="mt-1 text-sm text-red-600">{errors.username}</p>}
             </div>
 
-            {/* Password */}
+           
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                 Password
@@ -223,7 +221,7 @@ const RegisterForm = () => {
               {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
             </div>
 
-            {/* Confirm Password */}
+           
             <div>
               <label htmlFor="password_confirm" className="block text-sm font-medium text-gray-700 mb-1">
                 Confirm Password
@@ -262,7 +260,7 @@ const RegisterForm = () => {
               {errors.password_confirm && <p className="mt-1 text-sm text-red-600">{errors.password_confirm}</p>}
             </div>
 
-            {/* Agent Checkbox */}
+           
             <div className="bg-[#FFF8F1] border border-[#F47D31]/20 rounded-xl p-4">
               <div className="flex items-start">
                 <input
@@ -282,7 +280,7 @@ const RegisterForm = () => {
               </div>
             </div>
 
-            {/* Terms */}
+         
             <div className="flex items-start">
               <input
                 id="agree-terms"

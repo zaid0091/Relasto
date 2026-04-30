@@ -74,7 +74,7 @@ const SearchFilter = ({ onFilterChange, initialFilters = {} }) => {
     <div className="bg-white shadow rounded-lg mb-6">
       <div className="p-4">
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Search Bar */}
+          
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
@@ -135,11 +135,10 @@ const SearchFilter = ({ onFilterChange, initialFilters = {} }) => {
             </div>
           </div>
 
-          {/* Expanded Filters */}
           {isExpanded && (
             <div className="border-t pt-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* Property Type */}
+              
                 <div>
                   <label htmlFor="property_type" className="block text-sm font-medium text-gray-700 mb-1">
                     Property Type
@@ -159,7 +158,6 @@ const SearchFilter = ({ onFilterChange, initialFilters = {} }) => {
                   </select>
                 </div>
 
-                {/* Status */}
                 <div>
                   <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
                     Status
@@ -179,7 +177,6 @@ const SearchFilter = ({ onFilterChange, initialFilters = {} }) => {
                   </select>
                 </div>
 
-                {/* City */}
                 <div>
                   <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
                     City
@@ -195,7 +192,6 @@ const SearchFilter = ({ onFilterChange, initialFilters = {} }) => {
                   />
                 </div>
 
-                {/* State */}
                 <div>
                   <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
                     State
@@ -211,7 +207,6 @@ const SearchFilter = ({ onFilterChange, initialFilters = {} }) => {
                   />
                 </div>
 
-                {/* Price Range */}
                 <div>
                   <label htmlFor="price_min" className="block text-sm font-medium text-gray-700 mb-1">
                     Min Price
@@ -244,7 +239,7 @@ const SearchFilter = ({ onFilterChange, initialFilters = {} }) => {
                   />
                 </div>
 
-                {/* Sort By */}
+               
                 <div>
                   <label htmlFor="ordering" className="block text-sm font-medium text-gray-700 mb-1">
                     Sort By
@@ -265,7 +260,6 @@ const SearchFilter = ({ onFilterChange, initialFilters = {} }) => {
                 </div>
               </div>
 
-              {/* Reset Button */}
               <div className="flex justify-end pt-4 border-t">
                 <button
                   type="button"

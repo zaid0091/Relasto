@@ -90,7 +90,7 @@ const LoginForm = () => {
           )}
 
           <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
-            {/* Email Field */}
+          
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email address
@@ -113,7 +113,7 @@ const LoginForm = () => {
               )}
             </div>
 
-            {/* Password Field */}
+         
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                 Password
@@ -193,7 +193,7 @@ const LoginForm = () => {
               )}
             </button>
 
-            {/* Divider */}
+            
             <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200"></div>
@@ -203,7 +203,7 @@ const LoginForm = () => {
               </div>
             </div>
 
-            {/* Google Login */}
+            
             <div className="flex justify-center overflow-hidden w-full">
               <GoogleLogin
                 onSuccess={async (credentialResponse) => {

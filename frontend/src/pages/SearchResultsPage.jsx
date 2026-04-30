@@ -84,7 +84,7 @@ const SearchResultsPage = () => {
       <Navbar />
       
       <main className="max-w-6xl mx-auto px-6 pt-24 pb-12">
-        {/* Search Header */}
+
         <div className="mb-12">
           <h1 className="text-4xl md:text-5xl font-black text-[#1A1A1A] mb-4">
             Search Results for "{query}"
@@ -94,7 +94,7 @@ const SearchResultsPage = () => {
           </p>
         </div>
 
-        {/* Properties Section */}
+       
         {results.properties.length > 0 && (
           <div className="mb-16">
             <h2 className="text-2xl font-bold text-[#1A1A1A] mb-6 flex items-center gap-3">
@@ -146,7 +146,7 @@ const SearchResultsPage = () => {
           </div>
         )}
 
-        {/* Agents Section */}
+        
         {results.agents.length > 0 && (
           <div className="mb-16">
             <h2 className="text-2xl font-bold text-[#1A1A1A] mb-6 flex items-center gap-3">
@@ -195,7 +195,7 @@ const SearchResultsPage = () => {
           </div>
         )}
 
-        {/* No Results */}
+       
         {results.properties.length === 0 && results.agents.length === 0 && (
           <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
             <div className="text-6xl mb-6">🔍</div>

@@ -5,9 +5,9 @@ import Navbar from '../components/Navbar';
 import emailjs from '@emailjs/browser';
 import { Mail, Phone } from 'lucide-react';
 
-const SERVICE_ID = 'service_3ireqdm';
-const TEMPLATE_ID = 'template_g79cvhw';
-const PUBLIC_KEY = 'Z5Bt5WgX5YhBtuE5h';
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
 const ContactPage = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -64,7 +64,7 @@ const ContactPage = () => {
 
         <div className="bg-white rounded-[48px] shadow-sm border border-gray-100 overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2">
-            {/* Contact Form */}
+  
             <div className="p-6 md:p-16 border-r border-gray-50">
               <h2 className="text-2xl font-black text-[#1A1A1A] mb-10 tracking-tight">Send a message</h2>
 
@@ -147,7 +147,7 @@ const ContactPage = () => {
               </form>
             </div>
 
-            {/* Contact Info */}
+        
             <div className="p-6 md:p-16 bg-gray-50/30">
               <div className="mb-12">
                 <h3 className="text-xl font-black text-[#1A1A1A] mb-6">Office Address</h3>

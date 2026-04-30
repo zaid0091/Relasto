@@ -85,7 +85,7 @@ const AgentsPage = () => {
 
   return (
     <div className="min-h-screen bg-[#FFF8F1] font-['Inter']">
-      {/* Navigation */}
+     
       <Navbar/>
       
 
@@ -102,7 +102,7 @@ const AgentsPage = () => {
           )}
         </div>
 
-        {/* Filter Section */}
+      
         <div className="bg-white p-4 rounded-4xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 mb-16">
           <div className="flex-1 relative">
             <input
@@ -184,7 +184,7 @@ const AgentsPage = () => {
           </button>
         </div>
 
-        {/* Agents Grid */}
+        
         {loading ? (
           <div className="flex flex-col items-center justify-center py-32 gap-4">
             <div className="w-16 h-16 border-4 border-[#F47D31]/20 border-t-[#F47D31] rounded-full animate-spin"></div>
@@ -258,14 +258,14 @@ const AgentsPage = () => {
           </div>
         )}
 
-        {/* Pagination */}
+        
         {pagination && (
           <div className="mt-20 flex flex-col sm:flex-row items-center justify-between gap-6">
             <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
               Page {pagination.page} of {pagination.total_pages} &middot; {pagination.total} agents
             </p>
             <div className="flex items-center gap-2">
-              {/* Prev */}
+            
               <button
                 onClick={() => handlePageChange(pagination.page - 1)}
                 disabled={!pagination.has_previous}
@@ -276,7 +276,7 @@ const AgentsPage = () => {
                 </svg>
               </button>
 
-              {/* Page numbers — show max 7 */}
+             
               {getPageNumbers(pagination.page, pagination.total_pages).map((p, i) =>
                 p === '...' ? (
                   <span key={`dot-${i}`} className="w-8 text-center text-gray-400 text-sm font-bold">…</span>
@@ -295,7 +295,7 @@ const AgentsPage = () => {
                 ),
               )}
 
-              {/* Next */}
+            
               <button
                 onClick={() => handlePageChange(pagination.page + 1)}
                 disabled={!pagination.has_next}
@@ -313,7 +313,6 @@ const AgentsPage = () => {
   );
 };
 
-/** Smart page number generation */
 function getPageNumbers(current, total) {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
   const pages = [];

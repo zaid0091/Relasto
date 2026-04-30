@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// API configuration
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 const BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:8000';
 
@@ -12,7 +11,6 @@ const api = axios.create({
   },
 });
 
-// Export BASE_URL for use in components
 export { BASE_URL };
 
 // Request interceptor to add auth token
@@ -73,7 +71,6 @@ api.interceptors.response.use(
   }
 );
 
-// API endpoints
 export const authAPI = {
   register: (userData) => api.post('/auth/register/', userData),
   login: (credentials) => api.post('/auth/login/', credentials),

@@ -152,7 +152,7 @@ const BlogPage = () => {
       <Navbar />
 
       <main className="pt-28 pb-20 px-4 sm:px-6 md:px-16 max-w-[1440px] mx-auto">
-        {/* Header */}
+
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Real Estate News & Blogs</h1>
@@ -162,7 +162,7 @@ const BlogPage = () => {
             </p>
           </div>
 
-          {/* Sort */}
+
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Sort</span>
             <select
@@ -177,9 +177,9 @@ const BlogPage = () => {
           </div>
         </div>
 
-        {/* Filter Bar */}
+
         <div className="bg-white p-3 md:p-2.5 rounded-2xl shadow-xl flex flex-col lg:flex-row items-stretch gap-2 mb-6 border border-gray-100">
-          {/* Search input */}
+
           <div className="flex-1 flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl border border-gray-100">
             <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
             <input
@@ -191,7 +191,7 @@ const BlogPage = () => {
             />
           </div>
 
-          {/* Dropdowns */}
+
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:flex items-center gap-2">
             <select
               className="w-full lg:w-auto px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 text-sm font-medium outline-none appearance-none cursor-pointer hover:bg-gray-100 transition-colors"
@@ -201,7 +201,7 @@ const BlogPage = () => {
               {CATEGORIES.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
 
-            {/* Search button */}
+
             <button
               onClick={() => setCurrentPage(1)}
               className="col-span-2 sm:col-span-1 bg-[#1A1A1A] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#333] transition-all flex items-center justify-center gap-2 shadow-lg active:scale-[0.97]"
@@ -212,7 +212,7 @@ const BlogPage = () => {
           </div>
         </div>
 
-        {/* Active Filter Tags */}
+
         {activeFilterCount > 0 && (
           <div className="flex flex-wrap items-center gap-2 mb-8">
             {searchQuery && (
@@ -233,7 +233,7 @@ const BlogPage = () => {
           </div>
         )}
 
-        {/* Blog Grid */}
+
         {paginatedPosts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {paginatedPosts.map((post) => (
@@ -251,14 +251,14 @@ const BlogPage = () => {
           </div>
         )}
 
-        {/* Pagination */}
+
         {totalPages > 1 && (
           <div className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-6">
             <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
               Page {currentPage} of {totalPages} · {totalPosts} results
             </p>
             <div className="flex items-center gap-2">
-              {/* Prev */}
+
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
@@ -267,7 +267,7 @@ const BlogPage = () => {
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
               </button>
 
-              {/* Page numbers */}
+
               {getPageNumbers(currentPage, totalPages).map((p, i) =>
                 p === '...' ? (
                   <span key={`dot-${i}`} className="w-8 text-center text-gray-400 text-sm font-bold">…</span>
@@ -275,18 +275,17 @@ const BlogPage = () => {
                   <button
                     key={p}
                     onClick={() => handlePageChange(p)}
-                    className={`w-10 h-10 rounded-xl font-bold text-sm transition-all shadow-sm ${
-                      currentPage === p
+                    className={`w-10 h-10 rounded-xl font-bold text-sm transition-all shadow-sm ${currentPage === p
                         ? 'bg-[#1A1A1A] text-white shadow-xl scale-110'
                         : 'bg-white text-gray-500 border border-gray-200 hover:border-[#F47D31]/30 hover:text-[#F47D31]'
-                    }`}
+                      }`}
                   >
                     {p}
                   </button>
                 ),
               )}
 
-              {/* Next */}
+
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
@@ -302,12 +301,11 @@ const BlogPage = () => {
   );
 };
 
-/* Sub-components */
 
 const BlogCard = ({ post }) => {
   return (
     <article className="bg-[#FDF8F5] rounded-[15px] overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-orange-200 w-full">
-      {/* Image */}
+
       <div className="relative h-60 overflow-hidden">
         <img
           src={post.image}
@@ -315,25 +313,25 @@ const BlogCard = ({ post }) => {
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           loading="lazy"
         />
-        {/* Category Badge */}
+
         <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
           {post.category}
         </div>
       </div>
 
-      {/* Content */}
+
       <div className="p-8 md:p-10">
-        {/* Title */}
+
         <div className="flex items-start gap-4 mb-6">
           <div className="mt-1 shrink-0">
             <svg className="w-7 h-7 text-[#1A1A1A]" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 7h5v2h-5v-2zm-5 0h3v2H7v-2zm5 4h5v2h-5v-2zm-5 0h3v2H7v-2zm5 4h5v2h-5v-2zm-5 0h3v2H7v-2zm-3-8h12v2H4v-2z"/>
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 7h5v2h-5v-2zm-5 0h3v2H7v-2zm5 4h5v2h-5v-2zm-5 0h3v2H7v-2zm5 4h5v2h-5v-2zm-5 0h3v2H7v-2zm-3-8h12v2H4v-2z" />
             </svg>
           </div>
           <h3 className="font-bold text-2xl leading-tight text-[#1A1A1A] line-clamp-2">{post.title}</h3>
         </div>
 
-        {/* Meta Info */}
+
         <div className="grid grid-cols-2 gap-y-5 gap-x-4 mb-8">
           <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
             <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -349,12 +347,12 @@ const BlogCard = ({ post }) => {
           </div>
         </div>
 
-        {/* Excerpt */}
+
         <p className="text-[#5D7285] text-sm font-medium leading-relaxed mb-8 line-clamp-2">
           {post.excerpt}
         </p>
 
-        {/* Button */}
+
         <Link
           to={`/blog/${post.id}`}
           className="block w-full bg-[#1A1A1A] text-white text-center px-8 py-4 rounded-2xl text-base font-bold hover:bg-[#333] transition-all shadow-lg active:scale-95"
@@ -366,7 +364,7 @@ const BlogCard = ({ post }) => {
   );
 };
 
-/* Smart page number generation */
+
 function getPageNumbers(current, total) {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
   const pages = [];

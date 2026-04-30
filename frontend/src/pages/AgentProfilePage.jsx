@@ -111,7 +111,6 @@ const AgentProfilePage = () => {
     <div className="min-h-screen bg-[#FFF8F1] font-['Inter',sans-serif] text-[#2D2D2D]">
       <Navbar variant="light" />
 
-      {/* Hero Section */}
       <div className="relative w-full h-100 overflow-hidden pt-6">
         <img
           src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=2000&q=80"
@@ -121,7 +120,7 @@ const AgentProfilePage = () => {
         <div className="absolute inset-0 bg-black/10"></div>
       </div>
 
-      {/* Profile Bar */}
+
       <div className="max-w-[1440px] mx-auto px-6 md:px-16 -mt-16 relative z-10">
         <div className="bg-white rounded-4xl p-6 md:p-10 flex flex-col md:flex-row items-center md:items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.08)] gap-8">
           <div className="flex flex-col md:flex-row items-center gap-6">
@@ -163,7 +162,7 @@ const AgentProfilePage = () => {
           </button>
         </div>
 
-        {/* Agent Info Grid */}
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
           {agent.experience > 0 && (
             <div className="flex items-center gap-3">
@@ -221,7 +220,7 @@ const AgentProfilePage = () => {
         </div>
       </div>
 
-      {/* Tabs & Main Content */}
+
       <div className="max-w-[1440px] mx-auto px-6 md:px-16 py-12">
         <div className="flex overflow-x-auto pb-4 md:pb-0 md:flex-wrap gap-4 mb-10 no-scrollbar">
           {['Properties', 'Reviews', 'About', 'Contact'].map((tab) => (
@@ -244,63 +243,63 @@ const AgentProfilePage = () => {
               {properties.length > 0 ? properties
                 .slice((currentPage - 1) * propertiesPerPage, currentPage * propertiesPerPage)
                 .map((property) => (
-                <div key={property.id} className="bg-[#FDF8F5] rounded-[15px] overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-orange-200 w-full">
-                  <div className="relative h-72 overflow-hidden">
-                    <img
-                      src={property.primary_image?.image_url || property.primary_image?.image || 'https://images.unsplash.com/photo-1600585154340-be6199f7c096?auto=format&fit=crop&q=80&w=2070'}
-                      alt={property.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
-                      {property.status === 'sale' ? 'For Sale' : property.status === 'rent' ? 'For Rent' : property.status === 'sold' ? 'Sold' : property.status}
+                  <div key={property.id} className="bg-[#FDF8F5] rounded-[15px] overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-orange-200 w-full">
+                    <div className="relative h-72 overflow-hidden">
+                      <img
+                        src={property.primary_image?.image_url || property.primary_image?.image || 'https://images.unsplash.com/photo-1600585154340-be6199f7c096?auto=format&fit=crop&q=80&w=2070'}
+                        alt={property.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                      <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
+                        {property.status === 'sale' ? 'For Sale' : property.status === 'rent' ? 'For Rent' : property.status === 'sold' ? 'Sold' : property.status}
+                      </div>
+                    </div>
+                    <div className="p-8 md:p-10">
+                      <div className="flex items-start gap-4 mb-8">
+                        <div className="mt-1 shrink-0">
+                          <svg className="w-7 h-7 text-[#1A1A1A]" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM12 11.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                          </svg>
+                        </div>
+                        <h3 className="font-bold text-2xl leading-tight text-[#1A1A1A] line-clamp-2">{property.title}</h3>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-y-5 gap-x-4 mb-10">
+                        <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                          <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M2 20V9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11" /><path d="M2 11h20" /><path d="M2 15h20" /><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" />
+                          </svg>
+                          <span>{property.attributes?.bedrooms || '0'} Bed Room</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                          <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M14 11V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v8" /><path d="M21 15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4h18v4z" />
+                          </svg>
+                          <span>{property.attributes?.bathrooms || '0'} Bath</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                          <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="m15 3 6 6" /><path d="m9 21-6-6" /><path d="M21 3h-6" /><path d="M21 3v6" /><path d="M3 21h6" /><path d="M3 21v-6" />
+                          </svg>
+                          <span>{(property.attributes?.sqft || property.attributes?.square_feet || '1,032').toLocaleString()} sqft</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
+                          <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="6" cy="6" r="2" /><circle cx="18" cy="6" r="2" /><circle cx="6" cy="18" r="2" /><circle cx="18" cy="18" r="2" />
+                          </svg>
+                          <span>{property.property_type || 'Family'}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <Link to={`/properties/${property.slug}`} className="bg-[#1A1A1A] text-white px-8 py-4 rounded-2xl text-base font-bold hover:bg-[#333] transition-all shadow-lg active:scale-95">
+                          View Details
+                        </Link>
+                        <span className="text-3xl font-bold text-[#1A1A1A] tracking-tight">${Number(property.price).toLocaleString()}</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="p-8 md:p-10">
-                    <div className="flex items-start gap-4 mb-8">
-                      <div className="mt-1 shrink-0">
-                        <svg className="w-7 h-7 text-[#1A1A1A]" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM12 11.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                        </svg>
-                      </div>
-                      <h3 className="font-bold text-2xl leading-tight text-[#1A1A1A] line-clamp-2">{property.title}</h3>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-y-5 gap-x-4 mb-10">
-                      <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
-                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M2 20V9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11" /><path d="M2 11h20" /><path d="M2 15h20" /><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" />
-                        </svg>
-                        <span>{property.attributes?.bedrooms || '0'} Bed Room</span>
-                      </div>
-                      <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
-                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M14 11V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v8" /><path d="M21 15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4h18v4z" />
-                        </svg>
-                        <span>{property.attributes?.bathrooms || '0'} Bath</span>
-                      </div>
-                      <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
-                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="m15 3 6 6" /><path d="m9 21-6-6" /><path d="M21 3h-6" /><path d="M21 3v6" /><path d="M3 21h6" /><path d="M3 21v-6" />
-                        </svg>
-                        <span>{(property.attributes?.sqft || property.attributes?.square_feet || '1,032').toLocaleString()} sqft</span>
-                      </div>
-                      <div className="flex items-center gap-3 text-[#5D7285] font-semibold">
-                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <circle cx="6" cy="6" r="2" /><circle cx="18" cy="6" r="2" /><circle cx="6" cy="18" r="2" /><circle cx="18" cy="18" r="2" />
-                        </svg>
-                        <span>{property.property_type || 'Family'}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <Link to={`/properties/${property.slug}`} className="bg-[#1A1A1A] text-white px-8 py-4 rounded-2xl text-base font-bold hover:bg-[#333] transition-all shadow-lg active:scale-95">
-                        View Details
-                      </Link>
-                      <span className="text-3xl font-bold text-[#1A1A1A] tracking-tight">${Number(property.price).toLocaleString()}</span>
-                    </div>
-                  </div>
-                </div>
-              )) : (
+                )) : (
                 <div className="col-span-full py-20 text-center">
                   <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E5E7EB" strokeWidth="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
@@ -311,18 +310,16 @@ const AgentProfilePage = () => {
               )}
             </div>
 
-            {/* Pagination */}
             {properties.length > propertiesPerPage && (
               <div className="flex justify-center items-center gap-3 mt-16">
-                {/* Previous Button */}
+
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className={`px-4 h-12 rounded-xl font-bold transition-all border-2 flex items-center gap-2 ${
-                    currentPage === 1
+                  className={`px-4 h-12 rounded-xl font-bold transition-all border-2 flex items-center gap-2 ${currentPage === 1
                       ? 'bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed'
                       : 'bg-white text-gray-500 border-gray-100 hover:border-gray-300'
-                  }`}
+                    }`}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="m15 18-6-6 6-6" />
@@ -330,47 +327,45 @@ const AgentProfilePage = () => {
                   Previous
                 </button>
 
-                {/* Page Numbers */}
+
                 {(() => {
                   const totalPages = Math.ceil(properties.length / propertiesPerPage);
                   const pages = [];
                   const maxVisiblePages = 5;
-                  
+
                   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
                   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-                  
+
                   if (endPage - startPage + 1 < maxVisiblePages) {
                     startPage = Math.max(1, endPage - maxVisiblePages + 1);
                   }
-                  
+
                   for (let i = startPage; i <= endPage; i++) {
                     pages.push(i);
                   }
-                  
+
                   return pages.map(page => (
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`w-12 h-12 rounded-xl font-bold transition-all border-2 ${
-                        page === currentPage
+                      className={`w-12 h-12 rounded-xl font-bold transition-all border-2 ${page === currentPage
                           ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
                           : 'bg-white text-gray-500 border-gray-100 hover:border-gray-300'
-                      }`}
+                        }`}
                     >
                       {page}
                     </button>
                   ));
                 })()}
 
-                {/* Next Button */}
+
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(properties.length / propertiesPerPage)))}
                   disabled={currentPage === Math.ceil(properties.length / propertiesPerPage)}
-                  className={`px-6 h-12 rounded-xl font-bold transition-all border-2 flex items-center gap-2 ${
-                    currentPage === Math.ceil(properties.length / propertiesPerPage)
+                  className={`px-6 h-12 rounded-xl font-bold transition-all border-2 flex items-center gap-2 ${currentPage === Math.ceil(properties.length / propertiesPerPage)
                       ? 'bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed'
                       : 'bg-white text-gray-500 border-gray-100 hover:border-gray-300'
-                  }`}
+                    }`}
                 >
                   Next
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -384,7 +379,7 @@ const AgentProfilePage = () => {
 
         {activeTab === 'Reviews' && (
           <>
-            {/* Reviews Section */}
+
             <div className="mt-4">
               <div className="flex justify-between items-end mb-12">
                 <div>
@@ -440,7 +435,7 @@ const AgentProfilePage = () => {
 
         {activeTab === 'About' && (
           <>
-            {/* About Section */}
+
             <div className="bg-white rounded-[48px] p-8 md:p-16 mt-4 shadow-sm border border-gray-50">
               <div className="flex flex-col lg:flex-row gap-16 items-start">
                 <div className="w-full lg:w-1/3 flex flex-col items-center">
@@ -499,7 +494,7 @@ const AgentProfilePage = () => {
 
         {activeTab === 'Contact' && (
           <>
-            {/* Contact Section */}
+
             <div className="bg-white rounded-[48px] p-8 md:p-16 mt-4 shadow-sm border border-gray-50">
               <div className="flex flex-col lg:flex-row gap-16 items-start">
                 <div className="w-full lg:w-1/3 flex flex-col items-center">
@@ -544,7 +539,7 @@ const AgentProfilePage = () => {
       </div>
 
 
-      {/* Review Form Modal */}
+
       {showReviewForm && (
         <div className="fixed inset-0 bg-[#1A1A1A]/40 backdrop-blur-md flex items-center justify-center z-100 p-4">
           <div className="bg-white rounded-[48px] p-10 md:p-16 w-full max-w-2xl shadow-2xl">
@@ -611,7 +606,7 @@ const AgentProfilePage = () => {
         </div>
       )}
 
-      {/* Success Toast */}
+
       {reviewSuccess && (
         <div className="fixed bottom-10 right-10 bg-[#1A1A1A] text-white px-10 py-6 rounded-3xl shadow-2xl z-200 flex items-center gap-4 animate-bounce">
           <div className="w-10 h-10 bg-[#F47D31] rounded-full flex items-center justify-center">

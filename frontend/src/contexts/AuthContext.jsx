@@ -281,7 +281,7 @@ localStorage.setItem('access_token', tokens.access || tokens.access_token);
     }
   };
 
-  // Logout function - pure React state, no page reload
+  // Logout function 
   const logout = () => {
     // Clear storage
     localStorage.removeItem('access_token');

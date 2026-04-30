@@ -180,7 +180,7 @@ const ProfilePage = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-10">
-            {/* Profile Header / Image Section */}
+         
             <div className="flex flex-col md:flex-row items-center gap-8 pb-10 border-b border-gray-100">
               <div className="relative group">
                 <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-orange-50 overflow-hidden border-4 border-white shadow-md flex items-center justify-center transition-transform group-hover:scale-105">
@@ -223,7 +223,7 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            {/* Basic Information */}
+   
             <div>
               <h3 className="text-xl font-bold text-[#1A1A1A] mb-6 flex items-center gap-2">
                 <div className="w-1.5 h-6 bg-[#F47D31] rounded-full" />
@@ -276,7 +276,6 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            {/* About / Bio Section */}
             <div className="space-y-4">
               <label className="text-sm font-bold text-[#1A1A1A]">Professional Bio</label>
               <textarea
@@ -289,7 +288,6 @@ const ProfilePage = () => {
               />
             </div>
 
-            {/* Agent Fields - Only show for agents */}
             {(localUser?.profile?.is_agent || user?.profile?.is_agent) && (
               <div className="pt-6">
                 <h3 className="text-xl font-bold text-[#1A1A1A] mb-8 flex items-center gap-2">

@@ -111,7 +111,7 @@ const PropertyDetailPage = () => {
     <div className="min-h-screen bg-[#FDF9F6] font-['Inter'] text-[#1A1A1A]">
       <Navbar />
       <main className="pt-32 pb-20 px-6 md:px-16 max-w-[1440px] mx-auto">
-        {/* Gallery Collage */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 h-[300px] md:h-[500px]">
           <div className="md:col-span-2 relative overflow-hidden rounded-[15px]">
             <img
@@ -137,7 +137,7 @@ const PropertyDetailPage = () => {
                 alt="Interior 2"
                 onClick={() => setModalImage(galleryImages[1]?.image_url || galleryImages[1]?.image || 'https://images.unsplash.com/photo-1600607687940-4e7a5336d397?auto=format&fit=crop&q=80&w=2070')}
               />
-              <div 
+              <div
                 className="absolute bottom-4 right-4 bg-white text-[#1A1A1A] font-bold text-sm px-4 py-2 rounded-lg flex items-center gap-2 shadow-md cursor-pointer hover:bg-gray-50 border border-gray-200 transition-colors"
                 onClick={() => setModalImage(galleryImages[1]?.image_url || galleryImages[1]?.image || 'https://images.unsplash.com/photo-1600607687940-4e7a5336d397?auto=format&fit=crop&q=80&w=2070')}
               >
@@ -147,10 +147,10 @@ const PropertyDetailPage = () => {
             </div>
           </div>
         </div>
-       
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start bg-">
-          {/* Left Column: Details */}
-          
+
+
           <div className="lg:col-span-2">
             <div className="mb-8 md:mb-10">
               <h1 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A] leading-tight">{property.title}</h1>
@@ -159,7 +159,7 @@ const PropertyDetailPage = () => {
               </div>
             </div>
 
-            {/* Price Boxes */}
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-10">
               <div className="bg-white p-6 rounded-[15px] border border-gray-200 flex flex-col justify-center">
                 <div className="text-2xl font-bold text-[#1A1A1A] mb-1">${Number(property.price).toLocaleString()}</div>
@@ -171,7 +171,6 @@ const PropertyDetailPage = () => {
               </div>
             </div>
 
-            {/* Description */}
             <div className="mb-12">
               <h2 className="text-xl font-bold mb-4 text-[#1A1A1A]">
                 Well-constructed {(property.attributes?.sqft || property.attributes?.square_feet || '1,562').toLocaleString()} Sq Ft Home Is Now Offering To You In {property.city || 'Ottawa'} For {property.status === 'sale' ? 'Sale' : 'Rent'}
@@ -181,7 +180,7 @@ const PropertyDetailPage = () => {
               </p>
             </div>
 
-            {/* Local Information Tabs */}
+
             <div className="mb-12">
               <h2 className="text-xl font-bold mb-6 text-[#1A1A1A]">
                 Local Information
@@ -209,13 +208,12 @@ const PropertyDetailPage = () => {
               </div>
             </div>
 
-            {/* Home Highlights */}
             <div className="bg-white p-6 md:p-8 rounded-[15px] border border-gray-200 mb-12">
               <h2 className="text-xl font-bold mb-6 text-[#1A1A1A]">
                 Home Highlights
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-4">
-                {/* Column 1 */}
+
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-500 flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Parking</span>
@@ -234,7 +232,7 @@ const PropertyDetailPage = () => {
                     <span className="font-semibold text-[#1A1A1A]">{property.attributes?.year_built || '2021'}</span>
                   </div>
                 </div>
-                {/* Column 2 */}
+
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-500 flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span> HOA</span>
@@ -252,7 +250,7 @@ const PropertyDetailPage = () => {
               </div>
             </div>
 
-            {/* Agent Info */}
+
             <div className="bg-white p-6 md:p-8 rounded-[15px] border border-gray-200 mb-12">
               <h2 className="text-xl font-bold mb-6 text-[#1A1A1A]">Agent Information</h2>
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
@@ -284,7 +282,6 @@ const PropertyDetailPage = () => {
             </div>
           </div>
 
-          {/* Right Column: Visit Form Sidebar */}
           <div className="lg:mt-85 mb-12 sm:mt-2 lg:mb-0">
             <div className="bg-white p-6 md:p-8 rounded-[15px] border border-gray-200">
               <h2 className="text-xl font-bold mb-6 text-[#1A1A1A]">Request for Visit</h2>
@@ -356,7 +353,7 @@ const PropertyDetailPage = () => {
           </div>
         </div>
 
-        {/* Latest Listings */}
+
         <section className="mt-20">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
             <h2 className="text-2xl font-bold text-[#1A1A1A]">Latest Property Listings</h2>
@@ -430,10 +427,10 @@ const PropertyDetailPage = () => {
         </section>
       </main>
 
-      {/* Full Screen Image Modal */}
+
       {modalImage && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 md:p-8">
-          <button 
+          <button
             onClick={() => setModalImage(null)}
             className="absolute top-6 right-6 text-white hover:text-gray-300 bg-black/50 hover:bg-black/80 rounded-full p-2 transition-all"
             aria-label="Close full screen"
@@ -442,7 +439,7 @@ const PropertyDetailPage = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
-          
+
           <img
             src={modalImage}
             alt="Full screen property view"

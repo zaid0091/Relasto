@@ -440,6 +440,11 @@ class PropertyViewSet(viewsets.ModelViewSet):
                 sold_properties.aggregate(Sum("price"))["price__sum"] or 0
             )
 
+            # Sum of ALL property prices (total portfolio value)
+            total_properties_value = (
+                Property.objects.aggregate(Sum("price"))["price__sum"] or 0
+            )
+
             for_sale_count = Property.objects.filter(status="sale").count()
             for_rent_count = Property.objects.filter(status="rent").count()
 
@@ -458,6 +463,7 @@ class PropertyViewSet(viewsets.ModelViewSet):
                     "status": "success",
                     "data": {
                         "total_sales_value": total_sales_value,
+                        "total_properties_value": total_properties_value,
                         "for_sale_count": for_sale_count,
                         "for_rent_count": for_rent_count,
                         "total_properties": total_properties,

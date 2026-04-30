@@ -18,6 +18,7 @@ const HomePage = () => {
   });
   const [homeStats, setHomeStats] = useState({
     total_sales_value: 0,
+    total_properties_value: 0,
     for_sale_count: 0,
     for_rent_count: 0,
     total_visits: 0,
@@ -63,8 +64,18 @@ const HomePage = () => {
     setPropertyTab(tab);
   };
 
+  // Format total value (e.g., 1500000 -> "$1.5M", 250000 -> "$250K")
+  const formatTotalValue = (value) => {
+    if (value >= 1000000) {
+      return `$${(value / 1000000).toFixed(1)}M`;
+    } else if (value >= 1000) {
+      return `$${(value / 1000).toFixed(0)}K`;
+    }
+    return `$${value}`;
+  };
+
   const stats = [
-    { label: 'Completed Property', value: `$${(homeStats.total_sales_value / 1000000).toFixed(1)}M`, icon: '🏠' },
+    { label: 'Total Value', value: formatTotalValue(homeStats.total_properties_value), icon: '🏠' },
     { label: 'Property Sales', value: homeStats.for_sale_count.toLocaleString() + '+', icon: '📊' },
     { label: 'Apartment Rent', value: homeStats.for_rent_count.toLocaleString(), icon: '🏢' },
     { label: 'Happy Clients', value: homeStats.total_clients.toLocaleString() + '+', icon: '😊' },
@@ -74,7 +85,7 @@ const HomePage = () => {
     <div className="min-h-screen bg-[#FFF8F1] font-['Inter'] text-[#1A1A1A]">
       <Navbar />
 
-      {/* Hero Section */}
+      
       <section id="hero" className="bg-[#FFF8F1] pt-24 md:pt-32 pb-16 pl-6 md:pl-16 pr-0 overflow-hidden">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <div className="flex-1 max-w-2xl pr-6 md:pr-0">
@@ -177,7 +188,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Feature Section */}
+     
       <section id="features" className=" px-6 md:px-16 py-20 flex flex-col lg:flex-row gap-8">
         <div className="flex-1 bg-[#FFE5D4] p-12 md:p-16 rounded-[40px] flex flex-col justify-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-[#1A1A1A]">
@@ -238,7 +249,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
+    
       <section id="stats" className="mx-6 md:mx-16 px-8 md:px-16 py-16 grid grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-8 bg-[#FDF8F5] rounded-[40px] my-12">
         {stats.map((stat, idx) => (
           <div key={idx} className="flex flex-col items-center lg:items-start text-center lg:text-left">
@@ -272,7 +283,7 @@ const HomePage = () => {
         ))}
       </section>
 
-      {/* Featured Properties */}
+    
       <section id="properties" className="px-6 md:px-16 py-20 bg-orange-50">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12">
           <div className="flex-1">
@@ -378,7 +389,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Call to Action Section */}
       <section className="px-6 md:px-16 py-20 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
         <div className="flex-1 text-center lg:text-left">
           <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight text-[#1A1A1A]">
@@ -399,7 +409,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Featured Listing Section */}
+     
       <section className="px-6 md:px-16 py-20 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
         <div className="flex-1 relative w-full lg:w-auto">
           <div className="absolute inset-0 bg-[#F47D31] rounded-[40px] rotate-2 lg:rotate-3 -z-10"></div>
@@ -436,7 +446,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Testimonial Section */}
+     
       <section id="testimonials" className="px-6 md:px-16 py-24 bg-white/50 overflow-hidden">
         <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <div className="relative group">
@@ -468,7 +478,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* News Section */}
+      
       <section className="px-6 md:px-16 py-24 md:py-32 bg-white">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 md:mb-16 gap-6">
           <div>
@@ -516,7 +526,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Newsletter Section */}
+    
       <section className="px-6 md:px-16 py-24 md:py-32 bg-[#FFF8F1]">
         <div className="bg-[#1A1A1A] rounded-[40px] md:rounded-[60px] p-10 md:p-24 text-center relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#F47D31]/10 rounded-full -mr-32 -mt-32 transition-transform duration-1000 group-hover:scale-150"></div>

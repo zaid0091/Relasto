@@ -96,7 +96,6 @@ const Navbar = ({ variant = 'default' }) => {
           <span className="text-xl md:text-2xl font-bold tracking-tight text-[#F47D31]">Relasto</span>
         </Link>
 
-        {/* Desktop Links */}
         <div className="hidden lg:flex items-center gap-10 text-base font-semibold absolute left-1/2 -translate-x-1/2">
           {navItems.map((item) => (
             <div key={item.name} className="relative group py-2">
@@ -192,7 +191,7 @@ const Navbar = ({ variant = 'default' }) => {
             </Link>
           )}
 
-          {/* Mobile Menu Button */}
+     
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none"
@@ -204,15 +203,15 @@ const Navbar = ({ variant = 'default' }) => {
         </div>
       </nav>
 
-      {/* Mobile Menu Drawer */}
+      
       <div className={`fixed inset-0 z-[90] lg:hidden transition-all duration-500 ${isMenuOpen ? 'visible' : 'invisible'}`}>
-        {/* Backdrop */}
+       
         <div
           className={`absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-500 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}
           onClick={() => setIsMenuOpen(false)}
         />
 
-        {/* Drawer */}
+      
         <div className={`absolute top-0 right-0 h-full w-[80%] max-w-sm bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="p-8 pt-24 overflow-y-auto flex-grow">
             <div className="mb-8 block sm:hidden">

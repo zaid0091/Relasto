@@ -131,7 +131,7 @@ const BlogDetailPage = () => {
     <div className="min-h-screen bg-[#FFF8F1] font-['Inter'] text-[#1A1A1A]">
       <Navbar />
 
-      {/* Back Navigation */}
+
       <div className="pt-28 pb-4 px-4 sm:px-6 lg:px-16 max-w-[1440px] mx-auto">
         <Link
           to="/blog"
@@ -144,11 +144,11 @@ const BlogDetailPage = () => {
 
       <main className="px-4 sm:px-6 lg:px-16 max-w-[1440px] mx-auto pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-          {/* Main Content */}
+
           <div className="lg:col-span-8">
-            {/* Article Card */}
+
             <article className="bg-[#FDF8F5] rounded-[32px] border border-orange-200 shadow-sm overflow-hidden">
-              {/* Hero Image */}
+
               <div className="relative h-64 sm:h-80 lg:h-96 overflow-hidden">
                 <img
                   src={post.image}
@@ -156,7 +156,7 @@ const BlogDetailPage = () => {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                {/* Category Badge */}
+
                 <div className="absolute top-6 left-6">
                   <span className="bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
                     {post.category}
@@ -164,14 +164,14 @@ const BlogDetailPage = () => {
                 </div>
               </div>
 
-              {/* Content */}
+
               <div className="p-8 sm:p-10 lg:p-12">
-                {/* Title */}
+
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1A1A1A] leading-tight mb-6">
                   {post.title}
                 </h1>
 
-                {/* Author & Meta */}
+
                 <div className="flex flex-wrap items-center gap-4 mb-10 pb-10 border-b border-orange-200">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-full bg-[#1A1A1A] flex items-center justify-center text-white font-bold text-sm">
@@ -198,9 +198,9 @@ const BlogDetailPage = () => {
                   </div>
                 </div>
 
-                {/* Article Body */}
+
                 <div className="prose-content space-y-8">
-                  {/* Intro */}
+
                   <p className="text-lg text-[#5D7285] leading-relaxed">
                     Have you ever wondered why a lot of things are coming back, bringing back nostalgia. Wondering why I am talking about nostalgia and if it appears to be an article on website trend, because some not famous website technology is coming back too. Yes, I am talking about static websites.
                   </p>
@@ -208,7 +208,6 @@ const BlogDetailPage = () => {
                     Long ago, almost all websites were used to be static, issues during the early days of the internet. Then dynamic sites came and took the space. A lot of websites shifted to it. Obviously dynamic sites have their advantages. But static sites are making a comeback. And it's coming stronger than before.
                   </p>
 
-                  {/* Blockquotes */}
                   <div className="space-y-6">
                     <div className="bg-white rounded-2xl p-6 sm:p-8 border-l-4 border-[#F47D31] shadow-sm">
                       <h3 className="text-xl font-bold text-[#1A1A1A] mb-3">Performance: Faster Loading Speed</h3>
@@ -225,7 +224,6 @@ const BlogDetailPage = () => {
                     </div>
                   </div>
 
-                  {/* Images Grid */}
                   <div>
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">Visual Examples</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -242,7 +240,6 @@ const BlogDetailPage = () => {
                     </div>
                   </div>
 
-                  {/* Lists */}
                   <div>
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">Key Advantages</h2>
                     <ul className="space-y-3">
@@ -262,7 +259,6 @@ const BlogDetailPage = () => {
                     </ul>
                   </div>
 
-                  {/* Links */}
                   <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm">
                     <h3 className="text-xl font-bold text-[#1A1A1A] mb-3">Related Resources</h3>
                     <div className="flex flex-wrap gap-2">
@@ -274,7 +270,7 @@ const BlogDetailPage = () => {
                     </div>
                   </div>
 
-                  {/* Table */}
+
                   <div>
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">Team Members</h2>
                     <div className="overflow-x-auto rounded-2xl border border-orange-200 bg-white shadow-sm">
@@ -300,7 +296,7 @@ const BlogDetailPage = () => {
                   </div>
                 </div>
 
-                {/* Share Section */}
+
                 <div className="mt-12 pt-8 border-t border-orange-200">
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
@@ -329,9 +325,9 @@ const BlogDetailPage = () => {
             </article>
           </div>
 
-          {/* Sidebar */}
+
           <aside className="lg:col-span-4 space-y-6">
-            {/* Author Card */}
+
             <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">About the Author</p>
               <div className="flex items-center gap-4 mb-4">
@@ -351,7 +347,7 @@ const BlogDetailPage = () => {
               </button>
             </div>
 
-            {/* Related Categories */}
+
             <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Categories</p>
               <div className="flex flex-wrap gap-2">
@@ -359,11 +355,10 @@ const BlogDetailPage = () => {
                   <Link
                     key={cat}
                     to={`/blog?category=${cat}`}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-                      cat === post.category
-                        ? 'bg-[#1A1A1A] text-white'
-                        : 'bg-[#FFF8F1] text-[#1A1A1A] hover:bg-[#F47D31]/10'
-                    }`}
+                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${cat === post.category
+                      ? 'bg-[#1A1A1A] text-white'
+                      : 'bg-[#FFF8F1] text-[#1A1A1A] hover:bg-[#F47D31]/10'
+                      }`}
                   >
                     {cat}
                   </Link>
@@ -371,7 +366,7 @@ const BlogDetailPage = () => {
               </div>
             </div>
 
-            {/* Newsletter */}
+
             <div className="bg-[#1A1A1A] rounded-2xl p-6 text-white">
               <h4 className="font-bold text-lg mb-2">Stay Updated</h4>
               <p className="text-sm text-gray-300 mb-4">Get the latest real estate news delivered to your inbox.</p>
@@ -387,7 +382,6 @@ const BlogDetailPage = () => {
           </aside>
         </div>
 
-        {/* Recent News Section */}
         <div className="mt-16">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-[#1A1A1A]">More Articles</h2>
@@ -408,7 +402,7 @@ const BlogDetailPage = () => {
   );
 };
 
-/* Recent Post Card Component */
+
 const RecentPostCard = ({ post }) => {
   return (
     <article className="bg-[#FDF8F5] rounded-[15px] overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-orange-200 w-full">

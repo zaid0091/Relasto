@@ -78,25 +78,25 @@ const PropertyGrid = ({ properties, loading, error, pagination, onPageChange }) 
 
   return (
     <div>
-      {/* Results Summary */}
+    
       {pagination && (
         <div className="mb-6 text-sm text-gray-700">
           Showing {properties.length} of {pagination.total} properties
         </div>
       )}
 
-      {/* Property Grid */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {properties.map((property) => (
           <PropertyCard key={property.id} property={property} />
         ))}
       </div>
 
-      {/* Pagination */}
+     
       {pagination && pagination.total_pages > 1 && (
         <div className="mt-8 flex justify-center">
           <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-            {/* Previous Button */}
+         
             <button
               onClick={() => onPageChange && onPageChange(pagination.page - 1)}
               disabled={!pagination.has_previous}
@@ -120,12 +120,12 @@ const PropertyGrid = ({ properties, loading, error, pagination, onPageChange }) 
               </svg>
             </button>
 
-            {/* Page Numbers */}
+         
             {[...Array(pagination.total_pages)].map((_, index) => {
               const pageNum = index + 1;
               const isCurrentPage = pageNum === pagination.page;
               
-              // Show limited page numbers for better UX
+            
               if (
                 pageNum === 1 ||
                 pageNum === pagination.total_pages ||
@@ -146,7 +146,7 @@ const PropertyGrid = ({ properties, loading, error, pagination, onPageChange }) 
                 );
               }
               
-              // Show ellipsis for skipped pages
+             
               if (
                 (pageNum === pagination.page - 2 && pageNum > 1) ||
                 (pageNum === pagination.page + 2 && pageNum < pagination.total_pages)
@@ -164,7 +164,7 @@ const PropertyGrid = ({ properties, loading, error, pagination, onPageChange }) 
               return null;
             })}
 
-            {/* Next Button */}
+           
             <button
               onClick={() => onPageChange && onPageChange(pagination.page + 1)}
               disabled={!pagination.has_next}

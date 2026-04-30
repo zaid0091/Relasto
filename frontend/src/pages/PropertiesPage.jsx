@@ -50,13 +50,13 @@ const PAGE_SIZE = 9;
 /* ───────── helpers ───────── */
 const parsePriceRange = (val) => {
   if (!val) return {};
-  
+
   // Handle "1000000+" format
   if (val.endsWith('+')) {
     const min = val.slice(0, -1);
     return { price_min: min };
   }
-  
+
   // Handle "min-max" format
   const [min, max] = val.split('-');
   const out = {};
@@ -164,13 +164,12 @@ const PropertiesPage = () => {
 
   const currentPage = pagination?.page || 1;
 
-  /* ───────── render ───────── */
   return (
     <div className="min-h-screen bg-[#FFF8F1] font-['Inter'] text-[#1A1A1A]">
       <Navbar />
 
       <main className="pt-28 pb-20 px-4 sm:px-6 md:px-16 max-w-[1440px] mx-auto">
-        {/* Header */}
+
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Find Property</h1>
@@ -182,7 +181,7 @@ const PropertiesPage = () => {
             )}
           </div>
 
-          {/* Sort */}
+
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Sort</span>
             <select
@@ -205,9 +204,8 @@ const PropertiesPage = () => {
           </div>
         </div>
 
-        {/* ─── Filter Bar ─── */}
         <div className="bg-white p-3 md:p-2.5 rounded-2xl shadow-xl flex flex-col lg:flex-row items-stretch gap-2 mb-6 border border-gray-100">
-          {/* Search input */}
+
           <div className="flex-1 flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl border border-gray-100">
             <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
             <input
@@ -221,9 +219,9 @@ const PropertiesPage = () => {
             />
           </div>
 
-          {/* Dropdowns row */}
+
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:flex items-center gap-2">
-            {/* City */}
+
             <input
               id="city-input"
               type="text"
@@ -233,23 +231,23 @@ const PropertiesPage = () => {
               onChange={(e) => setFilters({ ...filters, city: e.target.value })}
               onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
             />
-            {/* Status */}
+
             <select id="status-select" className="w-full lg:w-auto px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 text-sm font-medium outline-none appearance-none cursor-pointer hover:bg-gray-100 transition-colors" value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })}>
               {STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
-            {/* Property Type */}
+
             <select id="type-select" className="w-full lg:w-auto px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 text-sm font-medium outline-none appearance-none cursor-pointer hover:bg-gray-100 transition-colors" value={filters.property_type} onChange={(e) => setFilters({ ...filters, property_type: e.target.value })}>
               {PROPERTY_TYPES.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
-            {/* Price Range */}
+
             <select id="price-select" className="w-full lg:w-auto px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 text-sm font-medium outline-none appearance-none cursor-pointer hover:bg-gray-100 transition-colors" value={filters.price_range} onChange={(e) => setFilters({ ...filters, price_range: e.target.value })}>
               {PRICE_RANGES.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
-            {/* Bedrooms */}
+
             <select id="beds-select" className="w-full lg:w-auto px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 text-sm font-medium outline-none appearance-none cursor-pointer hover:bg-gray-100 transition-colors" value={filters.bedrooms} onChange={(e) => setFilters({ ...filters, bedrooms: e.target.value })}>
               {BEDROOM_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
-            {/* Search button */}
+
             <button id="search-btn" onClick={applyFilters} className="col-span-2 sm:col-span-1 bg-[#1A1A1A] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#333] transition-all flex items-center justify-center gap-2 shadow-lg active:scale-[0.97]">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
               Search
@@ -257,7 +255,7 @@ const PropertiesPage = () => {
           </div>
         </div>
 
-        {/* ─── Active Filter Tags ─── */}
+
         {activeFilterCount > 0 && (
           <div className="flex flex-wrap items-center gap-2 mb-8">
             {filters.search && <FilterTag label="Search" value={filters.search} onRemove={() => removeFilter('search')} />}
@@ -270,7 +268,6 @@ const PropertiesPage = () => {
           </div>
         )}
 
-        {/* ─── Error ─── */}
         {error && (
           <div className="bg-red-50 text-red-600 px-6 py-4 rounded-2xl mb-8 text-sm font-medium flex items-center gap-3">
             <span className="text-lg">⚠️</span> {error}
@@ -278,7 +275,7 @@ const PropertiesPage = () => {
           </div>
         )}
 
-        {/* ─── Content ─── */}
+
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {[...Array(PAGE_SIZE)].map((_, i) => (
@@ -320,14 +317,13 @@ const PropertiesPage = () => {
           </div>
         )}
 
-        {/* ─── Pagination ─── */}
         {pagination && (
           <div className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-6">
             <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
               Page {currentPage} of {pagination.total_pages} &middot; {pagination.total} results
             </p>
             <div className="flex items-center gap-2">
-              {/* Prev */}
+
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={!pagination.has_previous}
@@ -336,7 +332,6 @@ const PropertiesPage = () => {
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
               </button>
 
-              {/* Page numbers — show max 7 */}
               {getPageNumbers(currentPage, pagination.total_pages).map((p, i) =>
                 p === '...' ? (
                   <span key={`dot-${i}`} className="w-8 text-center text-gray-400 text-sm font-bold">…</span>
@@ -344,18 +339,17 @@ const PropertiesPage = () => {
                   <button
                     key={p}
                     onClick={() => handlePageChange(p)}
-                    className={`w-10 h-10 rounded-xl font-bold text-sm transition-all shadow-sm ${
-                      currentPage === p
+                    className={`w-10 h-10 rounded-xl font-bold text-sm transition-all shadow-sm ${currentPage === p
                         ? 'bg-[#1A1A1A] text-white shadow-xl scale-110'
                         : 'bg-white text-gray-500 border border-gray-200 hover:border-[#F47D31]/30 hover:text-[#F47D31]'
-                    }`}
+                      }`}
                   >
                     {p}
                   </button>
                 ),
               )}
 
-              {/* Next */}
+
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={!pagination.has_next}
@@ -371,9 +365,6 @@ const PropertiesPage = () => {
   );
 };
 
-/* ───────── Sub-components ───────── */
-
-/** Single filter tag chip */
 const FilterTag = ({ label, value, onRemove }) => (
   <div className="bg-white border border-gray-200 px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-2 shadow-sm hover:border-[#F47D31]/30 transition-all">
     <span className="text-gray-400 font-medium">{label}:</span>
@@ -384,7 +375,7 @@ const FilterTag = ({ label, value, onRemove }) => (
   </div>
 );
 
-/** Property card — matches HomePage / AgentProfilePage card style */
+
 const PropertyCard = ({ property: prop }) => {
   const imgSrc = prop.primary_image?.image_url || prop.primary_image?.image || 'https://images.unsplash.com/photo-1600585154340-be6199f7c096?auto=format&fit=crop&q=80&w=800';
   const statusLabel = prop.status === 'sale' ? 'For Sale' : prop.status === 'rent' ? 'For Rent' : prop.status === 'sold' ? 'Sold' : prop.status === 'rented' ? 'Rented' : prop.status;
@@ -450,7 +441,7 @@ const PropertyCard = ({ property: prop }) => {
   );
 };
 
-/** Smart page number generation */
+
 function getPageNumbers(current, total) {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
   const pages = [];

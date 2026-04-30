@@ -29,7 +29,7 @@ const PropertyCard = ({ property }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-      {/* Property Image */}
+    
       <div className="relative h-48 bg-gray-200">
         {primaryImage ? (
           <img
@@ -55,7 +55,7 @@ const PropertyCard = ({ property }) => {
           </div>
         )}
         
-        {/* Status Badge */}
+        
         <div className="absolute top-2 right-2">
           <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(property.status)}`}>
             {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
@@ -63,19 +63,19 @@ const PropertyCard = ({ property }) => {
         </div>
       </div>
 
-      {/* Property Content */}
+      
       <div className="p-4">
-        {/* Title */}
+        
         <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
           {property.title}
         </h3>
 
-        {/* Price */}
+       
         <div className="text-2xl font-bold text-blue-600 mb-2">
           {formatPrice(property.price)}
         </div>
 
-        {/* Location */}
+       
         <div className="flex items-center text-gray-600 text-sm mb-3">
           <svg
             className="w-4 h-4 mr-1"
@@ -99,14 +99,12 @@ const PropertyCard = ({ property }) => {
           {property.city}, {property.state}
         </div>
 
-        {/* Property Type */}
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm text-gray-500 capitalize">
             {property.property_type}
           </span>
         </div>
 
-        {/* Agent Info */}
         <div className="flex items-center justify-between pt-3 border-t border-gray-200">
           <div className="flex items-center">
             <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center mr-2">
@@ -136,7 +134,6 @@ const PropertyCard = ({ property }) => {
           </div>
         </div>
 
-        {/* View Details Button */}
         <Link
           to={`/properties/${property.slug}`}
           className="block w-full mt-3 bg-blue-600 text-white text-center py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200"

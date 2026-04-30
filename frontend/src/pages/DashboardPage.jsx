@@ -68,7 +68,7 @@ const DashboardPage = () => {
     if (!window.confirm('Are you sure you want to delete this property?')) {
       return;
     }
-    
+
     try {
       await propertiesAPI.deleteProperty(propertyId);
       setMyProperties(prev => prev.filter(p => p.id !== propertyId));
@@ -80,7 +80,7 @@ const DashboardPage = () => {
   const handleUpdateVisitStatus = async (requestId, newStatus) => {
     try {
       await visitsAPI.updateVisitRequest(requestId, { status: newStatus });
-      setMyVisitRequests(prev => 
+      setMyVisitRequests(prev =>
         prev.map(r => r.id === requestId ? { ...r, status: newStatus } : r)
       );
     } catch (err) {
@@ -94,7 +94,7 @@ const DashboardPage = () => {
     }
     try {
       await visitsAPI.updateVisitRequest(requestId, { status: 'cancelled' });
-      setMyVisitRequests(prev => 
+      setMyVisitRequests(prev =>
         prev.map(r => r.id === requestId ? { ...r, status: 'cancelled' } : r)
       );
     } catch (err) {
@@ -151,9 +151,9 @@ const DashboardPage = () => {
     <div className="min-h-screen bg-[#FDF9F6]">
       <Navbar />
 
-      {/* Dashboard Content */}
+
       <main className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-20">
-        {/* Page Header */}
+
         <div className="mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">Dashboard</h1>
           <p className="text-[#666] text-lg">
@@ -161,70 +161,65 @@ const DashboardPage = () => {
           </p>
         </div>
 
-        {/* Tabs */}
+
         <div className="border-b border-gray-200 mb-10 overflow-x-auto hide-scrollbar">
           <nav className="-mb-px flex space-x-8 min-w-max">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`py-4 px-1 border-b-2 font-bold text-sm transition-colors ${
-                activeTab === 'overview'
+              className={`py-4 px-1 border-b-2 font-bold text-sm transition-colors ${activeTab === 'overview'
                   ? 'border-[#F47D31] text-[#F47D31]'
                   : 'border-transparent text-[#666] hover:text-[#1A1A1A] hover:border-gray-300'
-              }`}
+                }`}
             >
               Overview
             </button>
             {user?.is_agent && (
               <button
                 onClick={() => setActiveTab('properties')}
-                className={`py-4 px-1 border-b-2 font-bold text-sm transition-colors ${
-                  activeTab === 'properties'
+                className={`py-4 px-1 border-b-2 font-bold text-sm transition-colors ${activeTab === 'properties'
                     ? 'border-[#F47D31] text-[#F47D31]'
                     : 'border-transparent text-[#666] hover:text-[#1A1A1A] hover:border-gray-300'
-                }`}
+                  }`}
               >
                 My Properties
               </button>
             )}
             <button
               onClick={() => setActiveTab('reviews')}
-              className={`py-4 px-1 border-b-2 font-bold text-sm transition-colors ${
-                activeTab === 'reviews'
+              className={`py-4 px-1 border-b-2 font-bold text-sm transition-colors ${activeTab === 'reviews'
                   ? 'border-[#F47D31] text-[#F47D31]'
                   : 'border-transparent text-[#666] hover:text-[#1A1A1A] hover:border-gray-300'
-              }`}
+                }`}
             >
               {user?.is_agent ? 'My Reviews (Written)' : 'My Reviews'}
             </button>
             {user?.is_agent && (
               <button
                 onClick={() => setActiveTab('received')}
-                className={`py-4 px-1 border-b-2 font-bold text-sm transition-colors ${
-                  activeTab === 'received'
+                className={`py-4 px-1 border-b-2 font-bold text-sm transition-colors ${activeTab === 'received'
                     ? 'border-[#F47D31] text-[#F47D31]'
                     : 'border-transparent text-[#666] hover:text-[#1A1A1A] hover:border-gray-300'
-                }`}
+                  }`}
               >
                 Received Reviews ({receivedReviews.length})
               </button>
             )}
             <button
               onClick={() => setActiveTab('visits')}
-              className={`py-4 px-1 border-b-2 font-bold text-sm transition-colors ${
-                activeTab === 'visits'
+              className={`py-4 px-1 border-b-2 font-bold text-sm transition-colors ${activeTab === 'visits'
                   ? 'border-[#F47D31] text-[#F47D31]'
                   : 'border-transparent text-[#666] hover:text-[#1A1A1A] hover:border-gray-300'
-              }`}
+                }`}
             >
               Visit Requests
             </button>
           </nav>
         </div>
 
-        {/* Tab Content */}
+
         {activeTab === 'overview' && (
           <div className="space-y-8">
-            {/* Stats Cards */}
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white rounded-[15px] border border-orange-200 shadow-sm p-6 md:p-8 hover:shadow-md transition-shadow">
                 <div className="flex items-center">
@@ -313,7 +308,7 @@ const DashboardPage = () => {
               </div>
             </div>
 
-            {/* Recent Activity */}
+
             <div className="bg-white rounded-[15px] border border-orange-200 shadow-sm">
               <div className="px-6 py-6 md:p-8">
                 <h3 className="text-xl font-bold text-[#1A1A1A] mb-6 flex items-center gap-2">
@@ -383,7 +378,7 @@ const DashboardPage = () => {
                             >
                               Edit
                             </Link>
-                            <button 
+                            <button
                               onClick={() => handleDeleteProperty(property.id)}
                               className="text-sm font-bold text-red-500 hover:text-red-700 transition-colors"
                             >
@@ -422,9 +417,8 @@ const DashboardPage = () => {
                             {[...Array(5)].map((_, i) => (
                               <svg
                                 key={i}
-                                className={`h-5 w-5 ${
-                                  i < review.rating ? 'text-[#F47D31]' : 'text-gray-200'
-                                }`}
+                                className={`h-5 w-5 ${i < review.rating ? 'text-[#F47D31]' : 'text-gray-200'
+                                  }`}
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                               >
@@ -441,13 +435,13 @@ const DashboardPage = () => {
                             {new Date(review.created_at).toLocaleDateString()}
                           </p>
                           <div className="mt-3 space-x-3">
-                            <button 
+                            <button
                               onClick={() => handleEditReview(review)}
                               className="text-sm font-bold text-[#666] hover:text-[#1A1A1A] transition-colors"
                             >
                               Edit
                             </button>
-                            <button 
+                            <button
                               onClick={() => handleDeleteReview(review.id)}
                               className="text-sm font-bold text-red-500 hover:text-red-700 transition-colors"
                             >
@@ -491,9 +485,8 @@ const DashboardPage = () => {
                                 {[...Array(5)].map((_, i) => (
                                   <svg
                                     key={i}
-                                    className={`h-4 w-4 ${
-                                      i < review.rating ? 'text-[#F47D31]' : 'text-gray-200'
-                                    }`}
+                                    className={`h-4 w-4 ${i < review.rating ? 'text-[#F47D31]' : 'text-gray-200'
+                                      }`}
                                     fill="currentColor"
                                     viewBox="0 0 20 20"
                                   >
@@ -537,7 +530,7 @@ const DashboardPage = () => {
                       <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
                         <div className="flex-1">
                           <h4 className="text-lg font-bold text-[#1A1A1A]">{request.property.title}</h4>
-                          
+
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 bg-gray-50 p-4 rounded-xl border border-[#E5E5E5]">
                             <div>
                               <p className="text-xs font-bold text-[#999] uppercase tracking-wider mb-1">Status & Date</p>
@@ -546,11 +539,11 @@ const DashboardPage = () => {
                                 {new Date(request.preferred_date).toLocaleDateString()}
                               </p>
                             </div>
-                            
+
                             <div>
                               <p className="text-xs font-bold text-[#999] uppercase tracking-wider mb-1">Contact Info</p>
                               <p className="text-sm text-[#1A1A1A]">
-                                {request.contact_email} <br/> {request.contact_phone}
+                                {request.contact_email} <br /> {request.contact_phone}
                               </p>
                             </div>
                           </div>
@@ -574,25 +567,25 @@ const DashboardPage = () => {
                           <p className="text-sm font-medium text-[#999] mb-4 md:mb-0">
                             Requested on {new Date(request.created_at).toLocaleDateString()}
                           </p>
-                          
+
                           <div className="flex flex-wrap gap-2 md:justify-end mt-4">
                             {request.status === 'pending' && (
                               <>
                                 {user?.is_agent ? (
                                   <>
-                                    <button 
+                                    <button
                                       onClick={() => handleUpdateVisitStatus(request.id, 'completed')}
                                       className="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-bold hover:bg-green-100 transition-colors"
                                     >
                                       Complete
                                     </button>
-                                    <button 
+                                    <button
                                       onClick={() => handleUpdateVisitStatus(request.id, 'reviewed')}
                                       className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-bold hover:bg-blue-100 transition-colors"
                                     >
                                       Mark Reviewed
                                     </button>
-                                    <button 
+                                    <button
                                       onClick={() => handleUpdateVisitStatus(request.id, 'cancelled')}
                                       className="px-4 py-2 bg-red-50 text-red-500 rounded-lg text-sm font-bold hover:bg-red-100 transition-colors"
                                     >
@@ -600,7 +593,7 @@ const DashboardPage = () => {
                                     </button>
                                   </>
                                 ) : (
-                                  <button 
+                                  <button
                                     onClick={() => handleCancelVisitRequest(request.id)}
                                     className="px-4 py-2 bg-red-50 text-red-500 rounded-lg text-sm font-bold hover:bg-red-100 transition-colors"
                                   >
@@ -610,7 +603,7 @@ const DashboardPage = () => {
                               </>
                             )}
                             {request.status !== 'pending' && user?.is_agent && (
-                              <button 
+                              <button
                                 onClick={() => handleUpdateVisitStatus(request.id, 'pending')}
                                 className="px-4 py-2 bg-gray-100 text-[#666] rounded-lg text-sm font-bold hover:bg-gray-200 transition-colors"
                               >
@@ -625,7 +618,7 @@ const DashboardPage = () => {
                 </div>
               ) : (
                 <p className="text-[#666] italic">
-                  {user?.is_agent 
+                  {user?.is_agent
                     ? "You haven't received any visit requests yet."
                     : "You haven't made any visit requests yet."
                   }
@@ -636,7 +629,7 @@ const DashboardPage = () => {
         )}
       </main>
 
-      {/* Edit Review Modal */}
+
       {showEditModal && (
         <div className="fixed inset-0 bg-[#1A1A1A]/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-[20px] p-6 md:p-8 max-w-md w-full shadow-2xl">

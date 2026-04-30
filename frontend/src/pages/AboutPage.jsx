@@ -6,15 +6,15 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 const AboutPage = () => {
   return (
     <div className="min-h-screen bg-[#FFF8F1] font-['Inter'] text-[#1A1A1A]">
-      <Navbar variant="light" />
+      <Navbar />
 
       <main className="pt-20">
-        {/* Hero Section */}
+
         <section className="relative py-24 px-6 md:px-16 overflow-hidden">
           <div className="absolute inset-0 bg-linear-to-r from-[#FFF8F1] to-white -z-10" />
           <div className="absolute top-20 right-10 w-64 h-64 bg-[#F47D31]/10 rounded-full blur-3xl" />
           <div className="absolute bottom-10 left-10 w-48 h-48 bg-[#F47D31]/10 rounded-full blur-3xl" />
-          
+
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div>
@@ -37,9 +37,9 @@ const AboutPage = () => {
                 </div>
               </div>
               <div className="relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1000" 
-                  alt="Modern house" 
+                <img
+                  src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1000"
+                  alt="Modern house"
                   className="rounded-[40px] shadow-2xl w-full"
                 />
                 <div className="absolute -bottom-8 -left-8 bg-white p-6 rounded-3xl shadow-xl hidden sm:block">
@@ -51,7 +51,7 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* Stats Section */}
+
         <section className="py-16 px-6 md:px-16 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -70,18 +70,18 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* Mission Section */}
+
         <section className="py-24 px-6 md:px-16">
           <div className="max-w-7xl mx-auto">
             <div className="grid md:grid-cols-2 gap-16 items-center">
               <div className="relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1000" 
-                  alt="Team working" 
+                <img
+                  src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1000"
+                  alt="Team working"
                   className="rounded-[40px] shadow-2xl"
                 />
                 <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#F47D31] rounded-3xl flex items-center justify-center">
-                  <span className="text-white font-black text-xl">Since<br/>2020</span>
+                  <span className="text-white font-black text-xl">Since<br />2020</span>
                 </div>
               </div>
               <div>
@@ -113,7 +113,7 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* How It Works */}
+
         <section className="py-24 px-6 md:px-16 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
@@ -136,7 +136,7 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* Values Section */}
+
         <section className="py-24 px-6 md:px-16">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
@@ -160,7 +160,7 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
+
         <section className="py-24 px-6 md:px-16 bg-[#1A1A1A]">
           <div className="max-w-7xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
