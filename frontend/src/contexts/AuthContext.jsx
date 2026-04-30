@@ -234,6 +234,53 @@ localStorage.setItem('access_token', tokens.access || tokens.access_token);
     }
   };
 
+  // Google login function
+  const googleLogin = async (credential) => {
+    try {
+      dispatch({ type: AUTH_ACTIONS.LOGIN_START });
+      const response = await authAPI.googleLogin(credential);
+
+      const responseData = response.data?.data || response.data;
+      const tokens = responseData?.tokens;
+
+      if (!tokens) {
+        throw new Error('Invalid response format from server');
+      }
+
+      localStorage.setItem('access_token', tokens.access || tokens.access_token);
+      localStorage.setItem('refresh_token', tokens.refresh || tokens.refresh_token);
+
+      const profileResponse = await authAPI.getProfile();
+      const userData = profileResponse.data?.data?.user || profileResponse.data?.data || profileResponse.data;
+
+      let profileData = null;
+      try {
+        const myProfileResponse = await profilesAPI.getMyProfile();
+        profileData = myProfileResponse.data?.data?.profile || myProfileResponse.data?.profile;
+      } catch (e) {
+        console.log('Could not fetch profile details');
+      }
+
+      if (profileData) {
+        userData.profile = profileData;
+      }
+
+      dispatch({
+        type: AUTH_ACTIONS.LOAD_USER_SUCCESS,
+        payload: { user: userData },
+      });
+
+      return { success: true };
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || error.message || 'Google login failed';
+      dispatch({
+        type: AUTH_ACTIONS.LOGIN_FAILURE,
+        payload: errorMessage,
+      });
+      return { success: false, error: errorMessage };
+    }
+  };
+
   // Logout function - pure React state, no page reload
   const logout = () => {
     // Clear storage
@@ -272,6 +319,7 @@ localStorage.setItem('access_token', tokens.access || tokens.access_token);
     login,
     register,
     logout,
+    googleLogin,
     updateProfile,
     clearError,
     dispatch,

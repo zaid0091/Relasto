@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from django.db.models import Q
 from .models import Property, PropertyImage
 from .serializers import (
     PropertySerializer,
@@ -78,6 +79,13 @@ class PropertyViewSet(viewsets.ModelViewSet):
             if "bedrooms" in request.query_params:
                 try:
                     filters["bedrooms"] = int(request.query_params.get("bedrooms"))
+                except ValueError:
+                    pass
+
+            # Bathrooms filter
+            if "bathrooms" in request.query_params:
+                try:
+                    filters["bathrooms"] = int(request.query_params.get("bathrooms"))
                 except ValueError:
                     pass
 
@@ -432,8 +440,8 @@ class PropertyViewSet(viewsets.ModelViewSet):
                 sold_properties.aggregate(Sum("price"))["price__sum"] or 0
             )
 
-            for_sale_count = Property.objects.filter(status="for_sale").count()
-            for_rent_count = Property.objects.filter(status="for_rent").count()
+            for_sale_count = Property.objects.filter(status="sale").count()
+            for_rent_count = Property.objects.filter(status="rent").count()
 
             total_properties = Property.objects.count()
 
@@ -464,3 +472,63 @@ class PropertyViewSet(viewsets.ModelViewSet):
                 {"status": "error", "error": str(e), "code": "STATS_ERROR"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+    @action(detail=False, methods=['get'], permission_classes=[permissions.AllowAny])
+    def universal_search(self, request):
+        """Universal search across properties and agents"""
+        query = request.query_params.get('q', '').strip()
+        
+        if not query:
+            return Response(
+                {
+                    "status": "success",
+                    "data": {
+                        "properties": [],
+                        "agents": [],
+                        "total_results": 0,
+                        "query": query
+                    }
+                },
+                status=status.HTTP_200_OK,
+            )
+        
+        # Search properties
+        properties = Property.objects.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query) |
+            Q(address__icontains=query) |
+            Q(city__icontains=query) |
+            Q(state__icontains=query)
+        ).order_by('-created_at')[:10]  # Limit to 10 results
+        
+        # Search agents
+        from apps.profiles.models import Profile
+        from apps.profiles.serializers import AgentSearchSerializer
+        
+        agents = Profile.objects.filter(
+            is_agent=True
+        ).filter(
+            Q(user__first_name__icontains=query) |
+            Q(user__last_name__icontains=query) |
+            Q(user__username__icontains=query) |
+            Q(bio__icontains=query) |
+            Q(city__icontains=query) |
+            Q(state__icontains=query)
+        ).order_by('-average_rating', '-created_at')[:10]  # Limit to 10 results
+        
+        # Serialize results
+        property_serializer = PropertyListSerializer(properties, many=True)
+        agent_serializer = AgentSearchSerializer(agents, many=True)
+        
+        return Response(
+            {
+                "status": "success",
+                "data": {
+                    "properties": property_serializer.data,
+                    "agents": agent_serializer.data,
+                    "total_results": len(properties) + len(agents),
+                    "query": query
+                }
+            },
+            status=status.HTTP_200_OK,
+        )

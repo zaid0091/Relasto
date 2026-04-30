@@ -149,6 +149,11 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
     features = serializers.JSONField(
         required=False, help_text="List of feature objects with 'key' and 'value'"
     )
+    bedrooms = serializers.IntegerField(required=False, allow_null=True)
+    bathrooms = serializers.FloatField(required=False, allow_null=True)
+    square_feet = serializers.IntegerField(required=False, allow_null=True)
+    lot_size = serializers.FloatField(required=False, allow_null=True)
+    year_built = serializers.IntegerField(required=False, allow_null=True)
 
     class Meta:
         model = Property
@@ -166,6 +171,11 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
             "longitude",
             "attributes",
             "features",
+            "bedrooms",
+            "bathrooms",
+            "square_feet",
+            "lot_size",
+            "year_built",
         ]
 
     def validate_price(self, value):
@@ -190,6 +200,21 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         features_data = validated_data.pop("features", [])
 
+        # Extract individual attribute fields and create attributes object
+        attributes = validated_data.get("attributes", {})
+        individual_attrs = {
+            "bedrooms": validated_data.pop("bedrooms", None),
+            "bathrooms": validated_data.pop("bathrooms", None),
+            "square_feet": validated_data.pop("square_feet", None),
+            "lot_size": validated_data.pop("lot_size", None),
+            "year_built": validated_data.pop("year_built", None),
+        }
+        
+        # Merge individual attributes with existing attributes
+        for key, value in individual_attrs.items():
+            if value is not None:
+                attributes[key] = value
+
         # Create property with agent from request context
         request = self.context.get("request")
         agent_profile = request.user.profile
@@ -200,14 +225,14 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
             description=validated_data["description"],
             price=validated_data["price"],
             property_type=validated_data.get("property_type", "residential"),
-            status=validated_data.get("status", "for_sale"),
+            status=validated_data.get("status", "sale"),
             address=validated_data.get("address", ""),
             city=validated_data.get("city", ""),
             state=validated_data.get("state", ""),
             zip_code=validated_data.get("zip_code", ""),
             latitude=validated_data.get("latitude"),
             longitude=validated_data.get("longitude"),
-            attributes=validated_data.get("attributes", {}),
+            attributes=attributes,
         )
 
         # Create features from key-value list

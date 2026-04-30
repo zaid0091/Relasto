@@ -118,7 +118,7 @@ class AgentSearchSerializer(serializers.ModelSerializer):
     """Lightweight serializer for agent search results"""
 
     full_name = serializers.ReadOnlyField()
-    review_count = serializers.ReadOnlyField()
+    review_count = serializers.SerializerMethodField()
     properties_count = serializers.SerializerMethodField()
     id = serializers.IntegerField(source="user_id", read_only=True)
     profile_image = serializers.SerializerMethodField()
@@ -137,6 +137,12 @@ class AgentSearchSerializer(serializers.ModelSerializer):
             "full_name",
             "profile_image",
         ]
+
+    def get_review_count(self, obj):
+        """Get review count - handle both property and annotated field"""
+        if hasattr(obj, 'review_count_annotation'):
+            return obj.review_count_annotation
+        return obj.review_count if hasattr(obj, 'review_count') else 0
 
     def get_properties_count(self, obj):
         """Get properties count"""

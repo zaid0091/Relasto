@@ -29,7 +29,7 @@ const HomePage = () => {
       try {
         setLoading(true);
         const [propsRes, reviewsRes, statsRes] = await Promise.all([
-          propertiesAPI.getProperties({ page_size: 6, ordering: '-created_at' }),
+          propertiesAPI.getProperties({ page_size: 6, ordering: '-created_at', property_type: propertyTab }),
           reviewsAPI.getReviews({ page_size: 3 }),
           propertiesAPI.getStats()
         ]);
@@ -46,31 +46,21 @@ const HomePage = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [propertyTab]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     const queryParams = new URLSearchParams();
     if (searchParams.city) queryParams.append('city', searchParams.city);
     if (searchParams.property_type) queryParams.append('property_type', searchParams.property_type);
-    if (activeTab) queryParams.append('status', activeTab === 'buy' ? 'for_sale' : activeTab === 'rent' ? 'for_rent' : '');
+    if (searchParams.price_range) queryParams.append('price_range', searchParams.price_range);
+    if (activeTab) queryParams.append('status', activeTab === 'buy' ? 'sale' : activeTab === 'rent' ? 'rent' : '');
 
     navigate(`/properties?${queryParams.toString()}`);
   };
 
-  const fetchPropertiesByTab = async (tab) => {
-    try {
-      const params = { page_size: 6, ordering: '-created_at', property_type: tab };
-      const res = await propertiesAPI.getProperties(params);
-      setFeaturedProperties(res.data.data.properties || []);
-    } catch (error) {
-      console.error('Error fetching properties:', error);
-    }
-  };
-
   const handlePropertyTabChange = (tab) => {
     setPropertyTab(tab);
-    fetchPropertiesByTab(tab);
   };
 
   const stats = [
@@ -134,9 +124,10 @@ const HomePage = () => {
                       onChange={(e) => setSearchParams({ ...searchParams, property_type: e.target.value })}
                     >
                       <option value="">Property Type</option>
-                      <option value="apartment">Apartment</option>
-                      <option value="house">House</option>
-                      <option value="villa">Villa</option>
+                      <option value="residential">Residential</option>
+                      <option value="commercial">Commercial</option>
+                      <option value="industrial">Industrial</option>
+                      <option value="agricultural">Agricultural</option>
                     </select>
                     <div className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -152,10 +143,12 @@ const HomePage = () => {
                       onChange={(e) => setSearchParams({ ...searchParams, price_range: e.target.value })}
                     >
                       <option value="">Price Range</option>
-                      <option value="0-1000">$0 - $1,000</option>
-                      <option value="1000-3000">$1,000 - $3,000</option>
-                      <option value="3000-5000">$3,000 - $5,000</option>
-                      <option value="5000+">$5,000+</option>
+                      <option value="0-100000">Under $100k</option>
+                      <option value="100000-300000">$100k – $300k</option>
+                      <option value="300000-500000">$300k – $500k</option>
+                      <option value="500000-750000">$500k – $750k</option>
+                      <option value="750000-1000000">$750k – $1M</option>
+                      <option value="1000000+">$1M+</option>
                     </select>
                     <div className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -333,7 +326,7 @@ const HomePage = () => {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
-                  {prop.status === 'for_sale' ? 'For Sale' : 'For Rent'}
+                  {prop.status === 'sale' ? 'For Sale' : prop.status === 'rent' ? 'For Rent' : prop.status === 'sold' ? 'Sold' : prop.status}
                 </div>
               </div>
               <div className="p-8 md:p-10">

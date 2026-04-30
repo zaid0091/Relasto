@@ -93,7 +93,7 @@ class ProfileService:
         return profile
 
     @staticmethod
-    def search_agents(filters, page=1, page_size=20):
+    def search_agents(filters, page=1, page_size=20, ordering="-average_rating"):
         """
         Search for agents with filters and pagination
 
@@ -101,24 +101,46 @@ class ProfileService:
             filters: Dictionary with search parameters
             page: Page number (1-indexed)
             page_size: Items per page
+            ordering: Ordering parameter
 
         Returns:
             Dictionary with paginated results
         """
         queryset = Profile.objects.filter(is_agent=True)
 
-        # Apply filters
-        if "city" in filters:
+        # Apply text search (search by name, bio, city, state)
+        if "search" in filters and filters["search"]:
+            from django.db.models import Q
+            search_term = filters["search"]
+            queryset = queryset.filter(
+                Q(user__first_name__icontains=search_term) |
+                Q(user__last_name__icontains=search_term) |
+                Q(user__username__icontains=search_term) |
+                Q(bio__icontains=search_term) |
+                Q(city__icontains=search_term) |
+                Q(state__icontains=search_term)
+            )
+
+        # Apply specific filters
+        if "city" in filters and filters["city"]:
             queryset = queryset.filter(city__icontains=filters["city"])
 
-        if "state" in filters:
+        if "state" in filters and filters["state"]:
             queryset = queryset.filter(state__icontains=filters["state"])
 
         if "min_rating" in filters:
             queryset = queryset.filter(average_rating__gte=filters["min_rating"])
 
-        # Order by rating and created_at
-        queryset = queryset.order_by("-average_rating", "-created_at")
+        # Apply ordering - handle special cases for properties
+        if ordering in ['review_count', '-review_count']:
+            from django.db.models import Count
+            queryset = queryset.annotate(review_count_annotation=Count('received_reviews'))
+            if ordering == 'review_count':
+                queryset = queryset.order_by('review_count_annotation')
+            else:
+                queryset = queryset.order_by('-review_count_annotation')
+        else:
+            queryset = queryset.order_by(ordering)
 
         # Pagination
         from django.core.paginator import Paginator

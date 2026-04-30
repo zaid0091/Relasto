@@ -1,23 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { profilesAPI } from '../services/api';
 import Navbar from '../components/Navbar';
 
 const AgentsPage = () => {
   const { isAuthenticated, user, logout } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [pagination, setPagination] = useState(null);
   const [filters, setFilters] = useState({
-    search: '',
+    search: searchParams.get('search') || '',
+    ordering: searchParams.get('ordering') || '-average_rating',
   });
+  const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
 
-  const fetchAgents = async (currentFilters = filters, page = 1) => {
+  const fetchAgents = useCallback(async (currentFilters, page = 1, isSearchAction = false) => {
     try {
-      setLoading(true);
+      if (isSearchAction) {
+        setIsSearching(true);
+      } else {
+        setLoading(true);
+      }
       setError(null);
 
       const params = {
@@ -39,16 +46,41 @@ const AgentsPage = () => {
       setError(err.response?.data?.error || 'Failed to load agents');
     } finally {
       setLoading(false);
+      setIsSearching(false);
     }
-  };
-
-  useEffect(() => {
-    fetchAgents();
   }, []);
 
+  // Sync URL → fetch
+  useEffect(() => {
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const urlFilters = {
+      search: searchParams.get('search') || '',
+      ordering: searchParams.get('ordering') || '-average_rating',
+    };
+    setFilters(urlFilters);
+    fetchAgents(urlFilters, page);
+  }, [searchParams, fetchAgents]);
+
   const handleSearch = (e) => {
-    e.preventDefault();
-    fetchAgents(filters, 1);
+    if (e) e.preventDefault();
+    const params = new URLSearchParams();
+    Object.entries(filters).forEach(([k, v]) => {
+      if (v && v !== '-average_rating') params.set(k, v);
+    });
+    params.delete('page');
+    setSearchParams(params);
+  };
+
+  const clearSearch = () => {
+    setFilters({ search: '', ordering: '-average_rating' });
+    setSearchParams(new URLSearchParams());
+  };
+
+  const handlePageChange = (page) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('page', page);
+    setSearchParams(params);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -58,44 +90,97 @@ const AgentsPage = () => {
       
 
       <main className="max-w-7xl mx-auto mt-10 px-6 md:px-16 py-16">
-        <h1 className="text-4xl md:text-5xl font-black text-[#1A1A1A] mb-12 tracking-tight">
-          Some Nearby Good Agents
-        </h1>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+          <h1 className="text-4xl md:text-5xl font-black text-[#1A1A1A] tracking-tight">
+            Some Nearby Good Agents
+          </h1>
+          {pagination && (
+            <p className="text-gray-400 font-medium mt-2 text-sm">
+              Showing <span className="text-[#1A1A1A] font-bold">{agents.length}</span> of{' '}
+              <span className="text-[#1A1A1A] font-bold">{pagination.total}</span> agents
+            </p>
+          )}
+        </div>
 
         {/* Filter Section */}
         <div className="bg-white p-4 rounded-4xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 mb-16">
           <div className="flex-1 relative">
             <input
               type="text"
-              placeholder="Enter your address"
-              className="w-full h-14 pl-6 pr-12 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-[#F47D31] font-medium text-gray-700 placeholder:text-gray-400"
+              placeholder="Search agents by name, location..."
+              className="w-full h-14 pl-6 pr-20 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-[#F47D31] font-medium text-gray-700 placeholder:text-gray-400"
               value={filters.search}
               onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+            <div className="absolute right-12 top-1/2 -translate-y-1/2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
             </div>
+            {filters.search && (
+              <button
+                onClick={clearSearch}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                title="Clear search"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+            )}
           </div>
 
           <div className="w-full md:w-48 relative">
-            <select className="w-full h-14 pl-6 pr-12 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-[#F47D31] font-bold text-gray-700 appearance-none">
-              <option>Review</option>
-              <option>Highest Rated</option>
-              <option>Most Reviews</option>
+            <select 
+              className="w-full h-14 pl-6 pr-12 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-[#F47D31] font-bold text-gray-700 appearance-none"
+              value={filters.ordering}
+              onChange={(e) => {
+                const updated = { ...filters, ordering: e.target.value };
+                setFilters(updated);
+                const params = new URLSearchParams(searchParams);
+                params.set('ordering', e.target.value);
+                params.delete('page');
+                setSearchParams(params);
+              }}
+            >
+              <option value="-average_rating">Highest Rated</option>
+              <option value="-review_count">Most Reviews</option>
+              <option value="average_rating">Lowest Rated</option>
+              <option value="review_count">Least Reviews</option>
+              <option value="-created_at">Newest</option>
+              <option value="created_at">Oldest</option>
             </select>
             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2.5"><path d="m6 9 6 6 6-6" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2.5">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
             </div>
           </div>
 
           <button
             onClick={handleSearch}
-            className="w-full md:w-auto h-14 px-10 bg-[#1A1A1A] text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#F47D31] transition-all group shadow-lg shadow-black/5"
+            disabled={isSearching}
+            className="w-full md:w-auto h-14 px-10 bg-[#1A1A1A] text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#F47D31] transition-all group shadow-lg shadow-black/5 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span>Search</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" className="group-hover:scale-110 transition-transform">
-              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
-            </svg>
+            {isSearching ? (
+              <>
+                <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <span>Searching...</span>
+              </>
+            ) : (
+              <>
+                <span>Search</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" className="group-hover:scale-110 transition-transform">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
+              </>
+            )}
           </button>
         </div>
 
@@ -106,16 +191,11 @@ const AgentsPage = () => {
             <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Finding the best agents...</p>
           </div>
         ) : error ? (
-          <div className="bg-red-50 p-8 rounded-3xl text-center border border-red-100">
-            <p className="text-red-600 font-bold mb-4">{error}</p>
-            <button
-              onClick={() => fetchAgents()}
-              className="bg-red-600 text-white px-6 py-2 rounded-xl font-bold"
-            >
-              Try Again
-            </button>
+          <div className="bg-red-50 text-red-600 px-6 py-4 rounded-2xl mb-8 text-sm font-medium flex items-center gap-3">
+            <span className="text-lg">⚠️</span> {error}
+            <button onClick={() => fetchAgents(filters, 1)} className="ml-auto font-bold hover:underline">Retry</button>
           </div>
-        ) : (
+        ) : agents.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
             {agents.map((agent) => (
               <div key={agent.id} className="w-70 bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 group border border-gray-200">
@@ -138,7 +218,11 @@ const AgentsPage = () => {
                         </svg>
                       ))}
                     </div>
-                    <span className="text-lg font-medium text-[#1A1A1A]">{agent.average_rating || '4.5'} review</span>
+                    <span className="text-lg font-medium text-[#1A1A1A]">
+                    {agent.average_rating ? agent.average_rating.toFixed(1) : '0.0'} 
+                    {' '}
+                    {agent.review_count === 1 ? 'review' : agent.review_count === 0 ? 'reviews' : `${agent.review_count} reviews`}
+                  </span>
                   </div>
                   <Link
                     to={`/agents/${agent.id}`}
@@ -150,38 +234,97 @@ const AgentsPage = () => {
               </div>
             ))}
           </div>
+        ) : (
+          <div className="text-center py-20 bg-white rounded-4xl border border-gray-100 shadow-sm px-6">
+            <div className="text-6xl mb-6">🔍</div>
+            <h3 className="text-2xl font-black mb-3">No agents found</h3>
+            <p className="text-gray-400 max-w-xs mx-auto text-sm font-medium leading-relaxed mb-8">
+              {filters.search 
+                ? `We couldn't find any agents matching "${filters.search}". Try different keywords or clear your search.`
+                : "We couldn't find any agents. Please try again later."
+              }
+            </p>
+            {filters.search && (
+              <button 
+                onClick={() => {
+                  setFilters({ search: '', ordering: '-average_rating' });
+                  setSearchParams(new URLSearchParams());
+                }}
+                className="text-[#F47D31] font-bold text-sm hover:underline"
+              >
+                Clear search
+              </button>
+            )}
+          </div>
         )}
 
         {/* Pagination */}
-        {pagination && pagination.total_pages > 1 && (
-          <div className="mt-20 flex items-center justify-between">
-            <div className="flex gap-3">
-              {[...Array(Math.min(5, pagination.total_pages))].map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => fetchAgents(filters, i + 1)}
-                  className={`w-12 h-12 rounded-2xl font-black text-sm transition-all border-2 ${pagination.page === i + 1
-                    ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
-                    : 'bg-white text-gray-400 border-gray-50 hover:border-gray-200'
+        {pagination && (
+          <div className="mt-20 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+              Page {pagination.page} of {pagination.total_pages} &middot; {pagination.total} agents
+            </p>
+            <div className="flex items-center gap-2">
+              {/* Prev */}
+              <button
+                onClick={() => handlePageChange(pagination.page - 1)}
+                disabled={!pagination.has_previous}
+                className="w-10 h-10 rounded-xl flex items-center justify-center border border-gray-200 bg-white disabled:opacity-30 disabled:cursor-not-allowed hover:border-[#F47D31]/30 hover:text-[#F47D31] transition-all shadow-sm"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                  <path d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              {/* Page numbers — show max 7 */}
+              {getPageNumbers(pagination.page, pagination.total_pages).map((p, i) =>
+                p === '...' ? (
+                  <span key={`dot-${i}`} className="w-8 text-center text-gray-400 text-sm font-bold">…</span>
+                ) : (
+                  <button
+                    key={p}
+                    onClick={() => handlePageChange(p)}
+                    className={`w-10 h-10 rounded-xl font-bold text-sm transition-all shadow-sm ${
+                      pagination.page === p
+                        ? 'bg-[#1A1A1A] text-white shadow-xl scale-110'
+                        : 'bg-white text-gray-500 border border-gray-200 hover:border-[#F47D31]/30 hover:text-[#F47D31]'
                     }`}
-                >
-                  {i + 1}
-                </button>
-              ))}
+                  >
+                    {p}
+                  </button>
+                ),
+              )}
+
+              {/* Next */}
+              <button
+                onClick={() => handlePageChange(pagination.page + 1)}
+                disabled={!pagination.has_next}
+                className="w-10 h-10 rounded-xl flex items-center justify-center border border-gray-200 bg-white disabled:opacity-30 disabled:cursor-not-allowed hover:border-[#F47D31]/30 hover:text-[#F47D31] transition-all shadow-sm"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                  <path d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
-            <button
-              onClick={() => fetchAgents(filters, pagination.page + 1)}
-              disabled={!pagination.has_next}
-              className="h-14 px-8 bg-white border-2 border-gray-50 rounded-2xl text-[#1A1A1A] font-black text-sm flex items-center gap-3 hover:border-gray-200 disabled:opacity-50 transition-all shadow-sm"
-            >
-              <span>Next Page</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-            </button>
           </div>
         )}
       </main>
     </div>
   );
 };
+
+/** Smart page number generation */
+function getPageNumbers(current, total) {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages = [];
+  pages.push(1);
+  if (current > 3) pages.push('...');
+  for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+    pages.push(i);
+  }
+  if (current < total - 2) pages.push('...');
+  pages.push(total);
+  return pages;
+}
 
 export default AgentsPage;

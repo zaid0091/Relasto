@@ -16,6 +16,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', '678666545431-bad6m29btp87bcn0m6uppc1cp8m1hi8f.apps.googleusercontent.com')
+
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -33,6 +36,7 @@ INSTALLED_APPS = [
     'apps.profiles.apps.ProfilesConfig',
     'apps.properties.apps.PropertiesConfig',
     'apps.reviews.apps.ReviewsConfig',
+    'apps.search.apps.SearchConfig',
     'apps.visits.apps.VisitsConfig',
     'apps.common.apps.CommonConfig',
 ]
@@ -68,10 +72,16 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'backend.urls'
 
 # Database
+from decouple import config
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': config('DB_ENGINE', default='django.db.backends.postgresql'),
+        'NAME': config('DB_NAME', default='relasto_db'),
+        'USER': config('DB_USER', default='relasto_user'),
+        'PASSWORD': config('DB_PASSWORD', default=''),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default='5432'),
     }
 }
 

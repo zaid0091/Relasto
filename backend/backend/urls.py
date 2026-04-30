@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/', include('apps.profiles.urls')),
     path('api/', include('apps.properties.urls')),
     path('api/', include('apps.reviews.urls')),
+    path('api/', include('apps.search.urls')),
     path('api/', include('apps.visits.urls')),
     
     # Health check endpoint

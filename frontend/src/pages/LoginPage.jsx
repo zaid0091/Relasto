@@ -4,7 +4,7 @@ import LoginForm from '../components/LoginForm';
 import { useAuth } from '../contexts/AuthContext';
 
 const LoginPage = () => {
-  const { isAuthenticated, isLoading, user, logout } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {

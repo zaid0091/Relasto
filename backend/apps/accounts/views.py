@@ -3,6 +3,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
+from django.conf import settings as django_settings
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
 from .serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
@@ -291,3 +294,57 @@ def debug_blacklist(request):
         'status': 'error',
         'error': 'No token found'
     }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GoogleLoginView(APIView):
+    """Google OAuth2 login endpoint"""
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        token = request.data.get('credential')
+        if not token:
+            return Response({
+                'status': 'error',
+                'error': 'Google credential is required',
+                'code': 'MISSING_CREDENTIAL'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            idinfo = id_token.verify_oauth2_token(
+                token,
+                google_requests.Request(),
+                django_settings.GOOGLE_CLIENT_ID
+            )
+
+            email = idinfo['email']
+            username = idinfo.get('name', email.split('@')[0])
+
+            user, created = User.objects.get_or_create(
+                email=email,
+                defaults={
+                    'username': username,
+                    'is_active': True,
+                }
+            )
+
+            if created:
+                user.set_unusable_password()
+                user.save()
+
+            tokens = TokenService.generate_tokens(user)
+
+            return Response({
+                'status': 'success',
+                'message': 'Google login successful',
+                'data': {
+                    'user': UserSerializer(user).data,
+                    'tokens': tokens
+                }
+            }, status=status.HTTP_200_OK)
+
+        except ValueError:
+            return Response({
+                'status': 'error',
+                'error': 'Invalid Google token',
+                'code': 'INVALID_TOKEN'
+            }, status=status.HTTP_401_UNAUTHORIZED)

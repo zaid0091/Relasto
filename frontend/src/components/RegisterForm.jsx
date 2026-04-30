@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../contexts/AuthContext';
+import Navbar from './Navbar';
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -11,8 +14,10 @@ const RegisterForm = () => {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { register, error, clearError } = useAuth();
+  const { register, googleLogin, error, clearError } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,7 +26,6 @@ const RegisterForm = () => {
       [name]: value,
     }));
     
-    // Clear field-specific error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -29,7 +33,6 @@ const RegisterForm = () => {
       }));
     }
     
-    // Clear general error when user starts typing
     if (error) {
       clearError();
     }
@@ -57,7 +60,7 @@ const RegisterForm = () => {
     } else if (formData.password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters';
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
+      newErrors.password = 'Must contain uppercase, lowercase, and a number';
     }
     
     if (!formData.password_confirm) {
@@ -81,262 +84,253 @@ const RegisterForm = () => {
     
     try {
       await register(formData);
-      // Navigation will be handled by the calling component
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-blue-100">
-            <svg
-              className="h-8 w-8 text-blue-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M18 9v3m0 0v3m0 3h.01M6 9h12a2 2 0 002-2V5a2 2 0 00-2-2H6a2 2 0 00-2 2v4a2 2 0 002 2zm10 6H6a2 2 0 00-2 2v4a2 2 0 002 2h12a2 2 0 002-2v-4a2 2 0 00-2-2z"
-              />
-            </svg>
+    <div className="min-h-screen bg-gray-50">
+      <Navbar variant="light" />
+      
+      <div className="pt-20 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-screen">
+        <div className="w-full max-w-sm sm:max-w-md bg-white border border-gray-200 rounded-2xl shadow-lg p-6 sm:p-8">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Create account</h2>
+            <p className="mt-2 text-sm text-gray-500">Join Relasto and find your dream home.</p>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <a href="/login" className="font-medium text-blue-600 hover:text-blue-500">
-              sign in to your existing account
-            </a>
-          </p>
-        </div>
 
-        {/* General Error Message */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-4">
-            <div className="flex">
-              <div className="shrink-0">
-                <svg
-                  className="h-5 w-5 text-red-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
+          {error && (
+            <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4">
+              <div className="flex items-center gap-2">
+                <svg className="h-5 w-5 text-red-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
-              </div>
-              <div className="ml-3">
                 <p className="text-sm text-red-800">{error}</p>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            {/* Email Field */}
+          {/* Google Sign Up */}
+          <div className="flex justify-center overflow-hidden w-full mb-4">
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                setIsSubmitting(true);
+                try {
+                  await googleLogin(credentialResponse.credential);
+                } finally {
+                  setIsSubmitting(false);
+                }
+              }}
+              onError={() => {
+                console.error('Google Login Failed');
+              }}
+              theme="outline"
+              size="large"
+              text="signup_with"
+            />
+          </div>
+
+          {/* Divider */}
+          <div className="relative my-5">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-3 bg-white text-gray-500">or register with email</span>
+            </div>
+          </div>
+
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email address
               </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                    errors.email
-                      ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                      : 'border-gray-300'
-                  }`}
-                  placeholder="Enter your email"
-                />
-                {errors.email && (
-                  <p className="mt-2 text-sm text-red-600">{errors.email}</p>
-                )}
-              </div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                className={`block w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#F47D31] focus:border-transparent text-sm sm:text-base ${
+                  errors.email ? 'border-red-300' : 'border-gray-300'
+                }`}
+                placeholder="Enter your email"
+              />
+              {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
             </div>
 
-            {/* Username Field */}
+            {/* Username */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
                 Username
               </label>
-              <div className="mt-1">
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  autoComplete="username"
-                  required
-                  value={formData.username}
-                  onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                    errors.username
-                      ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                      : 'border-gray-300'
-                  }`}
-                  placeholder="Choose a username"
-                />
-                {errors.username && (
-                  <p className="mt-2 text-sm text-red-600">{errors.username}</p>
-                )}
-              </div>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                autoComplete="username"
+                required
+                value={formData.username}
+                onChange={handleChange}
+                className={`block w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#F47D31] focus:border-transparent text-sm sm:text-base ${
+                  errors.username ? 'border-red-300' : 'border-gray-300'
+                }`}
+                placeholder="Choose a username"
+              />
+              {errors.username && <p className="mt-1 text-sm text-red-600">{errors.username}</p>}
             </div>
 
-            {/* Password Field */}
+            {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
-              <div className="mt-1">
+              <div className="relative">
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   autoComplete="new-password"
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                    errors.password
-                      ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                      : 'border-gray-300'
+                  className={`block w-full px-4 py-3 pr-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#F47D31] focus:border-transparent text-sm sm:text-base ${
+                    errors.password ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Create a password"
                 />
-                {errors.password && (
-                  <p className="mt-2 text-sm text-red-600">{errors.password}</p>
-                )}
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {showPassword ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18" />
+                    ) : (
+                      <>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </>
+                    )}
+                  </svg>
+                </button>
               </div>
+              {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
             </div>
 
-            {/* Password Confirm Field */}
+            {/* Confirm Password */}
             <div>
-              <label htmlFor="password_confirm" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password_confirm" className="block text-sm font-medium text-gray-700 mb-1">
                 Confirm Password
               </label>
-              <div className="mt-1">
+              <div className="relative">
                 <input
                   id="password_confirm"
                   name="password_confirm"
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   autoComplete="new-password"
                   required
                   value={formData.password_confirm}
                   onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                    errors.password_confirm
-                      ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                      : 'border-gray-300'
+                  className={`block w-full px-4 py-3 pr-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#F47D31] focus:border-transparent text-sm sm:text-base ${
+                    errors.password_confirm ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Confirm your password"
                 />
-                {errors.password_confirm && (
-                  <p className="mt-2 text-sm text-red-600">{errors.password_confirm}</p>
-                )}
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {showConfirmPassword ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18" />
+                    ) : (
+                      <>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </>
+                    )}
+                  </svg>
+                </button>
               </div>
+              {errors.password_confirm && <p className="mt-1 text-sm text-red-600">{errors.password_confirm}</p>}
             </div>
-          </div>
 
-          {/* Agent Checkbox */}
-          <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
-            <div className="flex items-start">
-              <div className="flex items-center h-5">
+            {/* Agent Checkbox */}
+            <div className="bg-[#FFF8F1] border border-[#F47D31]/20 rounded-xl p-4">
+              <div className="flex items-start">
                 <input
                   id="is_agent"
                   name="is_agent"
                   type="checkbox"
                   checked={formData.is_agent}
-                  onChange={(e) => {
-                    setFormData({ ...formData, is_agent: e.target.checked });
-                  }}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  onChange={(e) => setFormData({ ...formData, is_agent: e.target.checked })}
+                  className="mt-0.5 h-4 w-4 text-[#F47D31] focus:ring-[#F47D31] border-gray-300 rounded"
                 />
-              </div>
-              <div className="ml-3 text-sm">
-                <label htmlFor="is_agent" className="font-medium text-gray-900 cursor-pointer">
-                  Register as a Real Estate Agent
-                </label>
-                <p className="text-gray-500">
-                  Check this if you want to list properties. You can always change this later in your profile settings.
-                </p>
+                <div className="ml-3 text-sm">
+                  <label htmlFor="is_agent" className="font-medium text-gray-900 cursor-pointer">
+                    Register as a Real Estate Agent
+                  </label>
+                  <p className="text-gray-500 mt-0.5">You can list properties and manage clients.</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex items-center">
-            <input
-              id="agree-terms"
-              name="agree-terms"
-              type="checkbox"
-              required
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            />
-            <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-900">
-              I agree to the{' '}
-              <a href="/terms" className="text-blue-600 hover:text-blue-500">
-                Terms and Conditions
-              </a>{' '}
-              and{' '}
-              <a href="/privacy" className="text-blue-600 hover:text-blue-500">
-                Privacy Policy
-              </a>
-            </label>
-          </div>
+            {/* Terms */}
+            <div className="flex items-start">
+              <input
+                id="agree-terms"
+                name="agree-terms"
+                type="checkbox"
+                required
+                className="mt-0.5 h-4 w-4 text-[#F47D31] focus:ring-[#F47D31] border-gray-300 rounded"
+              />
+              <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-600">
+                I agree to the{' '}
+                <a href="/terms" className="text-[#F47D31] hover:text-[#e06b20]">Terms</a>
+                {' '}and{' '}
+                <a href="/privacy" className="text-[#F47D31] hover:text-[#e06b20]">Privacy Policy</a>
+              </label>
+            </div>
 
-          <div>
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
+              className={`w-full py-3 px-4 text-sm sm:text-base font-semibold rounded-xl text-white transition-all ${
                 isSubmitting
                   ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+                  : 'bg-[#1A1A1A] hover:bg-[#333] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1A1A1A]'
               }`}
             >
               {isSubmitting ? (
-                <>
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
                   Creating account...
-                </>
+                </span>
               ) : (
                 'Create account'
               )}
             </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Already have an account?{' '}
+              <Link to="/login" className="font-semibold text-[#F47D31] hover:text-[#e06b20]">
+                Log in
+              </Link>
+            </p>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

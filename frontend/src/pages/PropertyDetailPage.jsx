@@ -174,7 +174,7 @@ const PropertyDetailPage = () => {
             {/* Description */}
             <div className="mb-12">
               <h2 className="text-xl font-bold mb-4 text-[#1A1A1A]">
-                Well-constructed {(property.attributes?.sqft || property.attributes?.square_feet || '1,562').toLocaleString()} Sq Ft Home Is Now Offering To You In {property.city || 'Ottawa'} For {property.status === 'for_sale' ? 'Sale' : 'Rent'}
+                Well-constructed {(property.attributes?.sqft || property.attributes?.square_feet || '1,562').toLocaleString()} Sq Ft Home Is Now Offering To You In {property.city || 'Ottawa'} For {property.status === 'sale' ? 'Sale' : 'Rent'}
               </h2>
               <p className="text-gray-400 leading-relaxed text-sm md:text-base">
                 {property.description}
@@ -377,7 +377,7 @@ const PropertyDetailPage = () => {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
-                    {prop.status === 'for_sale' ? 'For Sale' : 'For Rent'}
+                    {prop.status === 'sale' ? 'For Sale' : prop.status === 'rent' ? 'For Rent' : prop.status === 'sold' ? 'Sold' : prop.status}
                   </div>
                 </div>
                 <div className="p-8 md:p-10">

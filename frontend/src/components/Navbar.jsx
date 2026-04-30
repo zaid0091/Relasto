@@ -27,7 +27,7 @@ const Navbar = ({ variant = 'default' }) => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/properties?search=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setIsSearchOpen(false);
       setSearchQuery('');
     }
@@ -72,8 +72,8 @@ const Navbar = ({ variant = 'default' }) => {
       to: '/properties',
       subLinks: [
         { name: 'All Properties', to: '/properties' },
-        { name: 'For Sale', to: '/properties?status=for_sale' },
-        { name: 'For Rent', to: '/properties?status=for_rent' }
+        { name: 'For Sale', to: '/properties?status=sale' },
+        { name: 'For Rent', to: '/properties?status=rent' }
       ]
     },
     {
@@ -133,7 +133,7 @@ const Navbar = ({ variant = 'default' }) => {
                 <input
                   autoFocus
                   type="text"
-                  placeholder="Search properties..."
+                  placeholder="Search properties, agents..."
                   className={`px-4 py-2 pr-10 rounded-xl border border-gray-200 outline-none focus:border-[#F47D31] transition-all w-48 md:w-64 bg-white shadow-xl text-black text-sm`}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -219,7 +219,7 @@ const Navbar = ({ variant = 'default' }) => {
               <form onSubmit={handleSearch} className="relative">
                 <input
                   type="text"
-                  placeholder="Search properties..."
+                  placeholder="Search properties, agents..."
                   className="w-full px-4 py-3 pr-10 rounded-xl bg-gray-50 border border-transparent focus:border-[#F47D31] outline-none transition-all text-sm"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}

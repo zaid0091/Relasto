@@ -8,8 +8,11 @@ import PropertiesPage from './pages/PropertiesPage';
 import PropertyDetailPage from './pages/PropertyDetailPage';
 import AgentsPage from './pages/AgentsPage';
 import AgentProfilePage from './pages/AgentProfilePage';
+import SearchResultsPage from './pages/SearchResultsPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
+import BlogPage from './pages/BlogPage';
+import BlogDetailPage from './pages/BlogDetailPage';
 import DashboardPage from './pages/DashboardPage';
 import AddPropertyPage from './pages/AddPropertyPage';
 import ProfilePage from './pages/ProfilePage';
@@ -79,8 +82,11 @@ function App() {
               <Route path="/properties/:slug" element={<PropertyDetailPage />} />
               <Route path="/agents" element={<AgentsPage />} />
               <Route path="/agents/:id" element={<AgentProfilePage />} />
+              <Route path="/search" element={<SearchResultsPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:id" element={<BlogDetailPage />} />
 
               {/* Protected Routes */}
               <Route

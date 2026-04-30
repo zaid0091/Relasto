@@ -83,6 +83,7 @@ export const authAPI = {
   updateProfile: (data) => api.patch('/auth/profile/', data),
   changePassword: (data) => api.post('/auth/change-password/', data),
   health: () => api.get('/auth/health/'),
+  googleLogin: (credential) => api.post('/auth/google-login/', { credential }),
 };
 
 export const profilesAPI = {
@@ -107,6 +108,10 @@ export const propertiesAPI = {
   getPropertyImages: (id) => api.get(`/properties/${id}/images_list/`),
   getMyProperties: (params) => api.get('/my_properties/', { params }),
   getStats: () => api.get('/properties/stats/'),
+};
+
+export const searchAPI = {
+  universalSearch: (params) => api.get('/properties/universal_search/', { params }),
 };
 
 export const reviewsAPI = {

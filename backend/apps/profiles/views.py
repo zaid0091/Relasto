@@ -173,6 +173,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
         try:
             # Extract filters from query params
             filters = {}
+            if "search" in request.query_params:
+                filters["search"] = request.query_params.get("search")
             if "city" in request.query_params:
                 filters["city"] = request.query_params.get("city")
             if "state" in request.query_params:
@@ -185,11 +187,14 @@ class ProfileViewSet(viewsets.ModelViewSet):
                 except ValueError:
                     pass
 
+            # Handle ordering
+            ordering = request.query_params.get("ordering", "-average_rating")
+
             # Pagination
             page = int(request.query_params.get("page", 1))
             page_size = min(int(request.query_params.get("page_size", 20)), 100)
 
-            result = ProfileService.search_agents(filters, page, page_size)
+            result = ProfileService.search_agents(filters, page, page_size, ordering)
 
             serializer = AgentSearchSerializer(result["results"], many=True)
 
@@ -203,6 +208,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
                             "page": result["page"],
                             "page_size": result["page_size"],
                             "total_pages": result["total_pages"],
+                            "has_next": result["page"] < result["total_pages"],
+                            "has_previous": result["page"] > 1,
                         },
                     },
                 },

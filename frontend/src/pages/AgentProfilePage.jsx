@@ -18,6 +18,15 @@ const AgentProfilePage = () => {
   const [reviewData, setReviewData] = useState({ rating: 5, comment: '' });
   const [submittingReview, setSubmittingReview] = useState(false);
   const [reviewSuccess, setReviewSuccess] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const propertiesPerPage = 6;
+
+  // Reset current page when active tab changes
+  useEffect(() => {
+    if (activeTab === 'Properties') {
+      setCurrentPage(1);
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     const fetchAgentData = async () => {
@@ -232,7 +241,9 @@ const AgentProfilePage = () => {
         {activeTab === 'Properties' && (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {properties.length > 0 ? properties.map((property) => (
+              {properties.length > 0 ? properties
+                .slice((currentPage - 1) * propertiesPerPage, currentPage * propertiesPerPage)
+                .map((property) => (
                 <div key={property.id} className="bg-[#FDF8F5] rounded-[15px] overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-orange-200 w-full">
                   <div className="relative h-72 overflow-hidden">
                     <img
@@ -241,7 +252,7 @@ const AgentProfilePage = () => {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
                     <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
-                      {property.status === 'for_sale' ? 'For Sale' : 'For Rent'}
+                      {property.status === 'sale' ? 'For Sale' : property.status === 'rent' ? 'For Rent' : property.status === 'sold' ? 'Sold' : property.status}
                     </div>
                   </div>
                   <div className="p-8 md:p-10">
@@ -301,16 +312,73 @@ const AgentProfilePage = () => {
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-center items-center gap-3 mt-16">
-              {[1, 2, 3, 4, 5].map(p => (
-                <button key={p} className={`w-12 h-12 rounded-xl font-bold transition-all border-2 ${p === 1 ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-white text-gray-500 border-gray-100 hover:border-gray-300'}`}>
-                  {p}
+            {properties.length > propertiesPerPage && (
+              <div className="flex justify-center items-center gap-3 mt-16">
+                {/* Previous Button */}
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className={`px-4 h-12 rounded-xl font-bold transition-all border-2 flex items-center gap-2 ${
+                    currentPage === 1
+                      ? 'bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed'
+                      : 'bg-white text-gray-500 border-gray-100 hover:border-gray-300'
+                  }`}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                  Previous
                 </button>
-              ))}
-              <button className="px-6 h-12 bg-white rounded-xl font-bold text-gray-500 border-2 border-gray-100 hover:border-gray-300 flex items-center gap-2">
-                Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6" /></svg>
-              </button>
-            </div>
+
+                {/* Page Numbers */}
+                {(() => {
+                  const totalPages = Math.ceil(properties.length / propertiesPerPage);
+                  const pages = [];
+                  const maxVisiblePages = 5;
+                  
+                  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+                  
+                  if (endPage - startPage + 1 < maxVisiblePages) {
+                    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                  }
+                  
+                  for (let i = startPage; i <= endPage; i++) {
+                    pages.push(i);
+                  }
+                  
+                  return pages.map(page => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-12 h-12 rounded-xl font-bold transition-all border-2 ${
+                        page === currentPage
+                          ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
+                          : 'bg-white text-gray-500 border-gray-100 hover:border-gray-300'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ));
+                })()}
+
+                {/* Next Button */}
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(properties.length / propertiesPerPage)))}
+                  disabled={currentPage === Math.ceil(properties.length / propertiesPerPage)}
+                  className={`px-6 h-12 rounded-xl font-bold transition-all border-2 flex items-center gap-2 ${
+                    currentPage === Math.ceil(properties.length / propertiesPerPage)
+                      ? 'bg-gray-100 text-gray-300 border-gray-100 cursor-not-allowed'
+                      : 'bg-white text-gray-500 border-gray-100 hover:border-gray-300'
+                  }`}
+                >
+                  Next
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="m9 18 6-6-6-6" />
+                  </svg>
+                </button>
+              </div>
+            )}
           </>
         )}
 

@@ -174,10 +174,15 @@ class PropertyService:
         if "agent_id" in filters:
             queryset = queryset.filter(agent_id=filters["agent_id"])
 
-        # Bedrooms filter
+        # Bedrooms filter — supports "minimum bedrooms" (gte)
         if "bedrooms" in filters:
-            min_beds = filters["bedrooms"]
-            queryset = queryset.filter(attributes__contains={"bedrooms": min_beds})
+            min_beds = int(filters["bedrooms"])
+            queryset = queryset.filter(attributes__bedrooms__gte=min_beds)
+
+        # Bathrooms filter
+        if "bathrooms" in filters:
+            min_baths = int(filters["bathrooms"])
+            queryset = queryset.filter(attributes__bathrooms__gte=min_baths)
 
         # Optimize queries
         queryset = queryset.select_related("agent__user").prefetch_related(
@@ -186,8 +191,15 @@ class PropertyService:
 
         # Ordering
         ordering = filters.get("ordering", "-created_at")
-        if ordering:
+        allowed_orderings = [
+            "created_at", "-created_at",
+            "price", "-price",
+            "title", "-title",
+        ]
+        if ordering and ordering in allowed_orderings:
             queryset = queryset.order_by(ordering)
+        else:
+            queryset = queryset.order_by("-created_at")
 
         # Pagination
         paginator = Paginator(queryset, page_size)
