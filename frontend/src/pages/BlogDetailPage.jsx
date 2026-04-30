@@ -113,7 +113,7 @@ const BlogDetailPage = () => {
       <div className="min-h-screen bg-[#FFF8F1] font-['Inter'] text-[#1A1A1A]">
         <Navbar />
         <div className="pt-32 text-center px-4">
-          <div className="bg-white rounded-[32px] border border-gray-100 shadow-sm p-12 max-w-md mx-auto">
+          <div className="bg-white rounded-4xl border border-gray-100 shadow-sm p-12 max-w-md mx-auto">
             <div className="text-6xl mb-4">📰</div>
             <h1 className="text-2xl font-black text-[#1A1A1A] mb-2">Article Not Found</h1>
             <p className="text-gray-400 mb-6">The blog post you're looking for doesn't exist.</p>
@@ -132,7 +132,7 @@ const BlogDetailPage = () => {
       <Navbar />
 
 
-      <div className="pt-28 pb-4 px-4 sm:px-6 lg:px-16 max-w-[1440px] mx-auto">
+      <div className="pt-28 pb-4 px-4 sm:px-6 lg:px-16 max-w-360 mx-auto">
         <Link
           to="/blog"
           className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-[#F47D31] transition-colors"
@@ -142,12 +142,12 @@ const BlogDetailPage = () => {
         </Link>
       </div>
 
-      <main className="px-4 sm:px-6 lg:px-16 max-w-[1440px] mx-auto pb-20">
+      <main className="px-4 sm:px-6 lg:px-16 max-w-360 mx-auto pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
 
           <div className="lg:col-span-8">
 
-            <article className="bg-[#FDF8F5] rounded-[32px] border border-orange-200 shadow-sm overflow-hidden">
+            <article className="bg-[#FDF8F5] rounded-4xl border border-orange-200 shadow-sm overflow-hidden">
 
               <div className="relative h-64 sm:h-80 lg:h-96 overflow-hidden">
                 <img
@@ -155,7 +155,7 @@ const BlogDetailPage = () => {
                   alt={post.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
 
                 <div className="absolute top-6 left-6">
                   <span className="bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm text-[#1A1A1A]">
@@ -252,7 +252,7 @@ const BlogDetailPage = () => {
                         'Hosting and Pricing: Saves Your Budget For Good',
                       ].map((item, i) => (
                         <li key={i} className="flex items-start gap-3 text-[#5D7285]">
-                          <span className="mt-1.5 w-2 h-2 rounded-full bg-[#F47D31] flex-shrink-0"></span>
+                          <span className="mt-1.5 w-2 h-2 rounded-full bg-[#F47D31] shrink-0"></span>
                           <span className="font-medium">{item}</span>
                         </li>
                       ))}

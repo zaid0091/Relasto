@@ -121,7 +121,7 @@ const AgentProfilePage = () => {
       </div>
 
 
-      <div className="max-w-[1440px] mx-auto px-6 md:px-16 -mt-16 relative z-10">
+      <div className="max-w-360 mx-auto px-6 md:px-16 -mt-16 relative z-10">
         <div className="bg-white rounded-4xl p-6 md:p-10 flex flex-col md:flex-row items-center md:items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.08)] gap-8">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="w-32 h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden border-4 border-white shadow-lg">
@@ -221,7 +221,7 @@ const AgentProfilePage = () => {
       </div>
 
 
-      <div className="max-w-[1440px] mx-auto px-6 md:px-16 py-12">
+      <div className="max-w-360 mx-auto px-6 md:px-16 py-12">
         <div className="flex overflow-x-auto pb-4 md:pb-0 md:flex-wrap gap-4 mb-10 no-scrollbar">
           {['Properties', 'Reviews', 'About', 'Contact'].map((tab) => (
             <button

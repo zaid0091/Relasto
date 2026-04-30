@@ -110,9 +110,9 @@ const PropertyDetailPage = () => {
   return (
     <div className="min-h-screen bg-[#FDF9F6] font-['Inter'] text-[#1A1A1A]">
       <Navbar />
-      <main className="pt-32 pb-20 px-6 md:px-16 max-w-[1440px] mx-auto">
+      <main className="pt-32 pb-20 px-6 md:px-16 max-w-360 mx-auto">
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 h-[300px] md:h-[500px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 h-75 md:h-125">
           <div className="md:col-span-2 relative overflow-hidden rounded-[15px]">
             <img
               src={property.primary_image?.image || 'https://images.unsplash.com/photo-1600585154340-be6199f7c096?auto=format&fit=crop&q=80&w=2070'}
@@ -196,7 +196,7 @@ const PropertyDetailPage = () => {
                   </button>
                 ))}
               </div>
-              <div className="h-64 md:h-[350px] bg-white rounded-[15px] overflow-hidden relative border border-gray-100">
+              <div className="h-64 md:h-87.5 bg-white rounded-[15px] overflow-hidden relative border border-gray-100">
                 <img
                   src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=2074"
                   className="w-full h-full object-cover opacity-80"
@@ -429,7 +429,7 @@ const PropertyDetailPage = () => {
 
 
       {modalImage && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 md:p-8">
+        <div className="fixed inset-0 z-1000 flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 md:p-8">
           <button
             onClick={() => setModalImage(null)}
             className="absolute top-6 right-6 text-white hover:text-gray-300 bg-black/50 hover:bg-black/80 rounded-full p-2 transition-all"

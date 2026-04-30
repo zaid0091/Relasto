@@ -178,11 +178,11 @@ const HomePage = () => {
 
           <div className="hidden lg:block flex-1 relative w-full lg:w-auto mt-8 lg:mt-0 pr-6 md:pr-0 lg:pr-0">
             <div className="absolute -inset-4 md:-inset-10 bg-orange-100/50 -z-10 blur-3xl lg:hidden" />
-            <div className="hidden lg:block absolute inset-y-0 right-[-100px] w-full max-w-[600px] xl:max-w-[800px] bg-[#F47D31]/10 -z-10" />
+            <div className="hidden lg:block absolute inset-y-0 -right-25 w-full max-w-150 xl:max-w-200 bg-[#F47D31]/10 -z-10" />
             <img
               src={heroImage}
               alt="Hero House"
-              className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[700px] object-contain lg:object-cover lg:object-top lg:rounded-l-[100px] lg:rounded-r-none drop-shadow-2xl lg:shadow-none transition-all duration-700"
+              className="w-full h-75 sm:h-100 md:h-125 lg:h-175 object-contain lg:object-cover lg:object-top lg:rounded-l-[100px] lg:rounded-r-none drop-shadow-2xl lg:shadow-none transition-all duration-700"
             />
           </div>
         </div>
@@ -243,7 +243,7 @@ const HomePage = () => {
               <div className="mb-8 text-[#F47D31] group-hover:scale-110 transition-transform duration-300">
                 {item.icon}
               </div>
-              <h3 className="font-bold text-2xl leading-tight max-w-[150px]">{item.title}</h3>
+              <h3 className="font-bold text-2xl leading-tight max-w-37.5">{item.title}</h3>
             </div>
           ))}
         </div>
@@ -278,7 +278,7 @@ const HomePage = () => {
               </div>
             </div>
             <span className="text-3xl md:text-5xl font-bold mb-4 text-[#1A1A1A] tracking-tight">{stat.value}</span>
-            <span className="text-[#5D7285] text-sm md:text-lg font-medium leading-tight max-w-[150px] md:max-w-[180px]">{stat.label}</span>
+            <span className="text-[#5D7285] text-sm md:text-lg font-medium leading-tight max-w-37.5 md:max-w-45">{stat.label}</span>
           </div>
         ))}
       </section>
@@ -416,7 +416,7 @@ const HomePage = () => {
           <img
             src="https://images.unsplash.com/photo-1501183638714-841dd81dca4a?auto=format&fit=crop&q=80&w=1000"
             alt="Yellow House"
-            className="w-full h-80 md:h-[500px] lg:h-[600px] object-cover rounded-[40px] shadow-2xl"
+            className="w-full h-80 md:h-125 lg:h-150 object-cover rounded-[40px] shadow-2xl"
           />
         </div>
         <div className="flex-1 text-center lg:text-left mt-8 lg:mt-0">
@@ -433,7 +433,7 @@ const HomePage = () => {
               'Strong community and security'
             ].map((text, i) => (
               <li key={i} className="flex items-center gap-4 font-semibold text-[#1A1A1A]">
-                <div className="w-6 h-6 min-w-[24px] rounded-full bg-[#1A1A1A] text-white flex items-center justify-center text-[10px] shadow-md">✓</div>
+                <div className="w-6 h-6 min-w-6 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center text-[10px] shadow-md">✓</div>
                 {text}
               </li>
             ))}
@@ -499,7 +499,7 @@ const HomePage = () => {
             { title: 'Looking for a New Place? Just in...', date: 'Apr 20, 2026', image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1000' },
           ].map((news, i) => (
             <div key={i} className="group cursor-pointer">
-              <div className="overflow-hidden rounded-[32px] md:rounded-[40px] mb-8 h-72 md:h-80 relative">
+              <div className="overflow-hidden rounded-4xl md:rounded-[40px] mb-8 h-72 md:h-80 relative">
                 <img src={news.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt="" />
                 <div className="absolute top-6 left-6">
                   <div className="bg-white/90 backdrop-blur-md px-5 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl border border-white/20">

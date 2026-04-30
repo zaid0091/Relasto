@@ -90,8 +90,8 @@ const Navbar = ({ variant = 'default' }) => {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-[100] ${bgClass} backdrop-blur-md px-6 md:px-16 py-4 flex items-center justify-between ${isLight ? 'shadow-sm border-b border-gray-200' : ''}`}>
-        <Link to="/" className="flex items-center gap-2 relative z-[110]">
+      <nav className={`fixed top-0 left-0 right-0 z-100 ${bgClass} backdrop-blur-md px-6 md:px-16 py-4 flex items-center justify-between ${isLight ? 'shadow-sm border-b border-gray-200' : ''}`}>
+        <Link to="/" className="flex items-center gap-2 relative z-110">
           <img src={logo} alt="Relasto Logo" className="w-10 h-10 md:w-14 md:h-14 object-contain" />
           <span className="text-xl md:text-2xl font-bold tracking-tight text-[#F47D31]">Relasto</span>
         </Link>
@@ -109,7 +109,7 @@ const Navbar = ({ variant = 'default' }) => {
               </Link>
 
               {item.subLinks && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white shadow-[0_15px_40px_rgba(0,0,0,0.1)] rounded-2xl py-3 border border-gray-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-[110]">
+                <div className="absolute top-full left-0 mt-2 w-48 bg-white shadow-[0_15px_40px_rgba(0,0,0,0.1)] rounded-2xl py-3 border border-gray-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-110">
                   {item.subLinks.map((sub) => (
                     <Link
                       key={sub.name}
@@ -125,7 +125,7 @@ const Navbar = ({ variant = 'default' }) => {
           ))}
         </div>
 
-        <div className="flex items-center gap-4 md:gap-8 relative z-[110]">
+        <div className="flex items-center gap-4 md:gap-8 relative z-110">
           <div className="hidden sm:block">
             {isSearchOpen ? (
               <form onSubmit={handleSearch} className="relative flex items-center animate-in fade-in slide-in-from-right-4 duration-300">
@@ -204,7 +204,7 @@ const Navbar = ({ variant = 'default' }) => {
       </nav>
 
       
-      <div className={`fixed inset-0 z-[90] lg:hidden transition-all duration-500 ${isMenuOpen ? 'visible' : 'invisible'}`}>
+      <div className={`fixed inset-0 z-90 lg:hidden transition-all duration-500 ${isMenuOpen ? 'visible' : 'invisible'}`}>
        
         <div
           className={`absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-500 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}
@@ -213,7 +213,7 @@ const Navbar = ({ variant = 'default' }) => {
 
       
         <div className={`absolute top-0 right-0 h-full w-[80%] max-w-sm bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-          <div className="p-8 pt-24 overflow-y-auto flex-grow">
+          <div className="p-8 pt-24 overflow-y-auto grow">
             <div className="mb-8 block sm:hidden">
               <form onSubmit={handleSearch} className="relative">
                 <input

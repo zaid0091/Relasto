@@ -151,7 +151,7 @@ const BlogPage = () => {
     <div className="min-h-screen bg-[#FFF8F1] font-['Inter'] text-[#1A1A1A]">
       <Navbar />
 
-      <main className="pt-28 pb-20 px-4 sm:px-6 md:px-16 max-w-[1440px] mx-auto">
+      <main className="pt-28 pb-20 px-4 sm:px-6 md:px-16 max-w-360 mx-auto">
 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
@@ -218,7 +218,7 @@ const BlogPage = () => {
             {searchQuery && (
               <div className="bg-white border border-gray-200 px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-2 shadow-sm hover:border-[#F47D31]/30 transition-all">
                 <span className="text-gray-400 font-medium">Search:</span>
-                <span className="text-[#1A1A1A] max-w-[120px] truncate">{searchQuery}</span>
+                <span className="text-[#1A1A1A] max-w-30 truncate">{searchQuery}</span>
                 <button onClick={() => { setSearchQuery(''); setCurrentPage(1); }} className="w-4 h-4 flex items-center justify-center rounded-full hover:bg-red-50 text-gray-300 hover:text-red-500 transition-all">×</button>
               </div>
             )}
@@ -241,7 +241,7 @@ const BlogPage = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 bg-white rounded-[32px] border border-gray-100 shadow-sm px-6">
+          <div className="text-center py-20 bg-white rounded-4xl border border-gray-100 shadow-sm px-6">
             <div className="text-6xl mb-6">📰</div>
             <h3 className="text-2xl font-black mb-3">No articles found</h3>
             <p className="text-gray-400 max-w-xs mx-auto text-sm font-medium leading-relaxed">

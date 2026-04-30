@@ -152,7 +152,7 @@ const DashboardPage = () => {
       <Navbar />
 
 
-      <main className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-20">
+      <main className="max-w-360 mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-20">
 
         <div className="mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">Dashboard</h1>
