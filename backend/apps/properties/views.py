@@ -428,7 +428,7 @@ class PropertyViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-    @action(detail=False, methods=["get"])
+    @action(detail=False, methods=["get"], permission_classes=[permissions.AllowAny])
     def stats(self, request):
         """Get property statistics"""
         try:

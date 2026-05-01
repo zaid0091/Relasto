@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'apps.search.apps.SearchConfig',
     'apps.visits.apps.VisitsConfig',
     'apps.common.apps.CommonConfig',
+    
 ]
 
 TEMPLATES = [
@@ -194,3 +195,5 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
 }
+
+

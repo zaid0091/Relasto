@@ -27,24 +27,41 @@ const HomePage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [propsRes, reviewsRes, statsRes] = await Promise.all([
-          propertiesAPI.getProperties({ page_size: 6, ordering: '-created_at', property_type: propertyTab }),
-          reviewsAPI.getReviews({ page_size: 3 }),
-          propertiesAPI.getStats()
-        ]);
+      setLoading(true);
 
-        setFeaturedProperties(propsRes.data.data.properties || []);
-        setLatestReviews(reviewsRes.data.data.reviews || []);
-        if (statsRes.data.data) {
+      // Fetch properties independently so they show even if other requests fail
+      try {
+        const propsRes = await propertiesAPI.getProperties({
+          page_size: 6,
+          ordering: '-created_at',
+          property_type: propertyTab
+        });
+        setFeaturedProperties(propsRes.data?.data?.properties || []);
+      } catch (error) {
+        console.error('Error fetching properties:', error);
+        setFeaturedProperties([]);
+      }
+
+      // Fetch reviews separately (may require auth)
+      try {
+        const reviewsRes = await reviewsAPI.getReviews({ page_size: 3 });
+        setLatestReviews(reviewsRes.data?.data?.reviews || []);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+        setLatestReviews([]);
+      }
+
+      // Fetch stats separately (may require auth)
+      try {
+        const statsRes = await propertiesAPI.getStats();
+        if (statsRes.data?.data) {
           setHomeStats(statsRes.data.data);
         }
       } catch (error) {
-        console.error('Error fetching home page data:', error);
-      } finally {
-        setLoading(false);
+        console.error('Error fetching stats:', error);
       }
+
+      setLoading(false);
     };
     fetchData();
   }, [propertyTab]);

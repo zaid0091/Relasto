@@ -19,6 +19,12 @@ class ReviewViewSet(viewsets.ModelViewSet):
     ViewSet for review management
     """
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        """Allow anyone to list reviews, but require auth for write operations"""
+        if self.action == 'list':
+            return [permissions.AllowAny()]
+        return super().get_permissions()
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     search_fields = ['comment']
     filterset_fields = ['rating', 'agent_profile']
